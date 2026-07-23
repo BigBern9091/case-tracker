@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Docket — Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151B;
+    --surface:#191D25;
+    --surface-2:#212632;
+    --border:#2B313D;
+    --ink:#ECE9E2;
+    --ink-dim:#9BA1AC;
+    --ink-faint:#5C616C;
+    --red:#B0473C;
+    --red-dim:rgba(176,71,60,0.16);
+    --brass:#C7A233;
+    --brass-dim:rgba(199,162,51,0.16);
+    --green:#5C8368;
+    --green-dim:rgba(92,131,104,0.16);
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-body); font-size:15px; line-height:1.5;
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--brass-dim); }
+  a{ color:inherit; text-decoration:none; }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
+
+  .wrap{ max-width:720px; margin:0 auto; padding:56px 24px 80px; }
+
+  header{ margin-bottom:44px; }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--brass); margin-bottom:14px;
+  }
+  h1{
+    font-family:var(--font-display); font-weight:600; font-size:clamp(36px,7vw,52px);
+    margin:0 0 12px; letter-spacing:-0.01em; color:var(--ink);
+  }
+  .subhead{ font-size:15.5px; color:var(--ink-dim); max-width:480px; line-height:1.6; }
+
+  .docket-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); padding:0 18px 10px; border-bottom:1px solid var(--border); margin-top:8px;
+  }
+
+  .docket{ display:flex; flex-direction:column; }
+
+  .matter{
+    display:block; position:relative; padding:22px 18px 22px 22px;
+    border-bottom:1px solid var(--border); border-left:3px solid transparent;
+    transition:background .15s, border-color .15s;
+    opacity:0; transform:translateY(6px);
+    animation:call-in .5s ease forwards;
+  }
+  .matter:nth-child(1){ animation-delay:.05s; }
+  .matter:nth-child(2){ animation-delay:.15s; }
+  .matter:nth-child(3){ animation-delay:.25s; }
+  @keyframes call-in{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){
+    .matter{ opacity:1; transform:none; animation:none; }
+  }
+
+  a.matter{ cursor:pointer; }
+  a.matter:hover{ background:var(--surface-2); border-left-color:var(--brass); }
+  a.matter:hover .go{ opacity:1; transform:translateX(0); }
+
+  .matter-top{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .case-no{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); letter-spacing:0.03em; }
+  .status{
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:2px 8px; border-radius:3px; white-space:nowrap;
+  }
+  .status.ready{ color:var(--green); background:var(--green-dim); }
+  .status.unfiled{ color:var(--ink-faint); background:var(--surface-2); }
+
+  .matter-title{
+    font-family:var(--font-display); font-weight:600; font-size:22px; margin:6px 0 5px; color:var(--ink);
+  }
+  .matter-desc{ font-size:13.5px; color:var(--ink-dim); line-height:1.5; max-width:460px; }
+  .matter.unfiled .matter-title{ color:var(--ink-faint); font-style:italic; font-weight:500; }
+  .matter.unfiled .matter-desc{ color:var(--ink-faint); }
+
+  .go{
+    position:absolute; right:20px; top:50%; transform:translate(-4px,-50%); opacity:0;
+    font-family:var(--font-mono); font-size:12px; color:var(--brass); transition:opacity .15s, transform .15s;
+  }
+
+  footer{
+    margin-top:40px; padding-top:18px; border-top:1px solid var(--border);
+    font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); letter-spacing:0.02em;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:520px){
+    .wrap{ padding:40px 18px 60px; }
+    .matter{ padding:18px 14px 18px 16px; }
+    .matter-title{ font-size:19px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Caddo &middot; Cleveland &middot; Oklahoma County</div>
+    <h1>The Docket</h1>
+    <p class="subhead">Two tools, built for this practice. Each one opens straight to work — nothing to configure.</p>
+  </header>
+
+  <div class="docket-head"><span>Matter</span><span>Status</span></div>
+
+  <nav class="docket">
+    <a class="matter" href="./case-tracker.html">
+      <div class="matter-top">
+        <span class="case-no">CF&#8209;2026&#8209;0001</span>
+        <span class="status ready">Ready</span>
+      </div>
+      <div class="matter-title">Case Tracker</div>
+      <div class="matter-desc">Docket rail, deadlines, grounds &amp; motions, court minute intake, and now sentencing exposure &mdash; per case, per charge.</div>
+      <span class="go">Open &rarr;</span>
+    </a>
+
+    <a class="matter" href="./exposure-calculator.html">
+      <div class="matter-top">
+        <span class="case-no">CF&#8209;2026&#8209;0002</span>
+        <span class="status ready">Ready</span>
+      </div>
+      <div class="matter-title">Sentencing Exposure</div>
+      <div class="matter-desc">Standalone lookup across 782 offenses under the 2026 classification system &mdash; search, compute a range, model &sect; 51.1.</div>
+      <span class="go">Open &rarr;</span>
+    </a>
+
+    <div class="matter unfiled">
+      <div class="matter-top">
+        <span class="case-no">CF&#8209;2026&#8209;0003</span>
+        <span class="status unfiled">Not filed</span>
+      </div>
+      <div class="matter-title">&mdash;</div>
+      <div class="matter-desc">Reserved for whatever gets built next.</div>
+    </div>
+  </nav>
+
+  <footer>
+    <span>Private toolkit &mdash; not for public distribution</span>
+    <span id="today"></span>
+  </footer>
+
+</div>
+<script>
+  document.getElementById('today').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+</script>
+</body>
+</html>
