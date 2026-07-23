@@ -1,1 +1,1923 @@
 # case-tracker
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Docket — Case Tracker</title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAD1klEQVR4nLWWTWxUVRTHz//e+96bdj6daW3rSEoFRa2iiESM0JgYd25dmLjThcbIwpULQ5SVLE1IMGCoImxg0aAJbjCYuBC/dsZoG1vaxJjQdlrL0Dfv457j4nWm09K+aUs8i/eRe+/5nY97zr0o91bp/xTT/qNAINy7UiuyAUCB7sTcYL53RtHRikjaAQpYiuIjlfzBUtZnVrQTiBCBEItc+rsWMDuAEKHcW1VEy5YPl3Ov9Jcm7gSeQsAssj2GEDkKQpTTylE4NXkLLQ8A+CwHS9mJeuP0+D9wTY9rNBKLtqpdAwth7Me24JjTBwYLRi1G1gArIQKRb9nTynH185XcnqwXsGzLAwAscn32tqMQsHAzzatJ1qDActk1D2W90Zn5LgVpJqqjKCLf8nCh+2gld212Sbd5btZNBRCyZBQKjrYiRACtjZS03kkIJRn3lIplA3vWA6i5yEripoRhCEApJSLWWgDGGMcxJMTNQIDIysYh3QCwzqHdg7uCIPT9hue5+XwujKK5udrCwqLneZmMx8zpGtIAIqK1PvTsgddfe/WJJx8b/3Ni7MrVnp7Kc4ee+e33P8589uXk1HQ2253OUOnmM/Po6MWb0zP391Xn5mqfnDp7/KOTZ89dePftN8Yuf/7U/seXfV+pNCVpY4kUSkVjjEgIhVKpWCwWrnz9zdhXVx/et++D998zWu/cg0SstSICIPnWWlnLk1PTHDae3j88tHswDENs7kRnwF2CKIrq9WUoaGP6+3pja1NKcgcAgVLGaBIhEr/RUEgr+c4AtK0HQATPdXt6KkKoLSxOTc04rssbldhWAUEQRFEUxzaKoiAI5+drxWJ+5Mhh5bjnL16+NTvrOA5tDuhcaIODux6sPmBMtjowsHfPUKVy37F33hzo7ztx4uNPz3yRzWYldRd1KDQienHkhR9+/PnGT79aa19+acQY8+31749/eHL8r8nuri4AskmT6AxICu38hUtRFIkIlNJKMTMB3d1d+VxORGTz4HQGJFIsFlp5bqlj5o5dKA2AtidbmzKn9Y1W704BCJECQNRg8dpOpY4CopAlYHGBdYtWAcmpvRTGVmg4n4lFtn5/AUnA9Eguc9MPnbUM0zaJhKge2+/mbx8t54i2cegzkaswvRzeqNX7PUdodV+tAmKRvNEF13GAa7NLW7S93TgH6M+YgtEaZJu3HpR7q2jeO94a6n003xVY1qntZTMGEzGJIZybmftloZ5RihNAMhyJaKBgdEpj2QqHhf6NrKtWTFwJUeKgEC1G8c61ryDgqdU8r9lFRGS2H5y7pT0C/wH8Z7B82ZKDlwAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAHz0lEQVR4nO3dfWwUdRrA8W2XbrvNCQlSealASwERtHJNTLy7xDtyUTilQTlRo4SL9UQ8vfhyOTWAYABB8SUx4fAtFIy5MxeNIgUBJfgayUXlgGJLaWs9YQuUGu9ok3a2u6x/7IU0pk/7m9l5frOL38+f5cfydObL7My2s5s3sqQ0BAwkP+gBkL2IAyLigIg4ICIOiIgDIuKAiDggIg6IiAMi4oCIOCAiDoiIAyLigIg4ICIOiIgDIuKAiDggGqbxoLVV5RoPi8HV7G/z9wHz/P3tc7IInI+J+Pm0QhnZwMe94FsclJE9/NoX/sRBGdnGlz3iQxyUkZ0y3y8qVyshhTNnDE7jv2imR44BZ6IM+wbc5hkW4/+LYJQRFN+3PK+QQkQcEBEHRMQBkdalrAleIDEU1Dl+MHGQhSvpzWU/Edtx9M+Ci15D6Y1mPxGr5xznyqjZ30YZ5vpvLpsH3QBOSMnCG/vbzV4cQT1xnk/SW8/awYNLWYgsxcFhwy82Dx4cOSAiDoiIAyLigIg4ICIOiIgDIuKAiDggIg6IiAMi4oCIOCAiDoiIAyLigIg4ICIOiIgDIuKAKMh7ZTPxp7vveODPi31/2Hi8z4k7jhPv7uru6Pyuo6Pz5KmOlta2o0dbW1rbeh3H938xm+VqHEoikYJIpOCCn4VGXTiyrGxC/z9KJpMH6xs+2/f5p5/9698H6lOpVFBDWkMcpsLhcNXMy6tmXn7fPTWx2ImtdTvffHt7LHYi6LkUcc7hRWnp2HuX1Ox5940n1ywvmzg+6HG05OqRY+NLmze+tPlHXzQ/EXnjrbplK9b2/0pRYWG0ODpmdMnECeNnVs74xVVXXjptyuAPEg6H599w/bzqObWvvr5h46ae3l5X30L2y9U4fNfrOL2O8/33/2080rzrvb2hUGhyRfmi229e8PvqcDg8yF8Mh8N31Sycc+2shx5eefDQV7bmtYGnFVFLa9uKVU9dN++2+sONQy4ef3Hp37e8sGB+tYXBrCGOIbR98+0tCxdvrds55MpIpOCJVUvvXVJjYSo7iGNoiUTikaWr63a8Z7L4/vvuuvuPi7RHsoM4jKRSqWUr1h5pajZZ/JcH7rlu9m+1R7KAOEz1Os6ylevOnj1rsnjt6mWTyidqj6SNOFyoP9xY967Rk0txcfSpJx7Ly8vTHkkVcbjzyqbXDFdeUTnjphvnqg6jjTjcOdr89YGDhw0XP3j/ksLCiOo8qojDtW07dhuuHHXhyHnVv1MdRhVxuPbRx/vMF9+x6Fa9SbQRh2vHjseOx9oNF1dMKpt+6VTVefQQhxeH6hvMF8++ZpbeJKqIw4tGs1fD0mb9+ld6k6giDi9aWly8oerUKRXFxVG9YfQQhxex9pPmi/Pz8ysvm643jB7i8KK93d1vB067ZLLSJKqIw4szXd2JRMJ8/bhxY/WG0UMcHp3p6jZfPG7saL1J9BCHR2f+d8Z8cUnJKL1J9BCHR/E+F08r0aJCvUn0EIdHfX195ouLior0JtFDHB4lk0nzxZFITv5sljg8GjbMxV0d8dy8yZY4PHIVR08vcfyURCIF5ot7enr0JtFDHB6NGH6B+eJTHZ16k+ghDo+Gu4mj/URO3oxPHF6MGDF88Btof8TVD+qyB3F4cXGpu5+VNDQeVZpEFXF4MW7sGPPFyWSyoaFJbxg9xOHF1CkV5osbm5pz9M3EiMMLV7+fsfeDT/QmUUUcXlxROcN88e73P1QbRBdxuFZeNmHM6IsMFx9pam5u+Vp1Hj3E4dpvrv6l+eLaV1/Xm0QbcbhWPXe24cpTHad37NyjOowq4nBnxvRLLps+zXDx08/9zdWvfWQb4nBn8Z2mb+n0xZcHtm03veU6OxGHC1U/r5xzrdG9jV3d3Y8uX6M9jzbiMBWNRtc8/qjJm/WkUqlHlq7+9ljMwlSqiMNIfn7++rWPTa4oN1m8bv3ze/Z+rD2SBcQxtIKCgueeXmV4s/z6Zzdsee2f2iPZwdtbD2FyRfkzTz5u8h4bjhNfvnLdO9t3WZjKDuIQTZ0y6Q8Lb5l/49xw/tDH12/+c+yhv6443HDEwmDWEMf/FRZGotHomNEXlU00/dSEtEQisWnzPza8uMlx4tpDWparcWT4MV4L5ldn/ib2iURia92uF1/ech5cmAwoV+MI1rHjsXfqdr/51rb2E6eCnkURcZg69xlvn3y678Chr/iMt5+cvr4+x4k78XhXV/fp09+d7uw8ebKjubWtqamFT4fMGQN+jBf8xYtgEBEHRMQBEXFARBwQEQdExAERcUBEHBARB0TEARFxQEQcEBEHRMQBEXFARBwQEQdExAERcUBEHBARB0SW4qjZ3xYKhWqrjN7fAoNIb8P09tTGkQMie3Fw8MiczcNGKJAjB314Y3+7WY3jXPK1VeUkYq7/5rJ22AjZv1e2/5MLfbhiM4u0YG6k5vzDFftZpAV5l31Q3zMMcSkLEXFARBwQEQdE/sfBNUhQfN/ymcYx4BUHfdg34DbP8HpQ61KWPs4DPjyt8HJFdsp8v/hzzkEf2caXPeLbCSl9ZA+/9oWfVyv0kQ183At5I0tK/XqsczgbDYTv/zlV4sD5gVdIISIOiIgDIuKAiDggIg6IiAMi4oCIOCAiDoiIAyLigIg4ICIOiIgDIuKAiDggIg6IiAOiHwDPdyMTwQueJQAAAABJRU5ErkJggg==">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Docket">
+<meta name="theme-color" content="#12151B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151B;
+    --surface:#191D25;
+    --surface-2:#212632;
+    --border:#2B313D;
+    --ink:#ECE9E2;
+    --ink-dim:#9BA1AC;
+    --ink-faint:#5C616C;
+    --red:#B0473C;
+    --red-dim:rgba(176,71,60,0.16);
+    --brass:#C7A233;
+    --brass-dim:rgba(199,162,51,0.16);
+    --green:#5C8368;
+    --green-dim:rgba(92,131,104,0.16);
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-body); font-size:14px; line-height:1.5;
+    position:relative; overflow:hidden;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:50;
+    opacity:0.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{ background:var(--red-dim); }
+  button, input, textarea, select{ font-family:inherit; color:inherit; }
+  :focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+
+  #app{ display:flex; height:100vh; }
+
+  /* ---------- Rail ---------- */
+  .rail{ width:310px; min-width:310px; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; }
+  .rail-header{ padding:22px 20px 16px; border-bottom:1px solid var(--border); }
+  .eyebrow{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-faint); }
+  .rail-header h1{ font-family:var(--font-display); font-weight:600; font-size:26px; margin:4px 0 14px; }
+  .btn{ font-family:var(--font-body); font-size:12.5px; font-weight:500; padding:8px 13px; border-radius:5px;
+    border:1px solid var(--border); background:var(--surface-2); color:var(--ink); cursor:pointer; transition:border-color .15s, background .15s; }
+  .btn:hover{ border-color:var(--ink-faint); }
+  .btn-primary{ background:var(--red); border-color:var(--red); color:#F5EDEA; }
+  .btn-primary:hover{ opacity:0.88; border-color:var(--red); }
+  .btn-block{ width:100%; }
+  .btn-ghost{ background:transparent; }
+  .btn-danger{ color:var(--red); }
+
+  .case-list{ flex:1; overflow-y:auto; }
+  .case-item{ padding:14px 20px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; border-left:3px solid transparent; }
+  .case-item:hover{ background:var(--surface-2); }
+  .case-item.active{ background:var(--surface-2); border-left-color:var(--red); }
+  .case-item .client{ font-family:var(--font-display); font-weight:600; font-size:15.5px; }
+  .case-item .docket{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); margin-top:3px; letter-spacing:0.02em; }
+  .case-item .next{ font-size:11.5px; color:var(--ink-dim); margin-top:7px; }
+  .case-item .next.urgent{ color:var(--red); font-weight:600; }
+  .rail-empty{ padding:28px 20px; color:var(--ink-faint); font-size:12.5px; }
+
+  .new-case-form{ padding:14px 20px; border-bottom:1px solid var(--border); background:var(--surface-2); display:flex; flex-direction:column; gap:8px; }
+
+  /* ---------- Main ---------- */
+  .main{ flex:1; overflow-y:auto; padding:44px 52px 80px; }
+  .empty-main{ height:80%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:var(--ink-faint); text-align:center; }
+  .empty-main h2{ font-family:var(--font-display); font-weight:500; color:var(--ink-dim); font-size:22px; margin:0; }
+
+  .file-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; }
+  .file-id .docket-no{ font-family:var(--font-mono); font-size:12px; color:var(--ink-dim); letter-spacing:0.03em; }
+  .file-id h2{ font-family:var(--font-display); font-weight:600; font-size:34px; margin:6px 0 6px; }
+  .court-judge{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-dim); margin-bottom:10px; letter-spacing:0.02em; }
+  .court-judge.muted{ color:var(--ink-faint); font-style:italic; }
+  .charges{ color:var(--ink-dim); max-width:560px; font-size:13.5px; white-space:pre-wrap; }
+  .charges.muted{ color:var(--ink-faint); font-style:italic; }
+
+  .file-actions{ display:flex; gap:8px; flex-shrink:0; }
+
+  .stamp{ display:inline-block; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.13em;
+    font-size:11.5px; font-weight:600; padding:8px 15px; border:2px solid currentColor; border-radius:3px;
+    position:relative; transform:rotate(-3deg); margin-top:2px; }
+  .stamp::after{ content:''; position:absolute; inset:3px; border:1px dashed currentColor; opacity:0.55; border-radius:2px; }
+  .stamp.status-active{ color:var(--green); }
+  .stamp.status-trial-set{ color:var(--red); }
+  .stamp.status-continuance{ color:var(--brass); }
+  .stamp.status-closed{ color:var(--ink-faint); transform:rotate(-3deg); }
+
+  .edit-panel{ background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:18px; margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+  .field{ display:flex; flex-direction:column; gap:5px; }
+  .field label{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-faint); font-family:var(--font-mono); }
+  .field input, .field textarea, .field select{ background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:8px 10px; font-size:13.5px; }
+  .field textarea{ resize:vertical; min-height:60px; }
+  .form-row{ display:flex; gap:10px; }
+  .form-row .field{ flex:1; }
+  .form-actions{ display:flex; gap:8px; margin-top:2px; }
+
+  .tabs{ display:flex; border-bottom:1px solid var(--border); margin:30px 0 22px; gap:26px; }
+  .tab{ padding:9px 2px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); cursor:pointer; border-bottom:2px solid transparent; background:none; border-top:none; border-left:none; border-right:none; }
+  .tab.active{ color:var(--ink); border-bottom-color:var(--red); }
+  .tab:hover:not(.active){ color:var(--ink-dim); }
+
+  .panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .panel-head h3{ font-family:var(--font-display); font-weight:600; font-size:17px; margin:0; }
+
+  .item-card{ background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; gap:14px; align-items:flex-start; }
+  .item-card .body{ flex:1; }
+  .date-label{ font-weight:600; font-size:13.5px; }
+  .date-value{ font-family:var(--font-mono); font-size:12px; color:var(--red); margin-top:3px; }
+  .date-detail{ font-size:12px; color:var(--ink-dim); margin-top:3px; }
+
+  .ground-row{ display:flex; gap:14px; }
+  .ground-letter{ font-family:var(--font-mono); font-weight:700; font-size:18px; color:var(--red); width:22px; flex-shrink:0; }
+  .ground-title{ font-weight:600; font-size:14px; }
+  .ground-desc{ color:var(--ink-dim); font-size:12.5px; margin-top:5px; }
+
+  .pill{ font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; padding:3px 8px; border-radius:20px; border:1px solid currentColor; display:inline-block; margin-top:6px; }
+  .pill.drafting{ color:var(--brass); background:var(--brass-dim); }
+  .pill.filed{ color:var(--ink-dim); background:var(--surface-2); }
+  .pill.granted{ color:var(--green); background:var(--green-dim); }
+  .pill.denied{ color:var(--red); background:var(--red-dim); }
+
+  .icon-btn{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:2px 4px; flex-shrink:0; }
+  .icon-btn:hover{ color:var(--red); }
+
+  .note-item{ padding:12px 0; border-bottom:1px solid var(--border); }
+  .note-item:last-child{ border-bottom:none; }
+  .note-ts{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); margin-bottom:4px; }
+  .note-text{ font-size:13.5px; color:var(--ink); white-space:pre-wrap; }
+
+  .empty-tab{ color:var(--ink-faint); font-size:13px; font-style:italic; padding:18px 0; }
+  .exposure-status{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); margin:2px 0 14px; }
+  .exposure-stub{ font-size:13px; color:var(--ink-dim); line-height:1.5; }
+  .exposure-total{ font-size:12.5px; color:var(--ink-dim); background:var(--surface-2); border:1px solid var(--border); border-radius:6px; padding:10px 12px; margin-bottom:14px; line-height:1.5; }
+  .charge-note{ font-size:11.5px; color:var(--ink-faint); margin-top:4px; line-height:1.4; }
+  .charge-selected-head{ position:relative; padding-right:150px; margin-bottom:10px; }
+  .btn-small{ font-size:11px; padding:5px 9px; position:absolute; top:0; right:0; }
+  .charge-results{ max-height:260px; overflow-y:auto; border:1px solid var(--border); border-radius:6px; margin-top:4px; }
+  .charge-results:empty{ border:none; margin:0; }
+  .result-row{ display:flex; justify-content:space-between; gap:10px; align-items:baseline; padding:9px 11px; border-bottom:1px solid var(--border); cursor:pointer; font-size:12.5px; }
+  .result-row:last-child{ border-bottom:none; }
+  .result-row:hover{ background:var(--surface-2); }
+  .result-row .rlabel{ color:var(--ink); line-height:1.4; }
+  .result-row .rcite{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
+  .result-row .rclass{ font-family:var(--font-mono); font-size:10.5px; font-weight:600; background:var(--brass); color:#1B1400; border-radius:3px; padding:1px 6px; white-space:nowrap; }
+  .search-hint{ font-size:11.5px; color:var(--ink-faint); padding:9px 2px; }
+  .radiorow{ display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+  .radiorow label{ display:flex; gap:8px; align-items:flex-start; font-size:12.5px; padding:8px 10px; border:1px solid var(--border); border-radius:5px; cursor:pointer; background:var(--bg); }
+  .radiorow label.checked{ border-color:var(--brass); background:var(--brass-dim); }
+  .radiorow input{ margin-top:2px; accent-color:var(--brass); }
+  .inline-check{ display:flex; align-items:center; gap:7px; font-size:12px; margin:8px 0; }
+  .flag{ margin-top:10px; background:var(--red-dim); border:1px solid var(--red); color:var(--red); border-radius:5px; padding:9px 11px; font-size:12px; line-height:1.5; }
+  .flag.note{ background:var(--green-dim); border-color:var(--green); color:var(--green); }
+  #charge-preview .range{ font-family:var(--font-mono); font-size:20px; font-weight:600; margin:10px 0 2px; color:var(--ink); }
+  #charge-preview .range small{ font-size:12px; font-weight:400; color:var(--ink-faint); }
+  .exp-bar-wrap{ margin:10px 0 6px; }
+  .exp-bar-track{ position:relative; height:22px; background:var(--surface-2); border:1px solid var(--border); border-radius:4px; }
+  .exp-bar-fill{ position:absolute; top:0; bottom:0; background:var(--brass); border-radius:3px; opacity:0.85; }
+  .exp-bar-scale{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9.5px; color:var(--ink-faint); margin-top:3px; }
+  .exp-hypo{ margin-top:14px; padding-top:12px; border-top:1px solid var(--border); }
+  .exp-hypo-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); font-family:var(--font-mono); margin-bottom:6px; }
+  .exp-hypo input[type=range]{ width:100%; accent-color:var(--brass); }
+  .exp-hypo-readout{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-dim); margin-top:6px; }
+  .edit-charges-block{ background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:12px; }
+  .btn-charges-toggle{ font-size:11.5px; padding:6px 10px; margin-bottom:8px; }
+
+  .add-inline{ margin-top:6px; }
+
+  .header-actions{ display:flex; gap:8px; }
+  .header-actions .btn{ flex:1; position:relative; }
+  .count-badge{ position:absolute; top:-7px; right:-7px; background:var(--red); color:#fff; font-size:10px;
+    font-family:var(--font-mono); font-weight:600; min-width:16px; height:16px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px; }
+  .btn.view-active{ border-color:var(--red); color:var(--red); }
+
+  .task-item{ display:flex; align-items:flex-start; gap:10px; background:var(--surface); border:1px solid var(--border);
+    border-radius:7px; padding:12px 14px; margin-bottom:8px; }
+  .task-item.done{ opacity:0.5; }
+  .task-item.done .task-text{ text-decoration:line-through; }
+  .task-checkbox{ margin-top:2px; width:16px; height:16px; accent-color:var(--red); cursor:pointer; flex-shrink:0; }
+  .task-body{ flex:1; }
+  .task-text{ font-size:13.5px; font-weight:500; }
+  .due-pill{ font-family:var(--font-mono); font-size:10.5px; margin-top:5px; display:inline-block; }
+  .due-pill.overdue{ color:var(--red); font-weight:700; }
+  .due-pill.soon{ color:var(--brass); font-weight:600; }
+  .due-pill.normal{ color:var(--ink-faint); }
+
+  .reminders-section{ margin-bottom:32px; }
+  .reminder-row{ display:flex; align-items:flex-start; gap:10px; background:var(--surface); border:1px solid var(--border);
+    border-radius:7px; padding:12px 14px; margin-bottom:8px; }
+  .reminder-case{ font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin-top:4px; }
+  .reminder-jump{ margin-left:auto; }
+
+  .minute-panel{ border-color:var(--brass); }
+  .minute-preview img{ max-width:100%; max-height:320px; border-radius:6px; border:1px solid var(--border); display:block; }
+  .minute-alert{ background:var(--brass-dim); border:1px solid var(--brass); border-radius:7px; padding:10px 14px;
+    margin-bottom:12px; font-size:12.5px; display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--ink); }
+  .minute-alert .btn{ flex-shrink:0; }
+  .minute-tag{ font-family:var(--font-mono); font-size:10px; color:var(--green); margin-top:4px; }
+  input[type="file"]{ background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:8px 10px; font-size:12.5px; width:100%; }
+
+  .search-wrap{ padding:12px 20px; border-bottom:1px solid var(--border); }
+  .search-wrap input{ width:100%; background:var(--bg); border:1px solid var(--border); border-radius:6px;
+    padding:8px 10px; font-size:13px; }
+
+  .print-summary{ display:none; }
+
+  .save-error-banner{ position:fixed; top:0; left:0; right:0; z-index:200; background:var(--red); color:#fff;
+    padding:9px 16px; display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:12.5px; }
+  .save-error-banner .btn{ background:#fff; color:var(--red); border-color:#fff; flex-shrink:0; }
+  body.has-save-error #app{ padding-top:40px; }
+  body.has-save-error .rail{ height:calc(100vh - 40px); }
+
+  @media (max-width:760px){
+    #app{ flex-direction:column; }
+    .rail{ width:100%; min-width:0; max-height:280px; padding-top:env(safe-area-inset-top); }
+    .main{ padding:24px 18px calc(70px + env(safe-area-inset-bottom)); }
+    .file-top{ flex-direction:column; }
+    .field input, .field textarea, .field select, .search-wrap input{ font-size:16px; } /* prevents iOS auto-zoom on focus */
+    .btn{ min-height:44px; padding:10px 14px; }
+    .icon-btn{ min-width:44px; min-height:44px; }
+    .case-item{ padding:16px 20px; }
+    .tab{ padding:12px 4px; }
+  }
+
+  @media print{
+    body{ background:#fff !important; color:#000 !important; overflow:visible !important; }
+    body::before{ display:none !important; }
+    .rail, .file-actions, .tabs, .tab-content, .header-actions{ display:none !important; }
+    .main{ padding:0 !important; overflow:visible !important; }
+    .print-summary{ display:block !important; color:#000; font-family:Georgia, serif; }
+    .print-summary h1{ font-size:22px; margin:0 0 2px; }
+    .print-summary .p-meta{ font-size:11px; color:#444; margin-bottom:10px; }
+    .print-summary h2{ font-size:13px; text-transform:uppercase; letter-spacing:0.08em; border-bottom:1px solid #999;
+      padding-bottom:3px; margin:14px 0 6px; }
+    .print-summary p, .print-summary li{ font-size:12px; line-height:1.4; }
+    .print-summary ul{ margin:0; padding-left:18px; }
+    .print-summary li{ margin-bottom:4px; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  window.addEventListener('error', function(e){
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;inset:0;background:#fff;color:#c00;padding:24px;font-family:monospace;white-space:pre-wrap;overflow:auto;z-index:9999;font-size:13px;';
+    box.textContent = 'JS ERROR:\n' + e.message + '\nFile: ' + e.filename + '\nLine ' + e.lineno + ', Col ' + e.colno + '\n\n' + (e.error && e.error.stack ? e.error.stack : '(no stack available)');
+    document.body.appendChild(box);
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;inset:0;background:#fff;color:#c00;padding:24px;font-family:monospace;white-space:pre-wrap;overflow:auto;z-index:9999;font-size:13px;';
+    var reason = e.reason;
+    box.textContent = 'UNHANDLED PROMISE REJECTION:\n' + (reason && reason.stack ? reason.stack : String(reason));
+    document.body.appendChild(box);
+  });
+</script>
+<script type="application/json" id="felony-class-seed">{"meta":{"source":"Oklahoma Sentencing Modernization Act of 2024 (HB 1792 / HB 2104 / HB 2105), effective Jan 1 2026","description":"Complete crime-to-class lookup data for Oklahoma felony classification under the Sentencing Modernization Act of 2024. Classes Y, A1-A3, B1-B6, C1, C2, D2 are complete. Class D1 and D3 are limited to Titles 21, 47, and 63 (the rest scatter across ~50 other titles). 12 drug-trafficking offenses model verified tiered ranges. Per Baird v. State, drug-specific and § 51.1 enhancement are elected alternatives, not stacked. Class Y (capital murder, 21 O.S. § 701.9) is not a term-of-years offense — see capitalOffense/sentencingMenu fields instead of verifiedRange.","classesWithUniformRanges":["C1","C2","D1","D2","D3"],"classesWithOwnStatuteRanges":["Y","A1","A2","A3","B1","B2","B3","B4","B5","B6"],"generatedFor":"Casey — Oklahoma criminal defense case tracker","notes":["exemptFromUniformRange: true means this specific offense, though listed in a Class C/D statute, is carved out from that class's uniform range and instead retains its own statute's penalty (enhanced, if at all, under 21 O.S. § 51.1).","baseSentenceExempt: true means only the no-priors first-offense sentence is carved out to the offense's own statute; the class's enhanced (prior-conviction) tiers still apply.","Offenses in classesWithOwnStatuteRanges never carry a uniform range — always consult the cited statute directly for the penalty."]},"offenses":[{"class":"C1","citation":"21 O.S. § 437(1)","offense":"Assisting a prisoner's escape from prison"},{"class":"C1","citation":"21 O.S. § 438(1)","offense":"Carrying/sending contraband to aid an escape"},{"class":"C1","citation":"21 O.S. § 440(A)","offense":"Harboring, assisting, or concealing a felon/fugitive"},{"class":"C1","citation":"21 O.S. § 455(A)","offense":"Preventing a witness from testifying or producing records"},{"class":"C1","citation":"21 O.S. § 455(B)","offense":"Threatening or harming a witness"},{"class":"C1","citation":"21 O.S. § 540A(B)/(C)","offense":"Eluding a peace officer, endangering others / causing GBI accident"},{"class":"C1","citation":"21 O.S. § 662","offense":"Dueling"},{"class":"C1","citation":"21 O.S. § 843.4(B)(1)","offense":"Financial exploitation of elderly/disabled adult, ≥ $100,000"},{"class":"C1","citation":"21 O.S. § 1403(A)","offense":"Arson in the third degree"},{"class":"C1","citation":"21 O.S. § 1404(B)","offense":"Arson in the fourth degree — placing/distributing flammable material"},{"class":"C1","citation":"21 O.S. § 1435(A)","offense":"Burglary second degree — dwelling, no person present"},{"class":"C1","citation":"21 O.S. § 1708","offense":"Stealing at night time from the person of another"},{"class":"C1","citation":"21 O.S. § 2001(G)(3)","offense":"Receiving/concealing unlawful proceeds ≥ $10,000"},{"class":"C1","citation":"47 O.S. § 6-302","offense":"False affidavit (certificate of title)"},{"class":"C1","citation":"63 O.S. § 2-401(E)","offense":"Using/soliciting a minor to distribute a CDS"},{"class":"C1","citation":"63 O.S. § 2-401(F)","offense":"Distributing CDS within 2,000 ft of school/park/daycare"},{"class":"C1","citation":"63 O.S. § 2-406(A)(3)","offense":"Obtaining CDS as a registrant by fraud/forgery/subterfuge"},{"class":"C1","citation":"63 O.S. § 2-419.1(A)","offense":"Employing a minor to transport/sell a CDS"},{"class":"C1","citation":"63 O.S. § 2-419.1(C)","offense":"Employing a minor to transport/sell a CDS, subsequent offense"},{"class":"C1","citation":"63 O.S. § 2-503.1f","offense":"Evading federal reporting/money-laundering requirements"},{"class":"C1","citation":"63 O.S. § 4253(A)(1)","offense":"Owning/operating a chop shop (vessel/motor)"},{"class":"C1","citation":"63 O.S. § 4253(A)(2)","offense":"Transporting vessel/motor parts to/from a chop shop"},{"class":"C1","citation":"63 O.S. § 4253(A)(3)","offense":"Selling/receiving vessel/motor parts to/from a chop shop"},{"class":"C2","citation":"2 O.S. § 11-10(B)","offense":"Theft of anhydrous equipment"},{"class":"C2","citation":"4 O.S. § 268","offense":"Branding/misbranding a domestic animal to defraud"},{"class":"C2","citation":"17 O.S. § 6.1(C)","offense":"Injuring/destroying a pipeline transportation system"},{"class":"C2","citation":"19 O.S. § 641","offense":"Embezzlement by a county treasurer/officer"},{"class":"C2","citation":"21 O.S. § 265","offense":"Giving a bribe to an executive officer"},{"class":"C2","citation":"21 O.S. § 266","offense":"Receiving a bribe as an executive officer"},{"class":"C2","citation":"21 O.S. § 282(B)(1)","offense":"Entering a restricted area armed / with violence causing GBI"},{"class":"C2","citation":"21 O.S. § 301","offense":"Forcefully/fraudulently preventing the Legislature from meeting"},{"class":"C2","citation":"21 O.S. § 303","offense":"Compelling the Legislature to adjourn/disperse"},{"class":"C2","citation":"21 O.S. § 305","offense":"Compelling legislative action by force/fraud"},{"class":"C2","citation":"21 O.S. § 308","offense":"Offering a bribe to a legislator"},{"class":"C2","citation":"21 O.S. § 309","offense":"Receiving a bribe as a legislator"},{"class":"C2","citation":"21 O.S. § 350","offense":"Entering a fort/arsenal and seizing arms"},{"class":"C2","citation":"21 O.S. § 374","offense":"Displaying a disloyalty emblem/banner"},{"class":"C2","citation":"21 O.S. § 380(A)","offense":"Bribery by a fiduciary (giving)"},{"class":"C2","citation":"21 O.S. § 380(B)","offense":"Bribery of a fiduciary (receiving)"},{"class":"C2","citation":"21 O.S. § 380.1","offense":"Commercial bribery of a depository institution/credit union"},{"class":"C2","citation":"21 O.S. § 382","offense":"Accepting/requesting a bribe as a public officer/employee"},{"class":"C2","citation":"21 O.S. § 383","offense":"Offering/giving a bribe to a judicial officer"},{"class":"C2","citation":"21 O.S. § 388","offense":"Attempting to influence a juror"},{"class":"C2","citation":"21 O.S. § 421(C)","offense":"Conspiracy to commit a felony"},{"class":"C2","citation":"21 O.S. § 422","offense":"Conspiring against the state's peace (outside state)"},{"class":"C2","citation":"21 O.S. § 424","offense":"Conspiring to commit an act against the state"},{"class":"C2","citation":"21 O.S. § 540B","offense":"Evading a roadblock"},{"class":"C2","citation":"21 O.S. § 578","offense":"Fraudulently producing an infant to intercept inheritance"},{"class":"C2","citation":"21 O.S. § 752","offense":"Self-maiming to obtain a benefit"},{"class":"C2","citation":"21 O.S. § 843.4(B)(2)","offense":"Financial exploitation of elderly/disabled adult, ≤ $100,000"},{"class":"C2","citation":"21 O.S. § 941","offense":"Conducting gambling games"},{"class":"C2","citation":"21 O.S. § 946","offense":"Using a house/room/place to conduct gambling games"},{"class":"C2","citation":"21 O.S. § 948","offense":"Public officer engaging in gambling games"},{"class":"C2","citation":"21 O.S. § 982","offense":"Commercial gambling"},{"class":"C2","citation":"21 O.S. § 991(A)(2)-(6)","offense":"Letting premises / forwarding money for race betting"},{"class":"C2","citation":"21 O.S. § 996.3","offense":"Misleading use of \"prize\" or \"gift\" in advertising"},{"class":"C2","citation":"21 O.S. § 1327(A)","offense":"Advocating criminal syndicalism/sabotage"},{"class":"C2","citation":"21 O.S. § 1404(A)","offense":"Arson in the fourth degree — attempt"},{"class":"C2","citation":"21 O.S. § 1416(4)","offense":"Delivery-fraud on bill of lading/receipt, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1435(A)","offense":"Burglary second degree — commercial bldg / vending machine"},{"class":"C2","citation":"21 O.S. § 1451(B)(4)","offense":"Embezzlement, property ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1451(C)","offense":"Embezzlement by a county/state officer"},{"class":"C2","citation":"21 O.S. § 1531","offense":"False personation of another"},{"class":"C2","citation":"21 O.S. § 1532(4)","offense":"Receiving money/property intended for another, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1533(F)(2)","offense":"Impersonating a law enforcement officer with a vehicle, causing harm"},{"class":"C2","citation":"21 O.S. § 1533.2","offense":"Obtaining/presenting another's info to a financial institution"},{"class":"C2","citation":"21 O.S. § 1541.2(A)(3)","offense":"Obtaining property by trick/bogus check, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1541.3(A)(3)","offense":"Two or more false/bogus checks, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1577(A)(4)","offense":"Selling a forged/counterfeit instrument, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1578(A)(4)","offense":"Possession of a forged instrument, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1579(A)(4)","offense":"Possession of a forged instrument with intent to defraud, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1592(A)(4)","offense":"Uttering a forged instrument, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1632","offense":"Exhibiting false books/papers to a public officer"},{"class":"C2","citation":"21 O.S. § 1635","offense":"Destroying corporate books/records to defraud"},{"class":"C2","citation":"21 O.S. § 1702(4)","offense":"Larceny of lost property, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1705(A)(4)","offense":"Grand larceny, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1707","offense":"Grand larceny in a dwelling house or vessel"},{"class":"C2","citation":"21 O.S. § 1709","offense":"Larceny of an evidence of debt / written instrument"},{"class":"C2","citation":"21 O.S. § 1713(A)(3)","offense":"Buying/receiving stolen property, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1713.1","offense":"Buying/receiving stolen construction/farm equipment"},{"class":"C2","citation":"21 O.S. § 1715","offense":"Bringing another state's stolen property into Oklahoma"},{"class":"C2","citation":"21 O.S. § 1716(A)","offense":"Larceny of livestock or an implement of husbandry"},{"class":"C2","citation":"21 O.S. § 1718","offense":"Larceny of a dog"},{"class":"C2","citation":"21 O.S. § 1719.2","offense":"Grand larceny of exotic livestock"},{"class":"C2","citation":"21 O.S. § 1720","offense":"Larceny of aircraft/auto/construction/farm equipment, ≥ $50,000"},{"class":"C2","citation":"21 O.S. § 1721","offense":"Tapping or drilling into a pipeline"},{"class":"C2","citation":"21 O.S. § 1722(2)","offense":"Taking crude oil/gasoline from a pipe/tank, ≥ $1,000"},{"class":"C2","citation":"21 O.S. § 1731(A)(5)","offense":"Larceny of merchandise from retailer/wholesaler, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1732","offense":"Larceny of trade secrets, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1742.2(B)(2)","offense":"Fraudulently procuring 2–10 telephone records"},{"class":"C2","citation":"21 O.S. § 1778","offense":"Masking/altering locomotive or railway signals"},{"class":"C2","citation":"21 O.S. § 1779","offense":"Destroying a written instrument, ≥ $15,000"},{"class":"C2","citation":"21 O.S. § 1953(A)","offense":"Oklahoma Computer Crimes Act violation (¶¶1,2,3,6,7,9,10)"},{"class":"C2","citation":"22 O.S. § 17(A)","offense":"Contracting sale of criminal-act rights without forfeiture provision"},{"class":"C2","citation":"27A O.S. § 2-5-116(B)","offense":"Clean Air Act violation risking death/serious injury"},{"class":"C2","citation":"27A O.S. § 2-6-206(G)(3)(a)","offense":"Pollutant Discharge Elimination violation risking death/injury"},{"class":"C2","citation":"29 O.S. § 3-201(E)","offense":"Bribery of a game warden"},{"class":"C2","citation":"30 O.S. § 4-904","offense":"Taking/enticing an incapacitated person without guardian consent"},{"class":"C2","citation":"36 O.S. § 4055.14(F)(2)","offense":"Viatical Settlements Act violation, $2,500–$35,000"},{"class":"C2","citation":"42 O.S. § 153(2)","offense":"Embezzlement of trust funds, ≥ $15,000"},{"class":"C2","citation":"47 O.S. § 4-108","offense":"False statement in a certificate-of-title application"},{"class":"C2","citation":"47 O.S. § 4-109","offense":"Altering or forging a certificate of title"},{"class":"C2","citation":"47 O.S. § 6-302","offense":"Perjury — false affidavit"},{"class":"C2","citation":"47 O.S. § 7-612(B)","offense":"Creating/selling security verification forms"},{"class":"C2","citation":"47 O.S. § 11-902(C)(2)","offense":"Subsequent DUI within 10 yrs / DUI with injury or transporting a child"},{"class":"C2","citation":"47 O.S. § 11-905(B)","offense":"Driving without a valid license, causing a GBI accident"},{"class":"C2","citation":"47 O.S. § 592.9(B)(2)","offense":"Operating a crusher without a license + possessing stolen property"},{"class":"C2","citation":"47 O.S. § 592.9(B)(3)","offense":"Selling to a crusher with false ID/lien declaration"},{"class":"C2","citation":"47 O.S. § 1503(A)","offense":"Chop shop — motor vehicle"},{"class":"C2","citation":"47 O.S. § 1503(B)","offense":"Altering/removing a vehicle identification number"},{"class":"C2","citation":"51 O.S. § 36.5","offense":"Perjury by a public officer/employee"},{"class":"C2","citation":"51 O.S. § 36.6","offense":"Public officer advocating Communist Party / overthrow of government"},{"class":"C2","citation":"52 O.S. § 109","offense":"Perjury — false report/map to Corporation Commission"},{"class":"C2","citation":"52 O.S. § 118","offense":"Corporation Commission member receiving a gift/gratuity"},{"class":"C2","citation":"59 O.S. § 1350.6(A)","offense":"Burglary first degree by a bail enforcer"},{"class":"C2","citation":"63 O.S. § 2-401(A)(1)","offense":"Distributing/soliciting a minor for a CDS"},{"class":"C2","citation":"63 O.S. § 2-401(A)(2)","offense":"Creating/distributing a counterfeit CDS"},{"class":"C2","citation":"63 O.S. § 2-401(C)(1)","offense":"Manufacturing/distributing a controlled or synthetic substance"},{"class":"C2","citation":"63 O.S. § 2-403(A)","offense":"Larceny, burglary, or theft of a CDS"},{"class":"C2","citation":"63 O.S. § 2-407(A)(1)","offense":"Obtaining a CDS by fraud/deceit/misrepresentation"},{"class":"C2","citation":"63 O.S. § 2-407(A)(2)","offense":"Obtaining a CDS by forged/altered prescription"},{"class":"C2","citation":"63 O.S. § 2-407(A)(3)","offense":"Obtaining a CDS by concealment of a material fact"},{"class":"C2","citation":"63 O.S. § 2-407(A)(4)","offense":"Obtaining a CDS by false name/address"},{"class":"C2","citation":"63 O.S. § 2-407(A)(5)","offense":"Obtaining a CDS by failing to disclose other prescriptions"},{"class":"C2","citation":"63 O.S. § 2-407(B)","offense":"Manufacturing/possessing counterfeit prescription forms"},{"class":"C2","citation":"63 O.S. § 2-503.1(A)","offense":"Receiving proceeds derived from a CDS violation"},{"class":"C2","citation":"63 O.S. § 2-503.1(B)","offense":"Concealing/transporting value intended for a CDS violation"},{"class":"C2","citation":"63 O.S. § 2-503.1(C)","offense":"Organizing transport of CDS-derived proceeds"},{"class":"C2","citation":"63 O.S. § 2-503.1(D)","offense":"CDS money laundering — concealing nature/source of proceeds"},{"class":"C2","citation":"63 O.S. § 2-503.1d(B)","offense":"Facilitating money-transmitter access for unlawful purposes"},{"class":"C2","citation":"63 O.S. § 2-503.1e","offense":"Using a money services business to facilitate a CDS violation"},{"class":"C2","citation":"63 O.S. § 2-503.1g","offense":"Structuring transactions to evade detection"},{"class":"C2","citation":"63 O.S. § 4253(B)","offense":"Altering a vessel/motor hull identification number"},{"class":"C2","citation":"63 O.S. § 4253(D)","offense":"Vessel/Motor Chop Shop Act violations"},{"class":"C2","citation":"63 O.S. § 124.8(B)","offense":"Using an explosive agent to kill/injure/intimidate/damage"},{"class":"C2","citation":"68 O.S. § 218.1","offense":"Bogus check for taxes/fees/penalties, ≥ $500"},{"class":"C2","citation":"68 O.S. § 244","offense":"Perjury — false answers to the Tax Commission"},{"class":"C2","citation":"68 O.S. § 246","offense":"Perjury — false return filed with the Tax Commission"},{"class":"C2","citation":"68 O.S. § 317(a)","offense":"Forging or counterfeiting a tax stamp"},{"class":"C2","citation":"71 O.S. § 1-301","offense":"Offering/selling unregistered securities"},{"class":"C2","citation":"71 O.S. § 1-308(K)(1)","offense":"Issuing investment certificates while insolvent"},{"class":"C2","citation":"71 O.S. § 1-401(A)","offense":"Transacting business as an unregistered broker-dealer"},{"class":"C2","citation":"71 O.S. § 1-401(C)","offense":"Employing an unregistered/suspended broker-dealer agent"},{"class":"C2","citation":"71 O.S. § 1-402(A)","offense":"Transacting business as an unregistered agent"},{"class":"C2","citation":"71 O.S. § 1-402(D)","offense":"Employing an unregistered agent"},{"class":"C2","citation":"71 O.S. § 1-402(F)","offense":"Conducting business with a suspended agent registration"},{"class":"C2","citation":"71 O.S. § 1-403(A)","offense":"Transacting business as an unregistered investment adviser"},{"class":"C2","citation":"71 O.S. § 1-403(C)","offense":"Employing an individual with suspended IA registration"},{"class":"C2","citation":"71 O.S. § 1-403(D)","offense":"Employing an unregistered investment adviser representative"},{"class":"C2","citation":"71 O.S. § 1-404(A)","offense":"Transacting business as an unregistered IA representative"},{"class":"C2","citation":"71 O.S. § 1-404(E)","offense":"Conducting business with a suspended IA rep registration"},{"class":"C2","citation":"71 O.S. § 1-501(1)","offense":"Securities fraud — device or scheme to defraud"},{"class":"C2","citation":"71 O.S. § 1-501(2)","offense":"Securities fraud — untrue statement of material fact"},{"class":"C2","citation":"71 O.S. § 1-501(3)","offense":"Securities fraud — act/practice operating as fraud"},{"class":"C2","citation":"71 O.S. § 1-502(A)(1)","offense":"Investment-advice fraud — device or scheme"},{"class":"C2","citation":"71 O.S. § 1-502(A)(2)","offense":"Investment-advice fraud — untrue statement"},{"class":"C2","citation":"71 O.S. § 1-502(A)(3)","offense":"Investment-advice fraud — deceptive act/practice"},{"class":"C2","citation":"71 O.S. § 1-505","offense":"False or misleading statements in a securities record"},{"class":"C2","citation":"71 O.S. § 1-506","offense":"Inconsistent representation to a securities customer"},{"class":"C2","citation":"71 O.S. § 1-508(A)","offense":"Willful violation of the Securities Act"},{"class":"C2","citation":"71 O.S. § 806","offense":"Selling a business opportunity without registration"},{"class":"C2","citation":"71 O.S. § 808(A)","offense":"Selling a business opportunity without disclosure filing"},{"class":"C2","citation":"71 O.S. § 809(A)","offense":"Selling a business opportunity without a written contract"},{"class":"C2","citation":"71 O.S. § 811","offense":"Business-opportunity claims without required net worth"},{"class":"C2","citation":"71 O.S. § 812(B)","offense":"Misusing non-public Administrator information"},{"class":"C2","citation":"71 O.S. § 819(1)","offense":"Business-opportunity fraud — device or scheme"},{"class":"C2","citation":"71 O.S. § 819(2)","offense":"Business-opportunity fraud — untrue statement"},{"class":"C2","citation":"71 O.S. § 819(3)","offense":"Business-opportunity fraud — deceptive act/practice"},{"class":"C2","citation":"71 O.S. § 820","offense":"False statements filed with the Business Opportunity Administrator"},{"class":"C2","citation":"71 O.S. § 821","offense":"Filing a false/incomplete registration application"},{"class":"C2","citation":"71 O.S. § 822","offense":"Publishing false/misleading business-opportunity advertising"},{"class":"C2","citation":"74 O.S. § 71","offense":"OMES officer taking a rebate/kickback"},{"class":"C2","citation":"79 O.S. § 203(B)","offense":"Monopolizing or conspiring to monopolize trade/commerce"},{"class":"C2","citation":"79 O.S. § 204","offense":"Price discrimination between commercial purchasers"},{"class":"C2","citation":"79 O.S. § 206","offense":"Violation of the Oklahoma Antitrust Reform Act"},{"class":"C2","citation":"82 O.S. § 867","offense":"GRDA director/officer conflict of interest in a contract"},{"class":"D1","citation":"21 O.S. § 318","offense":"Gift to influence a legislator"},{"class":"D1","citation":"21 O.S. § 321","offense":"Legislator receiving payoff for employment of another"},{"class":"D1","citation":"21 O.S. § 334","offense":"Lobbying the legislature on a contingency-fee basis"},{"class":"D1","citation":"21 O.S. § 355(A)","offense":"Furnishing public supplies for profit"},{"class":"D1","citation":"21 O.S. § 355(C)","offense":"Purchasing public supplies from a business employing a family member/spouse with >5% interest"},{"class":"D1","citation":"21 O.S. § 358(A)","offense":"Making a false claim against the state"},{"class":"D1","citation":"21 O.S. § 381","offense":"Bribing an officer"},{"class":"D1","citation":"21 O.S. § 399","offense":"Bribing a participant or official in an athletic contest"},{"class":"D1","citation":"21 O.S. § 425","offense":"Engaging in a pattern of criminal offenses"},{"class":"D1","citation":"21 O.S. § 443(A)","offense":"Escape from a county or city jail"},{"class":"D1","citation":"21 O.S. § 443(B)","offense":"Escape from DOC custody or alternative incarceration"},{"class":"D1","citation":"21 O.S. § 443(E)","offense":"Escape from a juvenile detention facility"},{"class":"D1","citation":"21 O.S. § 445","offense":"Unauthorized entry into a penal institution or jail"},{"class":"D1","citation":"21 O.S. § 453","offense":"Preparing false evidence"},{"class":"D1","citation":"21 O.S. § 456","offense":"Bribing a witness to falsely testify"},{"class":"D1","citation":"21 O.S. § 461","offense":"Larceny or destruction of records by a clerk/officer"},{"class":"D1","citation":"21 O.S. § 462","offense":"Larceny or destruction of records by a non-officer"},{"class":"D1","citation":"21 O.S. § 463","offense":"Offering forged/false instruments for the record"},{"class":"D1","citation":"21 O.S. § 491","offense":"Perjury"},{"class":"D1","citation":"21 O.S. § 496","offense":"Contradictory statements as perjury"},{"class":"D1","citation":"21 O.S. § 504","offense":"Subornation of perjury"},{"class":"D1","citation":"21 O.S. § 531","offense":"Falsifying a public record"},{"class":"D1","citation":"21 O.S. § 540C","offense":"Fortifying an access point where a felony is being committed"},{"class":"D1","citation":"21 O.S. § 543","offense":"Compounding a crime"},{"class":"D1","citation":"21 O.S. § 579","offense":"Substituting a child to deceive a parent/guardian"},{"class":"D1","citation":"21 O.S. § 588","offense":"Recording/listening to/observing jury proceedings"},{"class":"D1","citation":"21 O.S. § 843.3(A)","offense":"Abuse, sexual abuse, or exploitation of a vulnerable adult"},{"class":"D1","citation":"21 O.S. § 843.3(B)","offense":"Neglect of a vulnerable adult"},{"class":"D1","citation":"21 O.S. § 861","offense":"Procuring an abortion"},{"class":"D1","citation":"21 O.S. § 871","offense":"Adultery","exemptFromUniformRange":true},{"class":"D1","citation":"21 O.S. § 881","offense":"Bigamy"},{"class":"D1","citation":"21 O.S. § 884","offense":"Knowingly marrying a bigamist"},{"class":"D1","citation":"21 O.S. § 954","offense":"Confidence game by cards"},{"class":"D1","citation":"21 O.S. § 984","offense":"Dealing in gambling devices"},{"class":"D1","citation":"21 O.S. § 986","offense":"Installing communication of gambling information"},{"class":"D1","citation":"21 O.S. § 987","offense":"Dissemination of gambling information"},{"class":"D1","citation":"21 O.S. § 988","offense":"Conspiracy to violate gambling laws"},{"class":"D1","citation":"21 O.S. § 1031(B)","offense":"Engaging in prostitution while HIV-infected"},{"class":"D1","citation":"21 O.S. § 1031(D)","offense":"Operating prostitution within 1,000 ft of a school/church"},{"class":"D1","citation":"21 O.S. § 1040.80","offense":"Interactive computer service provider failing to remove child pornography, 3rd+ offense","exemptFromUniformRange":true},{"class":"D1","citation":"21 O.S. § 1040.13b(G)","offense":"Gaining value from nonconsensual dissemination of private sexual images"},{"class":"D1","citation":"21 O.S. § 1125","offense":"Sex offender entering a school safety zone"},{"class":"D1","citation":"21 O.S. § 1161","offense":"Unlawful removal of a dead body"},{"class":"D1","citation":"21 O.S. § 1162","offense":"Purchasing or receiving a dead body"},{"class":"D1","citation":"21 O.S. § 1172","offense":"Obscene/threatening/harassing phone call, 2nd+ offense"},{"class":"D1","citation":"21 O.S. § 1192","offense":"Spreading infectious disease"},{"class":"D1","citation":"21 O.S. § 1229","offense":"Altering livestock appearance for exhibition, 2nd+ offense"},{"class":"D1","citation":"21 O.S. § 1230.3","offense":"Unlawfully transporting hazardous waste"},{"class":"D1","citation":"21 O.S. § 1230.4","offense":"Unlawful waste management"},{"class":"D1","citation":"21 O.S. § 1230.5","offense":"False statements/acts re: waste permits"},{"class":"D1","citation":"21 O.S. § 1230.6","offense":"Unlawful disposal of hazardous waste"},{"class":"D1","citation":"21 O.S. § 1265.4","offense":"Attempted Sabotage Prevention Act violation"},{"class":"D1","citation":"21 O.S. § 1278","offense":"Carrying a weapon with intent to injure"},{"class":"D1","citation":"21 O.S. § 1320.10","offense":"Teaching/training firearm use in furtherance of a riot"},{"class":"D1","citation":"21 O.S. § 1411","offense":"Delivering a fraudulent bill of lading"},{"class":"D1","citation":"21 O.S. § 1412","offense":"Maintaining fraudulent warehouse receipts"},{"class":"D1","citation":"21 O.S. § 1414","offense":"Issuing duplicate bills of lading/warehouse receipts"},{"class":"D1","citation":"21 O.S. § 1415","offense":"Selling goods without consent of bill-of-lading holder"},{"class":"D1","citation":"21 O.S. § 1416(3)","offense":"Unlawful delivery of goods, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1435(B)","offense":"Burglary in the third degree"},{"class":"D1","citation":"21 O.S. § 1451(A)","offense":"Embezzlement, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1481","offense":"Extortion"},{"class":"D1","citation":"21 O.S. § 1482","offense":"Extortion induced by threats"},{"class":"D1","citation":"21 O.S. § 1485","offense":"Obtaining signatures by extortion"},{"class":"D1","citation":"21 O.S. § 1486","offense":"Extortion by threatening letter"},{"class":"D1","citation":"21 O.S. § 1488","offense":"Blackmail"},{"class":"D1","citation":"21 O.S. § 1503","offense":"Defrauding a hotel, inn, or restaurant, \\u2265 $1,000"},{"class":"D1","citation":"21 O.S. § 1521","offense":"Renting a motor vehicle with a bogus check, \\u2265 $1,000"},{"class":"D1","citation":"21 O.S. § 1532(3)","offense":"Receiving money/property by impersonation, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1533(G)","offense":"False use of \"State Police\" causing injury/fraud/harassment"},{"class":"D1","citation":"21 O.S. § 1533.1","offense":"Identity theft"},{"class":"D1","citation":"21 O.S. § 1541.2(A)","offense":"False pretense/bogus check/con game, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1541.3(A)","offense":"Two or more bogus checks, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1544","offense":"Obtaining money/property with false negotiable paper"},{"class":"D1","citation":"21 O.S. § 1550.28(A)","offense":"Signing a credit/debit card with intent to defraud"},{"class":"D1","citation":"21 O.S. § 1550.28(B)","offense":"Possessing another's credit/debit card with intent to defraud"},{"class":"D1","citation":"21 O.S. § 1550.31","offense":"Possessing incomplete credit cards with intent to complete"},{"class":"D1","citation":"21 O.S. § 1550(A)","offense":"Possessing a firearm with altered ID during a felony"},{"class":"D1","citation":"21 O.S. § 1550.41(C)","offense":"Making/selling/displaying false ID for felony purposes"},{"class":"D1","citation":"21 O.S. § 1571","offense":"Forgery of state/public/court/corporate seals"},{"class":"D1","citation":"21 O.S. § 1572","offense":"Forgery of records"},{"class":"D1","citation":"21 O.S. § 1573","offense":"Making a false entry in records"},{"class":"D1","citation":"21 O.S. § 1574","offense":"Forgery of a certification/acknowledgment of conveyance"},{"class":"D1","citation":"21 O.S. § 1577(A)","offense":"Forgery II/III, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1578(A)","offense":"Possession of forged evidence of debt, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1579(A)","offense":"Possession of another forged instrument, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1580","offense":"Issuing spurious/false stock certificates"},{"class":"D1","citation":"21 O.S. § 1581","offense":"Reissuing canceled stock certificates"},{"class":"D1","citation":"21 O.S. § 1582","offense":"Issuing/pledging false evidence of debt"},{"class":"D1","citation":"21 O.S. § 1583","offense":"Counterfeiting coin"},{"class":"D1","citation":"21 O.S. § 1584","offense":"Counterfeiting coin for exportation"},{"class":"D1","citation":"21 O.S. § 1585","offense":"Forging court process or title to property"},{"class":"D1","citation":"21 O.S. § 1586","offense":"Making false entries in a public book"},{"class":"D1","citation":"21 O.S. § 1587","offense":"Forging tickets of passage"},{"class":"D1","citation":"21 O.S. § 1588","offense":"Forging postage stamps"},{"class":"D1","citation":"21 O.S. § 1589","offense":"Falsification of corporate records"},{"class":"D1","citation":"21 O.S. § 1590","offense":"Employee making false entries"},{"class":"D1","citation":"21 O.S. § 1591","offense":"Possessing counterfeit coin with intent to circulate"},{"class":"D1","citation":"21 O.S. § 1592(A)","offense":"Uttering forged instruments, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1593","offense":"Falsely procuring another's signature"},{"class":"D1","citation":"21 O.S. § 1622","offense":"Uttering a signature of another with the same name"},{"class":"D1","citation":"21 O.S. § 1623","offense":"Uttering one's endorsement as another's"},{"class":"D1","citation":"21 O.S. § 1624","offense":"Erasure/alteration with intent to defraud"},{"class":"D1","citation":"21 O.S. § 1626","offense":"Signing a fictitious name as a corporate officer"},{"class":"D1","citation":"21 O.S. § 1639","offense":"Fraudulent insolvency of a corporation"},{"class":"D1","citation":"21 O.S. § 1663","offense":"Workers' compensation fraud"},{"class":"D1","citation":"21 O.S. § 1681","offense":"Willfully poisoning an animal"},{"class":"D1","citation":"21 O.S. § 1702(3)","offense":"Larceny of lost property, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1705(A)","offense":"Grand larceny, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1709","offense":"Larceny of a written instrument"},{"class":"D1","citation":"21 O.S. § 1713(A)","offense":"Receiving/concealing stolen property, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1715","offense":"Bringing stolen property into the state, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1718","offense":"Larceny of a dog"},{"class":"D1","citation":"21 O.S. § 1719","offense":"Larceny of or receiving stolen fowls"},{"class":"D1","citation":"21 O.S. § 1719.1","offense":"Larceny of domesticated fish/game, \\u2265 $1,000"},{"class":"D1","citation":"21 O.S. § 1720","offense":"Larceny of an auto/aircraft/motor vehicle, < $50,000"},{"class":"D1","citation":"21 O.S. § 1723","offense":"Larceny from a building or house"},{"class":"D1","citation":"21 O.S. § 1726","offense":"Possession of mercury"},{"class":"D1","citation":"21 O.S. § 1727","offense":"Entering with intent to steal copper"},{"class":"D1","citation":"21 O.S. § 1728","offense":"Possessing/receiving/transporting stolen copper"},{"class":"D1","citation":"21 O.S. § 1731(A)","offense":"Larceny of merchandise from a retailer, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1732","offense":"Larceny of trade secrets, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1742.2(A)","offense":"Fraudulently procuring a single telephone record"},{"class":"D1","citation":"21 O.S. § 1751","offense":"Injury to or obstruction of a railroad"},{"class":"D1","citation":"21 O.S. § 1752.1","offense":"Interfering with a railroad"},{"class":"D1","citation":"21 O.S. § 1767.1","offense":"Possess/use/threaten incendiary device or explosives, no injury"},{"class":"D1","citation":"21 O.S. § 1777","offense":"Removing/injuring piles securing a bank or dam"},{"class":"D1","citation":"21 O.S. § 1779","offense":"Maliciously injuring a written instrument, $2,500\\u2013$15,000"},{"class":"D1","citation":"21 O.S. § 1837","offense":"Placing a hard/inflammable object in grain or cotton"},{"class":"D1","citation":"21 O.S. § 1873(B)","offense":"Selling 5+ unlawful telecom devices within 6 months"},{"class":"D1","citation":"21 O.S. § 1874(B)","offense":"Manufacturing 5+ unlawful telecom devices within 6 months"},{"class":"D1","citation":"21 O.S. § 1904","offense":"Unauthorized removal of baggage/cargo from a bus/terminal"},{"class":"D1","citation":"21 O.S. § 1958","offense":"Accessing a computer system/network with unlawful intent"},{"class":"D1","citation":"21 O.S. § 1976","offense":"Reproducing a sound recording without consent, \\u2265100 articles"},{"class":"D1","citation":"21 O.S. § 1977","offense":"Unlawfully selling sound recordings"},{"class":"D1","citation":"21 O.S. § 1978","offense":"Broadcasting/live recording for sale without consent"},{"class":"D1","citation":"21 O.S. § 1979","offense":"Renting/selling articles without true manufacturer name"},{"class":"D1","citation":"21 O.S. § 1980","offense":"Counterfeiting a recording or article label"},{"class":"D1","citation":"21 O.S. § 1990.2","offense":"Violating the Trademark Anti-Counterfeiting Act"},{"class":"D1","citation":"21 O.S. § 1993","offense":"Tampering with security equipment"},{"class":"D1","citation":"21 O.S. § 2100.1","offense":"Sex offender engaging in ice cream truck vending"},{"class":"D1","citation":"47 O.S. § 4-102(B)","offense":"Unauthorized use of an implement of husbandry"},{"class":"D1","citation":"47 O.S. § 4-103(B)","offense":"Receiving/possessing/concealing an implement of husbandry"},{"class":"D1","citation":"47 O.S. § 4-107(A)","offense":"Removed/falsified/unauthorized VIN"},{"class":"D1","citation":"47 O.S. § 4-107(C)","offense":"Buy/possess/sell vehicle with VIN removed/defaced to conceal"},{"class":"D1","citation":"47 O.S. § 4-107a","offense":"Destroying/altering/counterfeiting trim tag plates"},{"class":"D1","citation":"47 O.S. § 4-110(B)","offense":"Misuse of a manufactured-home certificate of title"},{"class":"D1","citation":"47 O.S. § 4-110(B)","offense":"Removing a receipt to misrepresent tax/fee payment"},{"class":"D1","citation":"47 O.S. § 4-110(B)","offense":"Purchasing a registration receipt on an assigned title"},{"class":"D1","citation":"47 O.S. § 6-301","offense":"Misuse of a forged/counterfeit/suspended driver license"},{"class":"D1","citation":"47 O.S. § 6-302","offense":"Perjury by false affidavit"},{"class":"D1","citation":"47 O.S. § 11-207(B)","offense":"Interfering with a traffic control device causing injury/death"},{"class":"D1","citation":"47 O.S. § 1503(C)","offense":"Buy/sell/dispose of a vehicle with altered VIN (chop shop)"},{"class":"D1","citation":"47 O.S. § 1503(D)","offense":"Attempting to violate chop shop laws"},{"class":"D1","citation":"63 O.S. § 2-401(A)","offense":"Distribution/possession w/ intent, Schedule III\\u2013V drugs"},{"class":"D1","citation":"63 O.S. § 2-401(A)","offense":"Distribution of a counterfeit Schedule III\\u2013V substance"},{"class":"D1","citation":"63 O.S. § 2-403(B)","offense":"Robbery of a controlled dangerous substance"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Distributing/dispensing a CDS without a required order form"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Manufacturing/distributing/dispensing a CDS beyond registration"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Omitting/altering/obliterating a required CDS symbol"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Refusing to furnish required CDS information"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Refusing entry/inspection re: a CDS premises"},{"class":"D1","citation":"63 O.S. § 2-404(A)","offense":"Maintaining a place for keeping/selling a CDS"},{"class":"D1","citation":"63 O.S. § 2-503.1d(A)","offense":"Providing money-transmitter equipment to an unlicensed person, 2nd+ offense"},{"class":"D1","citation":"63 O.S. § 124.8(A)","offense":"Violating permit-holder responsibilities (explosives)"},{"class":"D1","citation":"63 O.S. § 2200.16A","offense":"Purchasing/selling body parts for transplantation"},{"class":"D1","citation":"63 O.S. § 2200.17A","offense":"Falsifying/forging/concealing a document of gift"},{"class":"D1","citation":"63 O.S. § 4209","offense":"Unlawful possession of a vessel or motor"},{"class":"D1","citation":"63 O.S. § 4209.1","offense":"Receiving/possessing/selling a stolen vessel or motor"},{"class":"D1","citation":"63 O.S. § 4209.2(B)","offense":"Removing/altering a vessel ID number"},{"class":"D1","citation":"63 O.S. § 4209.2(D)","offense":"Buy/possess/dispose of a vessel with a false ID number to conceal"},{"class":"D1","citation":"63 O.S. § 4209.3","offense":"False statement in a title application for a stolen vessel"},{"class":"D1","citation":"63 O.S. § 4209.4","offense":"Alteration/forgery of a vessel certificate of title"},{"class":"D1","citation":"63 O.S. § 4253(C)","offense":"Possessing a vessel with an altered ID number"},{"class":"D2","citation":"21 O.S. § 434","offense":"Attempt to escape from a penitentiary"},{"class":"D2","citation":"21 O.S. § 436","offense":"Attempt to escape from prison (not a penitentiary)","baseSentenceExempt":true},{"class":"D2","citation":"21 O.S. § 444(C)","offense":"Escape from arrest or detention for a felony"},{"class":"D2","citation":"21 O.S. § 650.5","offense":"Aggravated assault and battery upon a medical care provider","baseSentenceExempt":true},{"class":"D2","citation":"21 O.S. § 852","offense":"Omitting to provide for a child","baseSentenceExempt":true},{"class":"D2","citation":"21 O.S. § 856.2","offense":"Harboring an endangered runaway child, 2nd+ offense","baseSentenceExempt":true},{"class":"D2","citation":"21 O.S. § 1272.3","offense":"Discharging a stun gun, tear gas, mace, or similar agent against an officer","exemptFromUniformRange":true},{"class":"D2","citation":"21 O.S. § 1289.18","offense":"Possession of a sawed-off shotgun"},{"class":"D2","citation":"21 O.S. § 1304","offense":"Transmitting a threatening letter"},{"class":"D2","citation":"63 O.S. § 1-731","offense":"Abortion without a license","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-731","offense":"Abortion after the first trimester","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-733","offense":"Self-induced abortion","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-737.9","offense":"Violating the Unborn Child Protection from Dismemberment Abortion Act","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-738.14","offense":"Violating the Unborn Child Pain Awareness/Prevention Act","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-740.4b","offense":"Knowingly performing an abortion on an unemancipated minor","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-740.4b","offense":"Making a fraudulent statement to obtain an abortion for a minor","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-745.7","offense":"Violating the Pain-Capable Unborn Child Protection Act","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-746.7","offense":"Violating the Heartbeat Informed Consent Act","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 1-749","offense":"Abortion on a minor under 14, or failure to submit tissue","exemptFromUniformRange":true},{"class":"D2","citation":"63 O.S. § 2-401","offense":"Distribution of an imitation controlled substance, 2nd offense"},{"class":"D2","citation":"63 O.S. § 2-701","offense":"Assisting another in purchasing pseudoephedrine products, 2nd+ offense"},{"class":"D3","citation":"21 O.S. § 187.1","offense":"Candidate contribution violation"},{"class":"D3","citation":"21 O.S. § 187.2","offense":"Contributions by a corporation"},{"class":"D3","citation":"21 O.S. § 275","offense":"Accepting a gratuity or reward for appointment or exercise of office"},{"class":"D3","citation":"21 O.S. § 282","offense":"Entry into a restricted area"},{"class":"D3","citation":"21 O.S. § 306","offense":"Altering a draft bill"},{"class":"D3","citation":"21 O.S. § 307","offense":"Altering an engrossed copy of a bill"},{"class":"D3","citation":"21 O.S. § 360","offense":"Coercion of a state employee by a public official"},{"class":"D3","citation":"21 O.S. § 372","offense":"Mutilating, defiling, or destroying the U.S. flag"},{"class":"D3","citation":"21 O.S. § 384","offense":"Jurors, referees, arbitrators, umpires, or assessors receiving bribes"},{"class":"D3","citation":"21 O.S. § 400","offense":"Receiving a bribe for an athletic contest"},{"class":"D3","citation":"21 O.S. § 437","offense":"Assisting a prisoner to escape"},{"class":"D3","citation":"21 O.S. § 438","offense":"Carrying items into prison to aid an escape"},{"class":"D3","citation":"21 O.S. § 444(D)","offense":"Removing an electronic monitoring device"},{"class":"D3","citation":"21 O.S. § 451","offense":"Offering false evidence"},{"class":"D3","citation":"21 O.S. § 567A","offense":"Violation of a child custody order"},{"class":"D3","citation":"21 O.S. § 589(B)","offense":"Communicating false information on a missing child"},{"class":"D3","citation":"21 O.S. § 590","offense":"Failing to maintain public financial or business records"},{"class":"D3","citation":"21 O.S. § 815","offense":"Aiding an attempted suicide","exemptFromUniformRange":true},{"class":"D3","citation":"21 O.S. § 856(B)","offense":"Contributing to the delinquency of a minor, 2nd+ offense"},{"class":"D3","citation":"21 O.S. § 950","offense":"Receiving money to aid a person's arrest evasion"},{"class":"D3","citation":"21 O.S. § 991(A)","offense":"Betting on races"},{"class":"D3","citation":"21 O.S. § 1053","offense":"Preparing or drawing a lottery"},{"class":"D3","citation":"21 O.S. § 1066","offense":"Setting up a lottery selling plan"},{"class":"D3","citation":"21 O.S. § 1067","offense":"Lottery injunction violation"},{"class":"D3","citation":"21 O.S. § 1092","offense":"Pawnbroker refusing to exhibit stolen goods"},{"class":"D3","citation":"21 O.S. § 1163","offense":"Interference with places of burial"},{"class":"D3","citation":"21 O.S. § 1168.1","offense":"Buying or selling human skeletal remains"},{"class":"D3","citation":"21 O.S. § 1168.4(C)","offense":"Knowingly disturbing human skeletal remains"},{"class":"D3","citation":"21 O.S. § 1168.4(D)","offense":"Disturbing a burial ground to obtain human skeletal remains"},{"class":"D3","citation":"21 O.S. § 1174","offense":"Burning a cross"},{"class":"D3","citation":"21 O.S. § 1214","offense":"Unlawful use of a police radio"},{"class":"D3","citation":"21 O.S. § 1267.1","offense":"Organizing groups advocating government overthrow"},{"class":"D3","citation":"21 O.S. § 1282","offense":"Carrying or using a slung shot"},{"class":"D3","citation":"21 O.S. § 1416","offense":"Unlawful delivery of goods, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1442","offense":"Possessing burglary tools as a convicted burglar"},{"class":"D3","citation":"21 O.S. § 1451(B)","offense":"Embezzlement, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1483(B)","offense":"Attempted extortion"},{"class":"D3","citation":"21 O.S. § 1503","offense":"Defrauding a hotel, inn, or restaurant, \\u2265 $1,000"},{"class":"D3","citation":"21 O.S. § 1506","offense":"Mock auction"},{"class":"D3","citation":"21 O.S. § 1532","offense":"Receiving money/property by impersonation, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1533(B)","offense":"False impersonation of a public official or officer"},{"class":"D3","citation":"21 O.S. § 1533(C)","offense":"Falsely asserting authority of the law"},{"class":"D3","citation":"21 O.S. § 1533(D)","offense":"Intimidating a public official or officer"},{"class":"D3","citation":"21 O.S. § 1533(E)","offense":"False impersonation of a judge, clerk, notary, or juror"},{"class":"D3","citation":"21 O.S. § 1541.2(A)","offense":"False pretense/bogus check/con game, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1541.3(A)","offense":"Two or more bogus checks, $2,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1542(A)","offense":"Obtaining money/property/signature under false pretenses"},{"class":"D3","citation":"21 O.S. § 1542(B)","offense":"Obtaining property by a false retail receipt or label"},{"class":"D3","citation":"21 O.S. § 1543","offense":"Obtaining a charitable contribution by false pretenses"},{"class":"D3","citation":"21 O.S. § 1550.32","offense":"Receiving money/goods/services from a forged or revoked credit card"},{"class":"D3","citation":"21 O.S. § 1577(A)","offense":"Forgery II/III, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1578(A)","offense":"Possession of forged evidence of debt, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1579(A)","offense":"Possession of another forged instrument, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1592(A)","offense":"Uttering forged instruments, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1662","offense":"Fraud on an insurance company"},{"class":"D3","citation":"21 O.S. § 1702","offense":"Larceny of lost property, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1705(A)","offense":"Grand larceny, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1709","offense":"Larceny of a written instrument"},{"class":"D3","citation":"21 O.S. § 1713(A)","offense":"Receiving/concealing stolen property, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1715","offense":"Bringing stolen property into the state, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1716(B)","offense":"Larceny of domestic animals"},{"class":"D3","citation":"21 O.S. § 1718","offense":"Larceny of a dog"},{"class":"D3","citation":"21 O.S. § 1731(A)","offense":"Larceny of merchandise from a retailer, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1732","offense":"Larceny of trade secrets, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1753","offense":"Injury to a highway"},{"class":"D3","citation":"21 O.S. § 1753.8","offense":"Defacing/stealing/possessing a road sign causing injury or death"},{"class":"D3","citation":"21 O.S. § 1755","offense":"Injuring or destroying a turnpike gate"},{"class":"D3","citation":"21 O.S. § 1760(A)","offense":"Malicious injury/destruction of property, \\u2265 $1,000"},{"class":"D3","citation":"21 O.S. § 1760(A)","offense":"Malicious injury/destruction of property, 2+ prior convictions (any amount)"},{"class":"D3","citation":"21 O.S. § 1765","offense":"Defacing or injuring a house of worship"},{"class":"D3","citation":"21 O.S. § 1779","offense":"Maliciously injuring a written instrument, $1,000\\u2013$2,500"},{"class":"D3","citation":"21 O.S. § 1785","offense":"Injuring works of literature or art in a public place"},{"class":"D3","citation":"21 O.S. § 1786","offense":"Injuring pipes or wire","exemptFromUniformRange":true},{"class":"D3","citation":"21 O.S. § 1791","offense":"Damaging fences for animal containment, 2nd+ offense"},{"class":"D3","citation":"21 O.S. § 1792(A)","offense":"Willful trespass with intent to damage/vandalize"},{"class":"D3","citation":"21 O.S. § 1792(B)","offense":"Trespass and damage to a critical infrastructure facility","exemptFromUniformRange":true},{"class":"D3","citation":"21 O.S. § 1834","offense":"Removal or disposal of mortgaged property, \\u2265 $1,000"},{"class":"D3","citation":"21 O.S. § 1861(A)","offense":"Telephone solicitor failing to give name/affiliation, 3rd+ offense"},{"class":"D3","citation":"21 O.S. § 1861(B)","offense":"Violating the Oklahoma Solicitation of Charitable Contributions Act, 3rd+ offense"},{"class":"D3","citation":"21 O.S. § 1871(B)","offense":"Using a telecommunication device to defraud, > $1,000"},{"class":"D3","citation":"21 O.S. § 1871(C)","offense":"Using a cloned cellular device to facilitate a felony"},{"class":"D3","citation":"21 O.S. § 1872(B)","offense":"Possessing 5+ unlawful telecommunication devices"},{"class":"D3","citation":"21 O.S. § 1872(C)","offense":"Possessing an ESN-interception device with intent to clone"},{"class":"D3","citation":"21 O.S. § 1873(A)","offense":"Selling an unlawful telecommunication device"},{"class":"D3","citation":"21 O.S. § 1874(A)","offense":"Manufacturing an unlawful telecommunication device"},{"class":"D3","citation":"21 O.S. § 2001(G)","offense":"Proceeds derived from a state statute violation, $2,500\\u2013$10,000"},{"class":"D3","citation":"47 O.S. § 4-102(A)","offense":"Unauthorized use of a vehicle"},{"class":"D3","citation":"47 O.S. § 4-103(A)","offense":"Receiving/possessing/concealing a stolen vehicle"},{"class":"D3","citation":"47 O.S. § 579.1","offense":"New motor vehicle broker violation, 2nd+ offense"},{"class":"D3","citation":"47 O.S. § 1503(E)","offense":"Conspiracy to violate chop shop laws"},{"class":"D3","citation":"47 O.S. § 1503(F)","offense":"Solicitation to violate chop shop laws"},{"class":"D3","citation":"47 O.S. § 1503(G)","offense":"Aiding or abetting a chop shop violation"},{"class":"D3","citation":"47 O.S. § 1503(H)","offense":"Accessory to a chop shop violation"},{"class":"D3","citation":"63 O.S. § 1-324.1","offense":"Birth, death, or stillborn certificate violation"},{"class":"D3","citation":"63 O.S. § 1-757.10","offense":"Fraudulent use of an abortion-inducing drug","exemptFromUniformRange":true},{"class":"D3","citation":"63 O.S. § 2-307","offense":"Failing to keep CDS records and inventories"},{"class":"D3","citation":"63 O.S. § 2-312.1","offense":"Steroid prescription without a valid purpose"},{"class":"D3","citation":"63 O.S. § 2-314","offense":"Tampering with a prescription label"},{"class":"D3","citation":"63 O.S. § 2-405(D)","offense":"Delivering paraphernalia to a person under 18"},{"class":"D3","citation":"63 O.S. § 3101.11(C)","offense":"Concealing/defacing/altering another's advance directive"},{"class":"D3","citation":"63 O.S. § 3101.11(D)","offense":"Falsifying or forging another's advance directive"},{"class":"D3","citation":"63 O.S. § 3101.11(E)","offense":"Requiring an advance directive"},{"class":"D3","citation":"63 O.S. § 3101.11(F)","offense":"Inducing another to execute an advance directive"},{"class":"D3","citation":"63 O.S. § 4009.1(B)","offense":"Possessing an outboard motor with serial number removed"},{"class":"D3","citation":"63 O.S. § 4009.1(B)","offense":"Possessing an outboard motor with a counterfeit serial number"},{"class":"D3","citation":"63 O.S. § 4253(E)","offense":"Conspiracy to violate the Vessel/Motor Chop Shop Act"},{"class":"D3","citation":"63 O.S. § 4253(F)","offense":"Solicitation to violate the Vessel/Motor Chop Shop Act"},{"class":"D3","citation":"63 O.S. § 4253(G)","offense":"Aiding/abetting a Vessel/Motor Chop Shop Act violation"},{"class":"D3","citation":"63 O.S. § 4253(H)","offense":"Accessory after the fact to a Vessel/Motor Chop Shop Act violation"},{"class":"B2","citation":"21 O.S. § 446(C)","offense":"Destroying/altering ID documents of a trafficking victim"},{"class":"B2","citation":"21 O.S. § 532","offense":"Allowing a person in custody to escape (by an officer)"},{"class":"B2","citation":"21 O.S. § 741","offense":"Kidnapping","verifiedRange":{"confidence":"high","minYears":0,"maxYears":20,"note":"If offense involved sexual abuse/exploitation, post-imprisonment supervision is mandatory in addition to the range shown."}},{"class":"B2","citation":"21 O.S. § 856.1","offense":"Causing/aiding a minor to distribute/possess/manufacture a CDS"},{"class":"B2","citation":"21 O.S. § 866","offense":"Trafficking in children"},{"class":"B2","citation":"21 O.S. § 1040.8(C)","offense":"Photographing/publishing/distributing child pornography"},{"class":"B2","citation":"21 O.S. § 1081","offense":"Procuring another for prostitution"},{"class":"B2","citation":"21 O.S. § 1085","offense":"Detaining a female against her will in a house of prostitution"},{"class":"B2","citation":"21 O.S. § 1114(B)","offense":"Rape in the second degree","verifiedRange":{"confidence":"high","minYears":1,"maxYears":15,"note":"Penalty stated in 21 O.S. § 1116, not § 1114 itself. No probation eligibility; lifetime sex offender registration (Level Three)."}},{"class":"B2","citation":"21 O.S. § 1402","offense":"Arson in the second degree","verifiedRange":{"confidence":"high","minYears":0,"maxYears":25,"note":"Also carries a fine up to $20,000."}},{"class":"B2","citation":"57 O.S. § 590(A)","offense":"Sex offender residing within 2,000 ft of a protected location, 2nd+ offense"},{"class":"B2","citation":"57 O.S. § 590(B)","offense":"Sex offender residing with a minor victim, 2nd+ offense"},{"class":"B2","citation":"59 O.S. § 1350.6","offense":"Bail enforcer breaking into a defendant's dwelling"},{"class":"B2","citation":"63 O.S. § 2-332(A)","offense":"Possessing a precursor drug product with intent to manufacture meth"},{"class":"B2","citation":"63 O.S. § 2-415(C)(1)(b)","offense":"Aggravated trafficking of marijuana","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":85,"note":"\\u2265 1,000 lbs. Fine $100K\\u2013$500K (first offense). All tiers served at 85% (aggravated trafficking rule). Tiers reflect § 2-415(D)'s own escalation for repeat DRUG-related priors — this is one of two enhancement paths; see § 51.1 alternative below."}},{"class":"B2","citation":"63 O.S. § 2-415(C)(2)(c)","offense":"Aggravated trafficking of cocaine/coca leaves/cocaine base","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":85,"note":"\\u2265 450 g. Fine $100K\\u2013$500K (first offense). All tiers served at 85%. Tiers reflect § 2-415(D)'s own escalation for repeat DRUG-related priors — one of two enhancement paths; see § 51.1 alternative below."}},{"class":"B2","citation":"63 O.S. § 2-415(C)(3)(b)","offense":"Aggravated trafficking of heroin","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":85,"note":"Fine range not independently confirmed for this specific tier — verify. All tiers served at 85%. Tiers reflect § 2-415(D)'s own escalation for repeat DRUG-related priors — one of two enhancement paths; see § 51.1 alternative below."}},{"class":"B2","citation":"63 O.S. § 2-415(C)(4)(c)","offense":"Aggravated trafficking of amphetamine/methamphetamine","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":85,"note":"\\u2265 450 g. Fine $50K\\u2013$500K (first offense). All tiers served at 85%. Tiers reflect § 2-415(D)'s own escalation for repeat DRUG-related priors — one of two enhancement paths; see § 51.1 alternative below."}},{"class":"B2","citation":"63 O.S. § 2-415(C)(5)(b)","offense":"Aggravated trafficking of LSD","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":2,"maxYears":null,"is85PercentCrime":true,"note":"\\u2265 10 g. Fine $100K\\u2013$250K. Structured differently from marijuana/cocaine/heroin/meth: the 2-year minimum and life max are stated directly in this subparagraph, NOT in § 2-415(D)'s escalation list — LSD isn't named in subsection D. No same-drug repeat-offense tier found for this substance; a prior would run through the § 51.1 alternative below, not a drug-specific tier."}},{"class":"B2","citation":"63 O.S. § 2-415(C)(6)(b)","offense":"Aggravated trafficking of PCP","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":2,"maxYears":null,"is85PercentCrime":true,"note":"\\u2265 150 g. Fine $50K\\u2013$250K. Structured differently from marijuana/cocaine/heroin/meth: the 2-year minimum and life max are stated directly in this subparagraph, NOT in § 2-415(D)'s escalation list — PCP isn't named in subsection D. No same-drug repeat-offense tier found for this substance; a prior would run through the § 51.1 alternative below, not a drug-specific tier."}},{"class":"B1","citation":"21 O.S. § 175(5)","offense":"Accessory to murder in the second degree","verifiedRange":{"confidence":"high","minYears":5,"maxYears":25}},{"class":"B1","citation":"63 O.S. § 2-415(C)(12)(b)","offense":"Aggravated trafficking of fentanyl/carfentanyl or analogs","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":2,"maxYears":null,"is85PercentCrime":true,"note":"\\u2265 5 g. Fine $250K\\u2013$500K. Confirmed Class B1 (base fentanyl trafficking, subparagraph a, is Class B3 \\u2014 resolved via the official B3 classification list, item 43). Structured like LSD/PCP: not in § 2-415(D)'s named list, so no same-drug repeat-offense tier found \\u2014 a prior would run through the § 51.1 alternative below."}},{"class":"B1","citation":"21 O.S. § 521(1)","offense":"Rescuing/attempting to rescue a felony prisoner"},{"class":"B1","citation":"21 O.S. § 813","offense":"Aiding suicide","verifiedRange":{"confidence":"low","minYears":7,"maxYears":null,"note":"§ 813 defines the offense; penalty is in § 817 (\\u2018not less than 7 years,\\u2019 no stated max — treat as up to life absent a cap). SB549 (2025) amended §§ 813/815 penalties and this may be stale. Verify current § 817 text before relying on this."}},{"class":"B1","citation":"21 O.S. § 814","offense":"Aiding suicide by furnishing weapons or poison"},{"class":"B1","citation":"21 O.S. § 832","offense":"Mingling poison/CDS/sharp objects with food, drink, medicine, or water"},{"class":"B1","citation":"21 O.S. § 843.1(B)(1)","offense":"Abuse, financial neglect, neglect, or exploitation by a caretaker"},{"class":"B1","citation":"21 O.S. § 843.5(C)","offense":"Engaging in child neglect"},{"class":"B1","citation":"21 O.S. § 843.5(D)","offense":"Enabling child neglect"},{"class":"B1","citation":"21 O.S. § 888(A)","offense":"Forcible sodomy","verifiedRange":{"confidence":"high","minYears":0,"maxYears":20,"note":"§ 888 has its OWN internal repeat-offense escalation, separate from § 51.1: 2nd conviction w/ victim under 16 = no probation/deferred eligibility; 3rd+ conviction w/ victim under 16, or after 2 priors under § 1114(A)/§1123/§843.5, = mandatory life or life without parole. Check priors against this specific list before using the base range."}},{"class":"B1","citation":"21 O.S. § 888(B)(1)","offense":"Sodomy, adult upon a person under 16"},{"class":"B1","citation":"21 O.S. § 888(B)(2)","offense":"Sodomy upon a person incapable of consent (mental illness)"},{"class":"B1","citation":"21 O.S. § 888(B)(3)","offense":"Sodomy by force, violence, or threats"},{"class":"B1","citation":"21 O.S. § 888(B)(4)","offense":"Sodomy upon a person in state/local custody or supervision"},{"class":"B1","citation":"21 O.S. § 888(B)(5)","offense":"Sodomy, school employee upon a student age 16\\u201319"},{"class":"B1","citation":"21 O.S. § 888(B)(7)","offense":"Sodomy upon an unconscious person"},{"class":"B1","citation":"21 O.S. § 888(B)(8)","offense":"Sodomy upon a person intoxicated by the accused"},{"class":"B1","citation":"21 O.S. § 1021.2","offense":"Procuring a minor for, or possessing/distributing, child pornography"},{"class":"B1","citation":"21 O.S. § 1021.3","offense":"Permitting a minor's participation in child pornography (parent/guardian)"},{"class":"B1","citation":"21 O.S. § 1024.2","offense":"Buying, procuring, or possessing child pornography"},{"class":"B1","citation":"21 O.S. § 1029(B)","offense":"Child sex trafficking"},{"class":"B1","citation":"21 O.S. § 1087(A)(2)","offense":"Receiving/agreeing to receive a child for prostitution"},{"class":"B1","citation":"21 O.S. § 1087(A)(3)","offense":"Transporting or aiding transport of a child for prostitution"},{"class":"B1","citation":"21 O.S. § 1087(B)(2)","offense":"Permitting child prostitution on controlled premises"},{"class":"B1","citation":"21 O.S. § 1088(A)(1)","offense":"Inducing a child into prostitution by threats/violence/scheme"},{"class":"B1","citation":"21 O.S. § 1088(A)(2)","offense":"Detaining/compelling a child to engage in prostitution"},{"class":"B1","citation":"21 O.S. § 1088(A)(3)","offense":"Compelling a child's prostitution to pay off debts"},{"class":"B1","citation":"21 O.S. § 1088(B)(2)","offense":"Permitting a child's detention for prostitution on controlled premises"},{"class":"B1","citation":"21 O.S. § 1266","offense":"Advocating revolution/sedition/treason/overthrow of the government"},{"class":"B1","citation":"21 O.S. § 1266.4","offense":"Committing/aiding an act to overthrow or destroy the government"},{"class":"B1","citation":"21 O.S. § 1268.2(D)","offense":"Biochemical terrorism"},{"class":"B1","citation":"21 O.S. § 1268.5(C)","offense":"Biochemical assault, knowing the substance is toxic/lethal"},{"class":"B4","citation":"21 O.S. § 1287(A)","offense":"Using a firearm while committing a felony, first offense","verifiedRange":{"confidence":"high","minYears":2,"maxYears":10,"note":"Separate offense from, and stacks on top of, the sentence for the underlying felony. Current statute text (2025) labels this Class B4."}},{"class":"B1","citation":"21 O.S. § 1287(A)","offense":"Using a firearm while committing a felony, 2nd+ offense","verifiedRange":{"confidence":"medium","minYears":10,"maxYears":null,"note":"Secondary sources describe this as a minimum of 10 years \\u2018possibly extending up to thirty (30) years or more\\u2019 — the upper bound is imprecise in available sources; treat as 10\\u2013life pending direct statute confirmation. Matches your B1 classification list. Separate offense stacking on top of the underlying felony sentence."}},{"class":"B4","citation":"21 O.S. § 1283(A)","offense":"Possession of a firearm after former conviction of a felony","verifiedRange":{"confidence":"high","minYears":1,"maxYears":10,"note":"Fine up to $10,000. Class confirmed as B4 by the official B4 classification list (item 42)."}},{"class":"B4","citation":"21 O.S. § 53","offense":"Concealing the birth or death of a child"},{"class":"B4","citation":"21 O.S. § 645","offense":"Assault, battery, or assault and battery with a sharp or dangerous weapon"},{"class":"B4","citation":"21 O.S. § 799","offense":"Robbery in the second degree"},{"class":"B4","citation":"21 O.S. § 843.3(A)","offense":"Neglecting a vulnerable adult"},{"class":"B4","citation":"21 O.S. § 850","offense":"Malicious harassment based on race, color, religion, ancestry, national origin, or disability"},{"class":"B4","citation":"21 O.S. § 851","offense":"Abandonment of a child under 10 years of age"},{"class":"B4","citation":"21 O.S. § 853","offense":"Abandonment of a wife or child under 15 years of age"},{"class":"B4","citation":"21 O.S. § 856(E)","offense":"2nd+ conviction for recruiting a minor into a criminal street gang"},{"class":"B4","citation":"21 O.S. § 885","offense":"Incest"},{"class":"B4","citation":"21 O.S. § 886","offense":"Crime against nature"},{"class":"B4","citation":"21 O.S. § 891","offense":"Taking/enticing a child under 16 to detain or conceal"},{"class":"B4","citation":"21 O.S. § 1021(A)(1)","offense":"Indecent exposure"},{"class":"B4","citation":"21 O.S. § 1021(A)(2)","offense":"Procuring/counseling/assisting an act of indecent exposure"},{"class":"B4","citation":"21 O.S. § 1021(A)(3)","offense":"Preparing/publishing/selling/distributing/exhibiting obscene material or child pornography"},{"class":"B4","citation":"21 O.S. § 1021(A)(4)","offense":"Preparing/selling/giving/loaning/distributing/exhibiting obscene material or child pornography"},{"class":"B4","citation":"21 O.S. § 1028","offense":"Operating a house of prostitution / soliciting or transporting for prostitution"},{"class":"B4","citation":"21 O.S. § 1029(A)","offense":"Engaging in or soliciting prostitution"},{"class":"B4","citation":"21 O.S. § 1040.13","offense":"Purchasing/selling/distributing obscene material or child pornography"},{"class":"B4","citation":"21 O.S. § 1040.13a","offense":"Soliciting sexual conduct with a minor by use of technology"},{"class":"B4","citation":"21 O.S. § 1073","offense":"Promoting a pyramid promotional scheme"},{"class":"B4","citation":"21 O.S. § 1086","offense":"2nd+ offense permitting prostitution on controlled premises"},{"class":"B4","citation":"21 O.S. § 1087(A)(1)","offense":"Offering to secure a child under 18 for prostitution"},{"class":"B4","citation":"21 O.S. § 1087(B)(2)","offense":"Knowingly permitting child prostitution on controlled premises"},{"class":"B4","citation":"21 O.S. § 1118","offense":"Taking a woman against her will to compel marriage"},{"class":"B4","citation":"21 O.S. § 1119","offense":"Abduction of a child under 15 for marriage/concubinage/moral turpitude"},{"class":"B4","citation":"21 O.S. § 1123(B)","offense":"Sexual battery"},{"class":"B4","citation":"21 O.S. § 1123(C)","offense":"Indecent acts with a human corpse"},{"class":"B4","citation":"21 O.S. § 1161.1","offense":"Desecration of a human corpse"},{"class":"B4","citation":"21 O.S. § 1173(D)","offense":"Stalking within 10 years of a prior stalking conviction"},{"class":"B4","citation":"21 O.S. § 1217","offense":"Interfering with/assaulting firefighters in performance of duties"},{"class":"B4","citation":"21 O.S. § 1230.7","offense":"Concealment of hazardous waste"},{"class":"B4","citation":"21 O.S. § 1261","offense":"Criminal syndicalism"},{"class":"B4","citation":"21 O.S. § 1262","offense":"Sabotage"},{"class":"B4","citation":"21 O.S. § 1263","offense":"Advocating/teaching criminal syndicalism or sabotage"},{"class":"B4","citation":"21 O.S. § 1265.2","offense":"Destroying property to hinder defense/war preparations"},{"class":"B4","citation":"21 O.S. § 1265.3","offense":"Causing defects in an article intended for defense/war"},{"class":"B4","citation":"21 O.S. § 1265.5","offense":"Conspiracy to violate the Sabotage Prevention Act"},{"class":"B4","citation":"21 O.S. § 1268.4","offense":"Terrorism hoax"},{"class":"B4","citation":"21 O.S. § 1268.6","offense":"Terrorist activity involving toxic/chemical/biological/nuclear materials"},{"class":"B4","citation":"21 O.S. § 1268.7","offense":"Financial transactions involving terrorism-related property"},{"class":"B4","citation":"21 O.S. § 1268.8","offense":"Using a money services business/EFT to violate the Antiterrorism Act"},{"class":"B4","citation":"21 O.S. § 1283(C)","offense":"Possession of a firearm while on probation, parole, or supervision"},{"class":"B4","citation":"21 O.S. § 1283(D)","offense":"Possession of a firearm by an adjudicated delinquent/youthful offender"},{"class":"B4","citation":"21 O.S. § 1283(E)","offense":"Possession of a firearm by a person illegally in the United States"},{"class":"B4","citation":"21 O.S. § 1283(F)","offense":"Allowing a felon/delinquent to possess a pistol (handgun license holder)"},{"class":"B4","citation":"21 O.S. § 1289.16","offense":"Pointing a firearm"},{"class":"B4","citation":"21 O.S. § 1289.20","offense":"Manufacturing/importing/selling restricted bullets"},{"class":"B4","citation":"21 O.S. § 1289.21","offense":"Possessing/using restricted bullets against another person"},{"class":"B4","citation":"21 O.S. § 1289.26","offense":"Committing a felony while wearing body armor"},{"class":"B4","citation":"21 O.S. § 1290.21(B)","offense":"Carrying a stolen handgun"},{"class":"B4","citation":"21 O.S. § 1320.2","offense":"Incitement to riot"},{"class":"B4","citation":"21 O.S. § 1321.7","offense":"Malicious destruction of property/injury during a state of emergency"},{"class":"B4","citation":"21 O.S. § 1321.8(A)","offense":"Participating in a riot during a state of emergency"},{"class":"B4","citation":"21 O.S. § 1321.8(E)","offense":"Causing an innocent person to engage in a riot"},{"class":"B4","citation":"21 O.S. § 1368","offense":"Possession of explosives by a convicted felon"},{"class":"B4","citation":"21 O.S. § 1378(A)","offense":"Attempting/conspiring to perform an act of violence"},{"class":"B4","citation":"21 O.S. § 1378(C)","offense":"Devising a plan to cause serious bodily harm or death"},{"class":"B4","citation":"21 O.S. § 1405","offense":"Endangering life (incl. emergency personnel) during arson"},{"class":"B4","citation":"21 O.S. § 1903(B)","offense":"Intimidating/assaulting a bus driver, attendant, guard, or passenger to seize a bus"},{"class":"B4","citation":"21 O.S. § 1903(D)","offense":"Discharging a firearm into/within a bus or transportation facility"},{"class":"B4","citation":"47 O.S. § 10-102.1","offense":"Leaving the scene of a fatal accident"},{"class":"B4","citation":"47 O.S. § 11-902(C)(3)","offense":"Second felony DUI conviction"},{"class":"B4","citation":"47 O.S. § 11-905(C)","offense":"Causing a fatal accident while driving without a valid license"},{"class":"B4","citation":"47 O.S. § 11-1111(A)","offense":"Throwing/dropping a substance at a moving vehicle"},{"class":"B4","citation":"47 O.S. § 11-1111(B)","offense":"Throwing/dropping an object from a bridge/overpass to damage/injure"},{"class":"B4","citation":"63 O.S. § 2-328(C)","offense":"Furnishing a precursor substance knowing it will be used to manufacture a CDS"},{"class":"B4","citation":"63 O.S. § 2-328(D)","offense":"2nd+ conviction for a precursor substance violation"},{"class":"B4","citation":"63 O.S. § 2-328(E)","offense":"Precursor substance violation without a permit, or false statement in application"},{"class":"B4","citation":"63 O.S. § 2-333","offense":"Selling pseudoephedrine products knowing they'll be used to manufacture meth"},{"class":"B4","citation":"63 O.S. § 2-509(B)","offense":"Cultivating/producing CDS-source plants"},{"class":"B4","citation":"63 O.S. § 2-509(H)","offense":"Manufacturing hashish/hashish oil/hashish powder from marijuana"},{"class":"B4","citation":"63 O.S. § 2-701(B)","offense":"Possessing pseudoephedrine while on the Meth Offender Registry"},{"class":"B4","citation":"63 O.S. § 124.8(B)","offense":"Using explosives to kill/injure/intimidate a person or damage property"},{"class":"B1","citation":"21 O.S. § 1289.17A","offense":"Discharging a firearm/deadly weapon into a dwelling or building"},{"class":"B1","citation":"21 O.S. § 1312(4)","offense":"Directing/soliciting force or violence during a riot"},{"class":"B1","citation":"21 O.S. § 1431","offense":"Burglary in the first degree","verifiedRange":{"confidence":"high","minYears":7,"maxYears":20,"is85PercentCrime":true}},{"class":"B1","citation":"21 O.S. § 1903(A)","offense":"Seizing/controlling a bus by force or violence"},{"class":"B1","citation":"21 O.S. § 1903(C)","offense":"Using a deadly weapon while seizing a bus / against a bus driver"},{"class":"B1","citation":"21 O.S. § 2001(G)(4)","offense":"Receiving/concealing unlawful proceeds, > $50,000"},{"class":"B1","citation":"22 O.S. § 1403(A)","offense":"Participating in racketeering activities"},{"class":"B1","citation":"22 O.S. § 1403(B)","offense":"Acquiring/controlling an enterprise through racketeering"},{"class":"B1","citation":"22 O.S. § 1403(C)","offense":"Investing racketeering proceeds"},{"class":"B1","citation":"22 O.S. § 1403(D)","offense":"Conspiring to commit racketeering activities"},{"class":"B1","citation":"47 O.S. § 11-904(B)(1)","offense":"Causing a GBI accident while driving under the influence"},{"class":"B6","citation":"21 O.S. § 649.1(A)","offense":"Striking/tormenting/mistreating/desensitizing a police dog or horse"},{"class":"B6","citation":"21 O.S. § 649.1(B)","offense":"Interfering with a police dog or horse's lawful performance"},{"class":"B6","citation":"21 O.S. § 649.3(D)","offense":"Harming/torturing/killing a service animal during a misdemeanor/felony"},{"class":"B6","citation":"21 O.S. § 650.2(A)","offense":"Assault/battery on a DOC employee by a person in DOC custody"},{"class":"B6","citation":"21 O.S. § 650.2(B)","offense":"Assault/battery on a private prison employee by an incarcerated person"},{"class":"B6","citation":"21 O.S. § 650.2(C)","offense":"Aggravated assault/battery on a DHS employee or contractor"},{"class":"B6","citation":"21 O.S. § 650.2(D)","offense":"Assault/battery on an OJA or contracted juvenile facility employee"},{"class":"B6","citation":"21 O.S. § 650.4","offense":"Assault/battery on a medical care provider"},{"class":"B6","citation":"21 O.S. § 650.6(B)","offense":"Assault/battery on a court officer, witness, or juror"},{"class":"B6","citation":"21 O.S. § 650.7(C)","offense":"Aggravated assault/battery on a school employee"},{"class":"B6","citation":"21 O.S. § 650.8","offense":"Assault/battery on a juvenile facility employee"},{"class":"B6","citation":"21 O.S. § 650.9","offense":"Throwing feces/urine/semen/saliva/blood on a state/county/city employee"},{"class":"B6","citation":"21 O.S. § 650.11","offense":"Medical battery"},{"class":"B6","citation":"21 O.S. § 852.1","offense":"Child endangerment","verifiedRange":{"confidence":"high","minYears":0,"maxYears":4,"note":"Also carries a fine up to $5,000. Covers knowingly permitting abuse, permitting a child near CDS manufacturing, permitting a child in a vehicle with an impaired driver, or driving impaired (§ 11-902) with a child in the vehicle."}},{"class":"B3","citation":"21 O.S. § 341","offense":"Embezzlement of state property by a public officer"},{"class":"B3","citation":"21 O.S. § 349","offense":"Burning, destroying, or injuring a public building"},{"class":"B3","citation":"21 O.S. § 539","offense":"Resisting or aiding in resisting the execution of process"},{"class":"B3","citation":"21 O.S. § 644.1","offense":"Domestic abuse with a prior pattern of physical abuse"},{"class":"B3","citation":"21 O.S. § 644(F)","offense":"Assault and battery against an intimate partner/family/household member causing GBI"},{"class":"B3","citation":"21 O.S. § 644(J)","offense":"2nd+ conviction for strangulation/attempted strangulation of an intimate partner/family/household member"},{"class":"B3","citation":"21 O.S. § 1289.26","offense":"2nd+ conviction for committing/attempting a felony while wearing body armor"},{"class":"B3","citation":"21 O.S. § 1312(2)","offense":"Riotous assembly to resist execution of a statute or obstruct a public officer"},{"class":"B3","citation":"21 O.S. § 1312(3)","offense":"Carrying a weapon or being disguised while participating in a riot"},{"class":"B3","citation":"21 O.S. § 1312(4)","offense":"Directing/soliciting force or violence while participating in a riot"},{"class":"B3","citation":"21 O.S. § 1403(B)","offense":"Arson with intent to injure or defraud the insurer"},{"class":"B3","citation":"21 O.S. § 1561","offense":"Forgery in the first degree"},{"class":"B3","citation":"21 O.S. § 1562","offense":"Forgery of stock certificates or securities"},{"class":"B3","citation":"21 O.S. § 1622","offense":"Fraudulently uttering one's signature as another's with the same name"},{"class":"B3","citation":"21 O.S. § 1623","offense":"Fraudulently uttering one's endorsement as another's with the same name"},{"class":"B3","citation":"21 O.S. § 1624","offense":"Total/partial erasure or obliteration of an instrument with intent to defraud"},{"class":"B3","citation":"21 O.S. § 1626","offense":"Signing a fictitious name as an officer/agent of a corporation"},{"class":"B3","citation":"21 O.S. § 1742.2(B)(3)","offense":"Procuring more than 10 telephone records by fraudulent means"},{"class":"B3","citation":"36 O.S. § 4055.14(F)(1)","offense":"Violation of the Viatical Settlements Act of 2008"},{"class":"B3","citation":"47 O.S. § 11-902(C)(4)","offense":"3rd+ conviction for DUI"},{"class":"B3","citation":"47 O.S. § 11-902(D)","offense":"DUI with a BAC of 0.15 or more"},{"class":"B3","citation":"52 O.S. § 47.6","offense":"Injuring/destroying a hazardous liquid transportation system"},{"class":"B3","citation":"57 O.S. § 21(A)","offense":"Bringing a weapon, CDS, alcohol, money, or financial documents into a jail/prison"},{"class":"B3","citation":"63 O.S. § 2-401(G)(5)","offense":"Purchasing pseudoephedrine/ephedrine after a prior meth manufacturing conviction"},{"class":"B3","citation":"63 O.S. § 2-406(A)(1)","offense":"Distributing a Schedule I/II CDS other than by dispensing, in legitimate business"},{"class":"B3","citation":"63 O.S. § 2-406(A)(2)","offense":"Using a fictitious/revoked/suspended registration number to manufacture/distribute a CDS"},{"class":"B3","citation":"63 O.S. § 2-406(A)(4)","offense":"Furnishing false/fraudulent information in a CDS application, report, or document"},{"class":"B3","citation":"63 O.S. § 2-406(A)(5)","offense":"Making/possessing a device to reproduce a drug trademark or identifying mark"},{"class":"B3","citation":"63 O.S. § 2-419.1(D)","offense":"Employing a person under 15 to transport/sell/peddle a CDS"},{"class":"B3","citation":"63 O.S. § 4253(J)","offense":"2nd+ conviction for violating the Vessel/Motor Chop Shop Act"},{"class":"B3","citation":"63 O.S. § 4253(J)","offense":"3rd+ conviction for violating the Vessel/Motor Chop Shop Act"},{"class":"B3","citation":"63 O.S. § 2-415(C)(1)(a)","offense":"Trafficking of marijuana","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 25 lbs. Fine $25K–$100K (first offense)."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(2)(a)","offense":"Trafficking of cocaine/coca leaves/cocaine base","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 28 g. Fine $25K–$100K (first offense)."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(2)(b)","offense":"Trafficking of cocaine/coca leaves/cocaine base (higher quantity tier)","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 300 g. Fine $100K–$500K (first offense). A distinct middle threshold between the base (28g) and aggravated (450g) tiers."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(3)(a)","offense":"Trafficking of heroin","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 10 g. Fine $25K–$50K (first offense)."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(4)(a)","offense":"Trafficking of amphetamine/methamphetamine","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 20 g. Fine $25K–$200K (first offense)."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(4)(b)","offense":"Trafficking of amphetamine/methamphetamine (higher quantity tier)","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 200 g. Fine $50K–$500K (first offense). A distinct middle threshold between the base (20g) and aggravated (450g) tiers."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(12)(a)","offense":"Trafficking in fentanyl/carfentanyl or analogs","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"tiers":{"none":{"minYears":0,"maxYears":20},"onePrior":{"minYears":4,"maxYears":null},"twoPlusPriors":{"minYears":20,"maxYears":null}},"minTimeServedPct":50,"note":"≥ 1 g. Fine $100K–$250K (first offense). Class confirmed B3 by the official B3 classification list (item 43) — corrects an earlier B1 assignment from a different pasted list."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(5)(a)","offense":"Trafficking of LSD","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 1 g. Fine $50K–$100K. Not in § 2-415(D)'s named list — no same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(6)(a)","offense":"Trafficking of PCP","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 20 g. Fine $20K–$50K. Not in § 2-415(D)'s named list — no same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(7)(a)","offense":"Trafficking of MDMA (ecstasy)","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 30 tablets or 10 g. Fine $25K–$100K. Not in § 2-415(D)'s named list — no same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(7)(b)","offense":"Aggravated trafficking of MDMA (ecstasy)","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":2,"maxYears":null,"note":"≥ 100 tablets or 30 g. Fine $100K–$500K. Unlike other aggravated tiers, this one is ALSO Class B3 (not B1/B2) — confirmed by item 38 of the B3 list. Not in § 2-415(D)'s named list — no same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(8)","offense":"Trafficking of morphine","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 1,000 g. Fine $100K–$500K. Single tier — no aggravated variant or same-drug repeat-offense tier found in sources reviewed; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(9)","offense":"Trafficking of oxycodone","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 400 g. Fine $100K–$500K. Single tier — no aggravated variant or same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(10)","offense":"Trafficking of hydrocodone","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 3,750 g. Fine $100K–$500K. Single tier — no aggravated variant or same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B3","citation":"63 O.S. § 2-415(C)(11)","offense":"Trafficking of benzodiazepine","verifiedRange":{"confidence":"high","hasOwnRepeatOffenseEscalation":true,"minYears":0,"maxYears":20,"note":"≥ 500 g. Fine $100K–$500K. Single tier — no aggravated variant or same-drug repeat-offense tier found; a prior runs through § 51.1."}},{"class":"B5","citation":"21 O.S. § 644(C)","offense":"2nd+ conviction for assault and battery against an intimate partner/family/household member"},{"class":"B5","citation":"21 O.S. § 644(G)","offense":"2nd+ conviction for domestic abuse committed in the presence of a child"},{"class":"B5","citation":"21 O.S. § 644(J)","offense":"Strangulation or attempted strangulation of an intimate partner/family/household member"},{"class":"B5","citation":"21 O.S. § 646","offense":"Aggravated assault and battery"},{"class":"B5","citation":"21 O.S. § 649(B)","offense":"Battery or assault and battery upon a police officer/peace officer"},{"class":"B5","citation":"21 O.S. § 649.1(D)","offense":"Striking/mistreating a police dog or horse during a misdemeanor/felony"},{"class":"B5","citation":"21 O.S. § 649.2(C)","offense":"Disfiguring/disabling/killing a police dog or horse during a misdemeanor/felony"},{"class":"B5","citation":"21 O.S. § 650.2(E)","offense":"Battery causing bodily injury to an OJA/residential facility employee"},{"class":"B5","citation":"21 O.S. § 653","offense":"Assault with intent to kill"},{"class":"B5","citation":"21 O.S. § 681","offense":"Assault with intent to commit a felony"},{"class":"B5","citation":"21 O.S. § 716","offense":"Manslaughter in the second degree"},{"class":"B5","citation":"21 O.S. § 717","offense":"Owning a mischievous animal that kills a human being"},{"class":"B5","citation":"21 O.S. § 856(C)","offense":"Causing a minor to commit/participate in a felony"},{"class":"B5","citation":"21 O.S. § 856(D)","offense":"Recruiting a minor into a criminal street gang"},{"class":"B5","citation":"21 O.S. § 856.3","offense":"Committing a gang-related offense as a condition of gang membership"},{"class":"B5","citation":"21 O.S. § 1173(B)","offense":"Stalking"},{"class":"B5","citation":"21 O.S. § 1173(C)","offense":"2nd+ conviction of stalking, or stalking within 10 years of a prior conviction"},{"class":"B5","citation":"21 O.S. § 1192.1","offense":"Intentionally/recklessly spreading an infectious disease"},{"class":"B5","citation":"21 O.S. § 1302","offense":"Entering premises while masked/disguised to inflict bodily/property injury"},{"class":"B5","citation":"21 O.S. § 1303","offense":"Assault with a dangerous weapon while masked/disguised"},{"class":"B5","citation":"21 O.S. § 1320.3","offense":"Unlawful assembly for the purpose of engaging in a riot"},{"class":"B5","citation":"21 O.S. § 1685","offense":"Acts of cruelty to animals"},{"class":"B5","citation":"21 O.S. § 1692.2","offense":"Instigating/encouraging a cockfight"},{"class":"B5","citation":"21 O.S. § 1692.3","offense":"Keeping a pit or providing equipment/facilities for cockfighting"},{"class":"B5","citation":"21 O.S. § 1692.4","offense":"Servicing or facilitating a cockfight"},{"class":"B5","citation":"21 O.S. § 1692.5","offense":"Owning/possessing/training a bird for cockfighting"},{"class":"B5","citation":"21 O.S. § 1694","offense":"Instigating/encouraging a dogfight"},{"class":"B5","citation":"21 O.S. § 1695","offense":"Keeping a house/pit or providing equipment/facilities for dogfighting"},{"class":"B5","citation":"21 O.S. § 1696","offense":"Performing a service in furtherance of a dogfight"},{"class":"B5","citation":"21 O.S. § 1697","offense":"Owning/training a dog with intent for it to fight another dog"},{"class":"B5","citation":"47 O.S. § 10-102","offense":"Failing to stop for an accident causing nonfatal injury"},{"class":"B5","citation":"47 O.S. § 11-904(A)(2)","offense":"Personal injury DUI accident with a prior DUI conviction"},{"class":"B5","citation":"57 O.S. § 583","offense":"Failure to register as a sex offender"},{"class":"B5","citation":"57 O.S. § 586","offense":"Furnishing false/misleading sex offender registration information"},{"class":"B5","citation":"57 O.S. § 587(A)","offense":"Failure to comply with the Sex Offenders Registration Act"},{"class":"B5","citation":"57 O.S. § 587(B)","offense":"Failure to comply with GPS monitoring guidelines (sex offender)"},{"class":"B5","citation":"57 O.S. § 590(A)","offense":"Residing within 2,000 ft of a school/protected site (sex offender)"},{"class":"B5","citation":"57 O.S. § 590(B)","offense":"Residing with a minor child after a minor-victim offense (sex offender)"},{"class":"B5","citation":"57 O.S. § 590.1(A)","offense":"Two or more sex offenders residing together in a dwelling"},{"class":"B5","citation":"57 O.S. § 590.1(E)","offense":"Establishing/operating a residence for registered sex offenders"},{"class":"A1","citation":"21 O.S. § 644(E)","offense":"Domestic abuse against a pregnant woman with knowledge, causing miscarriage/injury to the unborn child"},{"class":"A1","citation":"21 O.S. § 651","offense":"Administering poison with intent to kill"},{"class":"A1","citation":"21 O.S. § 701.8(1)","offense":"Second degree murder"},{"class":"A1","citation":"21 O.S. § 701.8(2)","offense":"Second degree murder by a person engaged in the commission of a felony"},{"class":"A1","citation":"21 O.S. § 745(A)","offense":"Kidnapping for the purpose of extorting money"},{"class":"A1","citation":"21 O.S. § 843.5(F)","offense":"Sexual abuse of a child under 12 years of age"},{"class":"A1","citation":"21 O.S. § 843.5(I)","offense":"Sexual exploitation of a child under 12 years of age"},{"class":"A1","citation":"21 O.S. § 843.5(K)","offense":"Sexual abuse of a child under 14, subsequent to a prior conviction of the same"},{"class":"A1","citation":"21 O.S. § 1021(B)(1)","offense":"Soliciting or aiding a minor to perform an obscene act"},{"class":"A1","citation":"21 O.S. § 1021(B)(2)","offense":"Showing/distributing obscene material or child pornography to induce a minor into an obscene act"},{"class":"A1","citation":"21 O.S. § 1312(1)","offense":"Murder, maiming, robbery, rape, or arson committed in the course of a riot"},{"class":"A1","citation":"21 O.S. § 1441","offense":"Burglary by the aid or use of an explosive"},{"class":"A1","citation":"21 O.S. § 1767.1","offense":"Placing/using an explosive or incendiary device where personal injury results"},{"class":"A1","citation":"63 O.S. § 2-401(G)(3)","offense":"Aggravated manufacturing of a controlled dangerous substance"},{"class":"A1","citation":"63 O.S. § 124.8(B)","offense":"Using an explosive/blasting agent to kill/injure/intimidate or damage property, where personal injury results"},{"class":"A2","citation":"21 O.S. § 175(5)","offense":"Accessory to murder in the first degree","verifiedRange":{"confidence":"high","minYears":5,"maxYears":45}},{"class":"A2","citation":"21 O.S. § 650(B)","offense":"Aggravated assault and battery upon a police officer/peace officer resulting in maiming"},{"class":"A2","citation":"21 O.S. § 701.16","offense":"Solicitation for murder in the first degree"},{"class":"A2","citation":"21 O.S. § 711","offense":"Manslaughter in the first degree"},{"class":"A2","citation":"21 O.S. § 712","offense":"Intoxicated physician's administration of poison/drug/medicine causing death"},{"class":"A2","citation":"21 O.S. § 745(B)","offense":"Receiving/possessing/exchanging money or a thing of value from a kidnapped person"},{"class":"A2","citation":"21 O.S. § 748(C)","offense":"Human trafficking for labor or commercial sex"},{"class":"A2","citation":"21 O.S. § 760","offense":"Female genital mutilation"},{"class":"A2","citation":"21 O.S. § 798","offense":"Robbery in the first degree"},{"class":"A2","citation":"21 O.S. § 800","offense":"Conjoint robbery committed by two or more persons"},{"class":"A2","citation":"21 O.S. § 801","offense":"Robbery or attempted robbery with a dangerous weapon or imitation firearm"},{"class":"A2","citation":"21 O.S. § 849","offense":"Wiring/equipping vehicles or structures with explosives intending injury or death"},{"class":"A2","citation":"21 O.S. § 1040.12a","offense":"Aggravated possession of child pornography"},{"class":"A2","citation":"21 O.S. § 1111.1","offense":"Rape by instrumentation"},{"class":"A2","citation":"21 O.S. § 1114(A)","offense":"Rape in the first degree"},{"class":"A2","citation":"21 O.S. § 1117","offense":"Compelling a woman to marry against her will by force, menace, or duress"},{"class":"A2","citation":"21 O.S. § 1752","offense":"Malicious/wanton/negligent destruction of railroad property causing death"},{"class":"A2","citation":"22 O.S. § 107","offense":"Resisting execution of process during a state of riot or insurrection"},{"class":"A2","citation":"47 O.S. § 11-902(C)(5)","offense":"DUI after a prior 2nd-degree murder/1st-degree manslaughter conviction involving a DUI death"},{"class":"A2","citation":"63 O.S. § 2-401(G)(2)","offense":"Manufacturing/attempting to manufacture a CDS, or possession of certain substances"},{"class":"A2","citation":"63 O.S. § 2-403(B)","offense":"Robbery of a CDS from a practitioner, manufacturer, distributor, or agent"},{"class":"A3","citation":"21 O.S. § 644(D)","offense":"Domestic assault and battery with a deadly weapon"},{"class":"A3","citation":"21 O.S. § 644(E)(2)","offense":"2nd+ conviction of domestic abuse against a pregnant woman with knowledge of the pregnancy"},{"class":"A3","citation":"21 O.S. § 650(A)","offense":"Aggravated assault and battery upon a police officer/peace officer"},{"class":"A3","citation":"21 O.S. § 652(A)","offense":"Shooting with intent to kill"},{"class":"A3","citation":"21 O.S. § 652(B)","offense":"Using a vehicle to facilitate the intentional discharge of a firearm/crossbow/weapon"},{"class":"A3","citation":"21 O.S. § 652(C)","offense":"Assault and battery with a deadly weapon"},{"class":"A3","citation":"21 O.S. § 751","offense":"Maiming"},{"class":"A3","citation":"21 O.S. § 843.1(B)(2)","offense":"Sexual abuse by a caretaker"},{"class":"A3","citation":"21 O.S. § 843.5(A)","offense":"Child abuse"},{"class":"A3","citation":"21 O.S. § 843.5(B)","offense":"Enabling child abuse"},{"class":"A3","citation":"21 O.S. § 843.5(E)","offense":"Child sexual abuse"},{"class":"A3","citation":"21 O.S. § 843.5(G)","offense":"Enabling child sexual abuse"},{"class":"A3","citation":"21 O.S. § 843.5(H)","offense":"Child sexual exploitation"},{"class":"A3","citation":"21 O.S. § 843.5(J)","offense":"Enabling child sexual exploitation"},{"class":"A3","citation":"21 O.S. § 1123(A)","offense":"Lewd or indecent proposals or acts to a child"},{"class":"A3","citation":"21 O.S. § 1268.2(B)","offense":"Terrorism"},{"class":"A3","citation":"21 O.S. § 1268.3(A)","offense":"Conspiracy to commit terrorism"},{"class":"A3","citation":"21 O.S. § 1327(B)","offense":"Adult advocating government overthrow on campus/public school grounds"},{"class":"A3","citation":"21 O.S. § 1401(A)","offense":"Arson in the first degree"},{"class":"A3","citation":"21 O.S. § 1401(B)","offense":"Arson while manufacturing/attempting to manufacture a controlled dangerous substance"},{"class":"A3","citation":"21 O.S. § 1405","offense":"Causing personal injury while committing an act of arson"},{"class":"Y","citation":"21 O.S. § 701.7(A)","offense":"Murder in the first degree — malice aforethought","capitalOffense":true,"sentencingMenu":"death, life without parole, or life"},{"class":"Y","citation":"21 O.S. § 701.7(B)","offense":"Murder in the first degree — felony murder (during commission of a crime)","capitalOffense":true,"sentencingMenu":"death, life without parole, or life"},{"class":"Y","citation":"21 O.S. § 701.7(C)","offense":"Murder in the first degree — death of a child from willful/malicious injury, torture, maiming, or unreasonable force","capitalOffense":true,"sentencingMenu":"death, life without parole, or life"},{"class":"Y","citation":"21 O.S. § 701.7(D)","offense":"Murder in the first degree — soliciting a killing in furtherance of manufacturing/distributing/dispensing a CDS","capitalOffense":true,"sentencingMenu":"death, life without parole, or life"},{"class":"Y","citation":"21 O.S. § 701.7(E)","offense":"Murder in the first degree — intentionally causing the death of a law enforcement officer","capitalOffense":true,"sentencingMenu":"death or life without parole only"},{"class":"Y","citation":"21 O.S. § 1268.2(C)","offense":"Murder in the first degree — killing another in the commission of an act of terrorism","capitalOffense":true,"sentencingMenu":"death, life without parole, or life"}],"uniformRanges":{"description":"21 O.S. §§ 20L-20P. Percentages are minimum time served before release/electronic monitoring eligibility (57 O.S. § 510.9).","C1":{"citation":"21 O.S. § 20L","tiers":{"noPriors":{"minYears":0,"maxYears":8,"minTimeServedPct":25},"onePriorOrTwoPriorClassCD":{"minYears":2,"maxYears":12,"minTimeServedPct":25},"threePriorsClassCDOrOnePriorClassYAB":{"minYears":2,"maxYears":30,"minTimeServedPct":50}}},"C2":{"citation":"21 O.S. § 20M","tiers":{"noPriors":{"minYears":0,"maxYears":7,"minTimeServedPct":20},"onePriorOrTwoPriorClassCD":{"minYears":2,"maxYears":10,"minTimeServedPct":20},"threePriorsClassCDOrOnePriorClassYAB":{"minYears":2,"maxYears":12,"minTimeServedPct":40}}},"D1":{"citation":"21 O.S. § 20N","tiers":{"noPriors":{"minYears":0,"maxYears":5,"minTimeServedPct":20},"onePriorOrTwoPriorClassCD":{"minYears":1,"maxYears":7,"minTimeServedPct":20},"threePriorsClassCDOrOnePriorClassYAB":{"minYears":2,"maxYears":10,"minTimeServedPct":30}}},"D2":{"citation":"21 O.S. § 20O","tiers":{"noPriors":{"minYears":0,"maxYears":2,"minTimeServedPct":20},"onePriorOrTwoPriorClassCD":{"minYears":1,"maxYears":5,"minTimeServedPct":20},"threePriorsClassCDOrOnePriorClassYAB":{"minYears":1,"maxYears":10,"minTimeServedPct":30}}},"D3":{"citation":"21 O.S. § 20P","tiers":{"noPriors":{"minYears":0,"maxYears":2,"minTimeServedPct":10},"onePriorOrTwoPriorClassCD":{"minYears":1,"maxYears":4,"minTimeServedPct":10},"threePriorsClassCDOrOnePriorClassYAB":{"minYears":1,"maxYears":10,"minTimeServedPct":20}}}},"habitualEnhancement51_1":{"description":"21 O.S. § 51.1. Applies to Class Y/A/B offenses, offenses exempted from their C/D uniform range, and any offense committed before 1/1/2026. Requires the offense's own first-offense range as a base input.","onePriorFelony":{"citation":"21 O.S. § 51.1(A)","ifBaseMaxOver5Years":"2x base minimum (or 2 years if base has no stated minimum) to life","ifBaseMax5YearsOrLess":"not to exceed 10 years (§ 51.1(A)(3); subsection does not set a distinct floor)"},"twoOrMorePriorFelonies":{"citation":"21 O.S. § 51.1(C)","ifBaseMaxOver5Years":"3x base minimum (or 4 years if base has no stated minimum) to life","ifBaseMax5YearsOrLess":"not verified in this dataset — consult current § 51.1(C)(3) text directly"},"twoOrMorePriorEnumeratedOffenses":{"citation":"21 O.S. § 51.1(B)","condition":"current charge and both priors must be offenses enumerated in 57 O.S. § 571","range":"20 years to life"},"electionDoctrine":"Baird v. State, No. F-2002-1509 (Okl.Cr., unpublished): where a drug-trafficking offense has its own statutory enhancement scheme AND the defendant has qualifying priors, the State must elect to enhance under either the drug-specific scheme (only drug-related priors count) or the general Habitual Offender Act, § 51.1 (any prior felony counts, but different range math) — not both stacked together."}}</script>
+<script>
+(function(){
+  // STANDALONE BUILD: replaces Claude's window.storage bridge with plain
+  // browser localStorage, so this file works fully offline/outside Claude.ai.
+  // Data here lives only on this device, in this browser — it will NOT
+  // sync with the Claude-hosted version of this app.
+  window.storage = {
+    get: async (key) => {
+      const raw = window.localStorage.getItem(key);
+      if(raw === null) throw new Error('not found');
+      return { key, value: raw, shared: false };
+    },
+    set: async (key, value) => {
+      window.localStorage.setItem(key, value);
+      return { key, value, shared: false };
+    },
+  };
+
+  const STORAGE_KEY = 'cases';
+  const FELONY_CLASS_KEY = 'felonyClasses';
+  let cases = [];
+  let felonyClasses = null; // { meta, offenses, uniformRanges, habitualEnhancement51_1 }
+  let selectedId = null;
+  let activeTab = 'dates';
+  let viewMode = 'case'; // 'case' | 'reminders'
+  let searchQuery = '';
+  let ui = { newCaseForm:false, editHeader:false, addDate:false, addGround:false, addTask:false, addCharge:false, logMinute:null };
+
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+  const STATUS_LABEL = { active:'Active File', 'trial-set':'Trial Set', continuance:'Continuance Filed', closed:'Closed' };
+  const GROUND_STATUS_LABEL = { drafting:'Drafting', filed:'Filed', granted:'Granted', denied:'Denied' };
+
+  // Oklahoma deadline presets — verified against okcca.net rule text and Oklahoma Statutes Title 22 (Jul 2026).
+  // These are planning aids only; see disclaimer in the Deadlines tab.
+  const DEADLINE_PRESETS = [
+    { id:'custom', label:'Custom', unit:'days', amount:30, citation:'', note:'Enter your own trigger and time period.' },
+    { id:'ok-notice-appeal', label:'Notice of Intent to Appeal + Designation of Record', unit:'days', amount:10,
+      citation:'OCCA Rule 2.1(B) / 2.5(A)',
+      note:'Jurisdictional \u2014 missing this waives the right to appeal. Runs from the date Judgment & Sentence is pronounced in open court.' },
+    { id:'ok-appeal-record', label:'Appeal record filing', unit:'days', amount:90,
+      citation:'22 O.S. \u00A7 1054; OCCA Rule 2.1(C)',
+      note:'Runs from the date Judgment & Sentence is imposed. Applies to both misdemeanor and felony appeals per current OCCA rule text.' },
+    { id:'ok-speedy-custody', label:'Speedy trial review \u2014 in custody', unit:'years', amount:1,
+      citation:'22 O.S. \u00A7 812.1(A)',
+      note:'Triggers a mandatory court review, not automatic dismissal \u2014 the court weighs statutory exceptions under 22 O.S. \u00A7 812.2 before any dismissal. Runs from arrest.' },
+    { id:'ok-speedy-bond', label:'Speedy trial review \u2014 on appearance bond', unit:'months', amount:18,
+      citation:'22 O.S. \u00A7 812.1(B)',
+      note:'Triggers a mandatory court review, not automatic dismissal \u2014 same exceptions analysis under 22 O.S. \u00A7 812.2. As of the Nov. 2024 amendment this runs from initial appearance, not arrest \u2014 confirm which applies to your filing date.' },
+  ];
+
+  function seedCases(){
+    const now = new Date().toLocaleString();
+    return [{
+      id: uid(),
+      clientName: 'Wallace Clay',
+      docketNumber: '',
+      court: '',
+      judge: '',
+      charges: '',
+      status: 'continuance',
+      dates: [
+        { id: uid(), label:'Trial Date', date:'', detail:'April 1 — subject to pending continuance' }
+      ],
+      tasks: [],
+      deadlines: [],
+      grounds: [
+        { id: uid(), title:'Discovery Is Ongoing', status:'filed',
+          description:'Discovery isn\u2019t complete; defense needs additional time to finish it. No blame, no laundry list of what\u2019s missing.' },
+        { id: uid(), title:'Concurrent Civil Action Requires Coordination', status:'filed',
+          description:'Keeps the same intentionally vague language from the original filing to avoid volunteering anything adverse.' },
+        { id: uid(), title:'Defense Counsel on Medical Leave', status:'filed',
+          description:'Straightforward unavailability. Sixth Amendment hook, good-faith framing.' }
+      ],
+      notes: [
+        { id: uid(), timestamp: now,
+          text:'Continuance motion finalized \u2014 three grounds, expert-witness ground dropped. Speedy trial waiver and interest-of-justice section updated for the new three-prong structure. Ready for filing ahead of trial date.' }
+      ]
+    }];
+  }
+
+  function pendingImports(){
+    const now = new Date().toLocaleString();
+    return [
+      {
+        id: uid(),
+        clientName: 'Conduff & Stephens',
+        docketNumber: 'MPD2026060197',
+        court: '',
+        judge: '',
+        charges: 'Conduff: Possession of CDS (Fentanyl); Trafficking (Meth, 26.4g); Possession of Paraphernalia; 2x FTA municipal warrants.\nStephens: Obstructing an Officer; Possession of Paraphernalia.',
+        status: 'active',
+        dates: [],
+        tasks: [],
+        deadlines: [],
+        grounds: [
+          { id: uid(), title:'Basis for the Stop', status:'drafting',
+            description:'Predicated on a named 7-Eleven clerk\u2019s tip (two females \u201csmoking narcotics,\u201d matching vehicle description) plus Officer Babbitt\u2019s independent corroboration watching the vehicle leave the address. Named citizen-informant + real-time corroboration is a decent RS package for the state \u2014 not the strongest angle, but confirm Raff\u2019s identification lines up; the clothing description (\u201cnative female, blue shirt, black jeans\u201d) isn\u2019t tied to either defendant in the narrative.' },
+          { id: uid(), title:'Stephens\u2019 Obstruction Charge (21 O.S. \u00A7 540)', status:'drafting',
+            description:'She got out and walked away after a command to stay. Check whether mere non-compliant walking, absent physical resistance or interference with an officer\u2019s duties, satisfies the elements. Also worth asking whether she was even lawfully seized at that moment, or if the command exceeded the stop\u2019s scope for a passenger with no independent suspicion attached yet.' },
+          { id: uid(), title:'Consent Search of Stephens', status:'drafting',
+            description:'Backpack and person searches were consent-based, obtained after she fled the stop, was tracked down, and was in a \u201cnot free to leave\u201d atmosphere at a hotel. Voluntariness under that pressure is a real fight \u2014 pull body cam for tone/commands before the \u201cconsent.\u201d' },
+          { id: uid(), title:'Inventory Search / Vehicle Impound', status:'drafting',
+            description:'Probably the best-yield issue. Vehicle owner is a third party (Tyllena Williams, Tulsa) \u2014 neither defendant is the registered owner. Get the actual MPD written impound policy: standardized non-discretionary procedure, or could the vehicle have gone to a licensed third party instead of being towed? Non-compliance with a standardized policy, or an inventory that was really an investigatory rummage, is textbook suppression territory (Bertine / Wells line).' },
+          { id: uid(), title:'Tow-Yard Discovery of Meth', status:'drafting',
+            description:'The baggie wasn\u2019t found by police during inventory \u2014 it fell out at the tow yard, found by a civilian (Perry Phillips) after the vehicle was already released to Excel Towing. Chain-of-custody and scope-of-search problem: no documented inventory of that location, no police present, messy sequence. State\u2019s fallback is Conduff\u2019s own Mirandized admission (\u201cit was Methamphetamine\u2026 a large quantity\u201d) \u2014 the confession, not the physical discovery, is probably the real battleground.' },
+          { id: uid(), title:'Miranda Timing', status:'drafting',
+            description:'Pre-warrant-confirmation statements (bathroom, \u201cshowering in the sink\u201d) came before cuffs \u2014 likely investigative-detention questioning, not custodial. The fentanyl/meth admissions came after a clean Mirandize-and-waive \u2014 hard to knock out unless voluntariness can be attacked another way.' },
+          { id: uid(), title:'Duplicate Warrant Numbers', status:'drafting',
+            description:'Both listed warrant numbers are identical (E0283001V, E0283001V) \u2014 likely an OCR/data-entry artifact, but confirm with the court clerk that two distinct valid warrants actually exist, not a duplicate entry that would undercut the arrest basis.' }
+        ],
+        notes: [
+          { id: uid(), timestamp: now,
+            text:'Open decision: draft the motion to suppress (impound/inventory + tow-yard discovery angle) first, or send the discovery request list first (impound policy, BWC footage, TruNarc calibration records, OSBI confirmatory results).' }
+        ]
+      }
+    ];
+  }
+
+  async function mergeImports(){
+    const existingDockets = new Set(cases.map(c => c.docketNumber));
+    let changed = false;
+    pendingImports().forEach(imp => {
+      if(!existingDockets.has(imp.docketNumber)){
+        cases.push(imp);
+        changed = true;
+      }
+    });
+    if(changed) await saveCases();
+  }
+
+  function pendingPatches(){
+    const now = new Date().toLocaleString();
+    return [
+      {
+        docketNumber: 'MPD2026060197',
+        patchId: 'discovery-motion-drafted',
+        apply: (c) => {
+          c.grounds.push({
+            id: uid(),
+            title: 'Motion for Discovery & Request for Production',
+            status: 'drafting',
+            description: 'Drafted \u2014 19 requests: standard 22 O.S. \u00A7 2002(A) disclosures plus case-specific items (BWC footage, MPD impound policy, tow-yard chain of custody, TruNarc calibration logs, OSBI bench notes, duplicate-warrant confirmation). Still needs county, case number, defendants\u2019 first names, and attorney info filled in. Confirm single vs. joint representation before filing for both defendants.'
+          });
+          c.notes.push({
+            id: uid(),
+            timestamp: now,
+            text: 'Drafted Motion for Discovery & Request for Production (19 items) and logged it under Grounds. Pending: placeholders filled in, joint-representation check, then filing.'
+          });
+        }
+      }
+    ];
+  }
+
+  async function applyPatches(){
+    let changed = false;
+    cases.forEach(c => {
+      if(!Array.isArray(c.appliedPatches)) c.appliedPatches = [];
+      pendingPatches().forEach(p => {
+        if(p.docketNumber === c.docketNumber && !c.appliedPatches.includes(p.patchId)){
+          p.apply(c);
+          c.appliedPatches.push(p.patchId);
+          changed = true;
+        }
+      });
+    });
+    if(changed) await saveCases();
+  }
+
+  async function loadCases(){
+    try{
+      const res = await window.storage.get(STORAGE_KEY, false);
+      cases = (res && res.value) ? JSON.parse(res.value) : seedCases();
+    }catch(e){
+      cases = seedCases();
+    }
+    await mergeImports();
+    await applyPatches();
+    cases.forEach(c => {
+      if(!Array.isArray(c.tasks)) c.tasks = [];
+      if(!Array.isArray(c.deadlines)) c.deadlines = [];
+      if(!Array.isArray(c.exposureCharges)) c.exposureCharges = [];
+      if(typeof c.court !== 'string') c.court = '';
+      if(typeof c.judge !== 'string') c.judge = '';
+      c.dates.forEach(d => { if(typeof d.minuteLogged !== 'boolean') d.minuteLogged = false; });
+    });
+    if(cases.length && !selectedId) selectedId = cases[0].id;
+    await saveCases();
+    render();
+  }
+
+  let saveError = false;
+
+  async function saveCases(){
+    for(let attempt = 0; attempt < 3; attempt++){
+      try{
+        await window.storage.set(STORAGE_KEY, JSON.stringify(cases), false);
+        saveError = false;
+        return true;
+      }catch(e){
+        console.error('Save failed (attempt ' + (attempt+1) + ')', e);
+        if(attempt < 2) await new Promise(r => setTimeout(r, 350));
+      }
+    }
+    saveError = true;
+    return false;
+  }
+
+  async function loadFelonyClasses(){
+    let needsSave = false;
+    try{
+      const res = await window.storage.get(FELONY_CLASS_KEY, false);
+      if(res && res.value){
+        felonyClasses = JSON.parse(res.value);
+      } else {
+        felonyClasses = seedFelonyClasses();
+        needsSave = true;
+      }
+    }catch(e){
+      felonyClasses = seedFelonyClasses();
+      needsSave = true;
+    }
+    // If the stored copy predates a newer embedded seed (fewer offenses), refresh it.
+    const seed = seedFelonyClasses();
+    if(!felonyClasses || !Array.isArray(felonyClasses.offenses) || felonyClasses.offenses.length < seed.offenses.length){
+      felonyClasses = seed;
+      needsSave = true;
+    }
+    if(needsSave) await saveFelonyClasses();
+  }
+
+  function seedFelonyClasses(){
+    try{
+      const node = document.getElementById('felony-class-seed');
+      return JSON.parse(node.textContent);
+    }catch(e){
+      console.error('Felony classification seed failed to parse', e);
+      return { meta:{}, offenses:[], uniformRanges:{}, habitualEnhancement51_1:{} };
+    }
+  }
+
+  async function saveFelonyClasses(){
+    try{
+      await window.storage.set(FELONY_CLASS_KEY, JSON.stringify(felonyClasses), false);
+      return true;
+    }catch(e){
+      console.error('Felony classification data save failed', e);
+      return false;
+    }
+  }
+
+  const OWN_RANGE_CLASSES = ["Y","A1","A2","A3","B1","B2","B3","B4","B5","B6"];
+
+  function normalizeSearch(s){ return (s||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+  function searchFelonyOffenses(q){
+    const nq = normalizeSearch(q);
+    if(nq.length < 2 || !felonyClasses || !Array.isArray(felonyClasses.offenses)) return [];
+    const ql = (q||'').toLowerCase();
+    return felonyClasses.offenses.filter(o =>
+      normalizeSearch(o.citation).includes(nq) || (o.offense||'').toLowerCase().includes(ql)
+    ).slice(0, 20);
+  }
+
+  function classifyOffenseKind(o){
+    if(o.class === 'Y') return 'capital';
+    if(o.exemptFromUniformRange) return 'exempt';
+    const vr = o.verifiedRange;
+    if(vr && vr.tiers) return 'verifiedTiered';
+    if(vr) return 'verified';
+    if(['C1','C2','D1','D2','D3'].includes(o.class)) return 'uniform'; // covers baseSentenceExempt too, handled within uniform panel
+    if(OWN_RANGE_CLASSES.includes(o.class)) return 'ownRangeUnverified';
+    return 'unclassified';
+  }
+
+  function fmtYrs(n){ return (n===null || n===undefined) ? 'Life' : String(n); }
+
+  function renderExposureBar(min, maxOrNull, pct){
+    const scaleMax = maxOrNull === null ? Math.max(30, min*2, 40) : Math.max(30, maxOrNull);
+    const clampedMax = maxOrNull === null ? scaleMax : maxOrNull;
+    const leftPct = (min/scaleMax)*100;
+    const widthPct = ((clampedMax-min)/scaleMax)*100;
+    return `
+      <div class="exp-bar-wrap">
+        <div class="exp-bar-track">
+          <div class="exp-bar-fill" style="left:${leftPct}%;width:${widthPct}%"></div>
+        </div>
+        <div class="exp-bar-scale"><span>0</span><span>${scaleMax}${maxOrNull===null?'+ (life)':''} yrs</span></div>
+      </div>`;
+  }
+
+  function rangeToolHtml(min, maxOrNull, pct, citeNote){
+    const bar = renderExposureBar(min, maxOrNull, pct);
+    const sliderMax = maxOrNull === null ? Math.max(30, min*2, 40) : maxOrNull;
+    return `
+      <div class="range">${min===null?'\u2014':min} \u2013 ${fmtYrs(maxOrNull)} <small>years${pct?`, min ${pct}% served`:''}${citeNote?' \u2014 '+escapeHtml(citeNote):''}</small></div>
+      ${bar}
+      <div class="exp-hypo">
+        <div class="exp-hypo-label">Model a specific sentence</div>
+        <input type="range" id="exposure-hypo" min="${min||0}" max="${sliderMax}" value="${min||0}" step="1"
+          data-min="${min||0}" data-max="${maxOrNull===null?'':maxOrNull}" data-pct="${pct||''}">
+        <div class="exp-hypo-readout" id="exposure-hypo-readout">${hypoReadoutText(min||0, pct)}</div>
+      </div>`;
+  }
+
+  function hypoReadoutText(years, pct){
+    if(!pct) return `${years} yrs imposed \u2014 no stated minimum-time-served % for this offense`;
+    const served = (years*pct/100).toFixed(1);
+    return `${years} yrs imposed \u2014 min. time served \u2248 ${served} yrs (${pct}%)`;
+  }
+
+  function wireExposureHypoSlider(){
+    const slider = document.getElementById('exposure-hypo');
+    if(!slider) return;
+    slider.addEventListener('input', () => {
+      const years = parseInt(slider.value, 10);
+      const pct = slider.getAttribute('data-pct') ? parseInt(slider.getAttribute('data-pct'),10) : null;
+      const readout = document.getElementById('exposure-hypo-readout');
+      if(readout) readout.innerHTML = hypoReadoutText(years, pct);
+    });
+  }
+
+  function uniformTierRange(cls, tierKey){
+    const t = felonyClasses.uniformRanges && felonyClasses.uniformRanges[cls] && felonyClasses.uniformRanges[cls].tiers[tierKey];
+    return t || null;
+  }
+
+  // § 51.1 computation mirroring the standalone calculator's logic.
+  function computeHab51(baseMin, baseMaxOrNull, priorTier){
+    // priorTier: 'none' | 'one' | 'two'
+    if(priorTier === 'none') return { min: baseMin, max: baseMaxOrNull, cite: 'first-offense range' };
+    if(priorTier === 'one'){
+      if(baseMaxOrNull === null || baseMaxOrNull > 5){
+        return { min: baseMin > 0 ? baseMin*2 : 2, max: null, cite: '21 O.S. § 51.1(A)' };
+      }
+      return { min: null, max: 10, cite: '21 O.S. § 51.1(A)(3)' };
+    }
+    if(priorTier === 'two'){
+      if(baseMaxOrNull === null || baseMaxOrNull > 5){
+        return { min: baseMin > 0 ? baseMin*3 : 4, max: null, cite: '21 O.S. § 51.1(C)' };
+      }
+      return { min: null, max: null, cite: '21 O.S. § 51.1(C)(3)', unresolved: true };
+    }
+    return { min: baseMin, max: baseMaxOrNull, cite: '' };
+  }
+
+  function getSelected(){ return cases.find(c => c.id === selectedId) || null; }
+
+  function daysUntil(dateStr){
+    if(!dateStr) return null;
+    const d = new Date(dateStr + 'T00:00:00');
+    if(isNaN(d)) return null;
+    const diff = Math.ceil((d - new Date(new Date().toDateString())) / 86400000);
+    return diff;
+  }
+
+  function fmtDate(dateStr){
+    if(!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    if(isNaN(d)) return dateStr;
+    return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+  }
+
+  function addToDate(dateStr, amount, unit){
+    const d = new Date(dateStr + 'T00:00:00');
+    if(isNaN(d)) return '';
+    if(unit === 'days') d.setDate(d.getDate() + amount);
+    else if(unit === 'months') d.setMonth(d.getMonth() + amount);
+    else if(unit === 'years') d.setFullYear(d.getFullYear() + amount);
+    return d.toISOString().slice(0,10);
+  }
+
+  function nextUpInfo(c){
+    const items = [];
+    c.dates.filter(d => d.date).forEach(d => items.push({ label: d.label, date: d.date }));
+    c.tasks.filter(t => !t.done && t.dueDate).forEach(t => items.push({ label: t.text, date: t.dueDate }));
+    if(!items.length) return null;
+    items.sort((a,b) => a.date.localeCompare(b.date));
+    const nearest = items[0];
+    const diff = daysUntil(nearest.date);
+    return { label: nearest.label, date: nearest.date, urgent: diff !== null && diff <= 14 };
+  }
+
+  function taskUrgencyClass(dueDate){
+    if(!dueDate) return 'normal';
+    const diff = daysUntil(dueDate);
+    if(diff === null) return 'normal';
+    if(diff < 0) return 'overdue';
+    if(diff <= 7) return 'soon';
+    return 'normal';
+  }
+
+  function taskDueLabel(dueDate){
+    if(!dueDate) return 'No due date';
+    const diff = daysUntil(dueDate);
+    if(diff === null) return fmtDate(dueDate);
+    if(diff < 0) return `Overdue \u2014 ${fmtDate(dueDate)}`;
+    if(diff === 0) return 'Due today';
+    if(diff === 1) return 'Due tomorrow';
+    return `Due ${fmtDate(dueDate)}`;
+  }
+
+  function allOpenTasks(){
+    const rows = [];
+    cases.forEach(c => c.tasks.filter(t => !t.done).forEach(t => rows.push({ case: c, task: t })));
+    rows.sort((a,b) => (a.task.dueDate||'9999').localeCompare(b.task.dueDate||'9999'));
+    return rows;
+  }
+
+  function upcomingKeyDates(){
+    const rows = [];
+    cases.forEach(c => c.dates.filter(d => d.date && daysUntil(d.date) !== null && daysUntil(d.date) <= 14).forEach(d => rows.push({ case: c, date: d })));
+    rows.sort((a,b) => a.date.date.localeCompare(b.date.date));
+    return rows;
+  }
+
+  function unloggedPastDates(c){
+    return c.dates.filter(d => d.date && daysUntil(d.date) <= 0 && !d.minuteLogged);
+  }
+
+  function allUnloggedMinutes(){
+    const rows = [];
+    cases.forEach(c => unloggedPastDates(c).forEach(d => rows.push({ case: c, date: d })));
+    rows.sort((a,b) => a.date.date.localeCompare(b.date.date));
+    return rows;
+  }
+
+  function reminderCount(){
+    const urgentTasks = allOpenTasks().filter(r => taskUrgencyClass(r.task.dueDate) !== 'normal').length;
+    const urgentDates = upcomingKeyDates().length;
+    const unloggedMinutes = allUnloggedMinutes().length;
+    return urgentTasks + urgentDates + unloggedMinutes;
+  }
+
+  function el(html){ const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+  function filteredCases(){
+    const q = searchQuery.trim().toLowerCase();
+    if(!q) return cases;
+    return cases.filter(c =>
+      (c.clientName||'').toLowerCase().includes(q) ||
+      (c.docketNumber||'').toLowerCase().includes(q) ||
+      (c.charges||'').toLowerCase().includes(q)
+    );
+  }
+
+  function wireCaseItemClicks(container){
+    container.querySelectorAll('[data-select]').forEach(node => {
+      node.addEventListener('click', () => {
+        selectedId = node.getAttribute('data-select');
+        viewMode = 'case';
+        ui.editHeader = false; ui.addDate = false; ui.addGround = false; ui.addTask = false; ui.addCharge = null; ui.logMinute = null; activeTab = 'dates';
+        render();
+      });
+    });
+  }
+
+  function updateCaseList(){
+    searchQuery = document.getElementById('case-search').value;
+    const listEl = document.querySelector('.case-list');
+    if(!listEl) return;
+    const results = filteredCases();
+    listEl.innerHTML = results.length
+      ? results.map(caseItemHtml).join('')
+      : (cases.length ? `<div class="rail-empty">No matches for \u201c${escapeHtml(searchQuery)}\u201d.</div>` : `<div class="rail-empty">No cases logged yet. Open your first file.</div>`);
+    wireCaseItemClicks(listEl);
+  }
+
+  // ---------- Render ----------
+  function render(){
+    document.body.classList.toggle('has-save-error', saveError);
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    if(saveError){
+      app.appendChild(el(`
+        <div class="save-error-banner">
+          <span>\u26A0 Changes aren\u2019t saving \u2014 storage error. Anything you enter now may be lost on reload.</span>
+          <button class="btn" data-action="retry-save">Retry</button>
+        </div>
+      `));
+    }
+    app.appendChild(renderRail());
+    app.appendChild(renderMain());
+    wireGlobalActions();
+  }
+
+  function renderRail(){
+    const rail = el(`<div class="rail"></div>`);
+    const count = reminderCount();
+    rail.innerHTML = `
+      <div class="rail-header">
+        <div class="eyebrow">Docket \u00B7 Offline build</div>
+        <h1>Case Tracker</h1>
+        <div class="header-actions">
+          <button class="btn btn-primary" data-action="new-case">+ New case</button>
+          <button class="btn ${viewMode==='reminders'?'view-active':''}" data-action="view-reminders">Reminders${count ? `<span class="count-badge">${count}</span>` : ''}</button>
+        </div>
+      </div>
+      ${ui.newCaseForm ? newCaseFormHtml() : ''}
+      <div class="search-wrap"><input type="text" id="case-search" placeholder="Search cases\u2026" value="${attrEsc(searchQuery)}"></div>
+      <div class="case-list">
+        ${filteredCases().length ? filteredCases().map(caseItemHtml).join('') : (cases.length ? `<div class="rail-empty">No matches for \u201c${escapeHtml(searchQuery)}\u201d.</div>` : `<div class="rail-empty">No cases logged yet. Open your first file.</div>`)}
+      </div>
+    `;
+    return rail;
+  }
+
+  function newCaseFormHtml(){
+    return `
+      <div class="new-case-form">
+        <div class="field"><label>Client name</label><input id="nc-client" placeholder="Full name"></div>
+        <div class="field"><label>Docket number</label><input id="nc-docket" placeholder="e.g. CR-2026-1148"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" data-action="save-new-case">Save</button>
+          <button class="btn btn-ghost" data-action="cancel-new-case">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function caseItemHtml(c){
+    const next = nextUpInfo(c);
+    return `
+      <div class="case-item ${c.id===selectedId && viewMode==='case'?'active':''}" data-select="${c.id}">
+        <div class="client">${escapeHtml(c.clientName || 'Untitled client')}</div>
+        <div class="docket">${escapeHtml(c.docketNumber) || 'No docket #'}</div>
+        ${next ? `<div class="next ${next.urgent?'urgent':''}">${escapeHtml(next.label)} \u2014 ${fmtDate(next.date)}</div>` : ''}
+      </div>
+    `;
+  }
+
+  function courtJudgeLine(c){
+    const court = c.court ? escapeHtml(c.court) : '';
+    const judge = c.judge ? `Judge ${escapeHtml(c.judge)}` : '';
+    if(!court && !judge) return 'No court or judge on file \u2014 add details';
+    return [court, judge].filter(Boolean).join(' \u2007\u00B7\u2007 ');
+  }
+
+  function renderMain(){
+    const main = el(`<div class="main"></div>`);
+    if(viewMode === 'reminders'){
+      main.innerHTML = remindersViewHtml();
+      return main;
+    }
+    const c = getSelected();
+    if(!c){
+      main.innerHTML = `<div class="empty-main"><h2>No file open</h2><div>Select a case on the left, or start a new one.</div></div>`;
+      return main;
+    }
+
+    main.innerHTML = `
+      <div class="file-top">
+        <div class="file-id">
+          <div class="docket-no">${escapeHtml(c.docketNumber) || 'No docket number on file'}</div>
+          <h2>${escapeHtml(c.clientName || 'Untitled client')}</h2>
+          <div class="court-judge ${!c.court && !c.judge ? 'muted' : ''}">${courtJudgeLine(c)}</div>
+          <div class="charges ${!c.charges?'muted':''}">${c.charges ? escapeHtml(c.charges) : 'No charges on file \u2014 add details'}</div>
+          <div class="stamp status-${c.status}">${STATUS_LABEL[c.status]}</div>
+        </div>
+        <div class="file-actions">
+          <button class="btn" data-action="copy-brief">Copy brief for Claude</button>
+          <button class="btn" data-action="print-summary">Print summary</button>
+          <button class="btn" data-action="toggle-edit">${ui.editHeader ? 'Close' : 'Edit'}</button>
+          <button class="btn btn-danger" data-action="delete-case">Delete</button>
+        </div>
+      </div>
+
+      ${ui.editHeader ? editHeaderHtml(c) : ''}
+      ${ui.logMinute ? logMinuteHtml() : ''}
+
+      <div class="tabs">
+        <button class="tab ${activeTab==='dates'?'active':''}" data-tab="dates">Dates</button>
+        <button class="tab ${activeTab==='tasks'?'active':''}" data-tab="tasks">Tasks</button>
+        <button class="tab ${activeTab==='deadlines'?'active':''}" data-tab="deadlines">Deadlines</button>
+        <button class="tab ${activeTab==='grounds'?'active':''}" data-tab="grounds">Grounds & Motions</button>
+        <button class="tab ${activeTab==='exposure'?'active':''}" data-tab="exposure">Exposure</button>
+        <button class="tab ${activeTab==='notes'?'active':''}" data-tab="notes">Notes</button>
+      </div>
+
+      <div class="tab-content">
+        ${activeTab==='dates' ? datesTabHtml(c) : ''}
+        ${activeTab==='tasks' ? tasksTabHtml(c) : ''}
+        ${activeTab==='deadlines' ? deadlinesTabHtml(c) : ''}
+        ${activeTab==='grounds' ? groundsTabHtml(c) : ''}
+        ${activeTab==='exposure' ? exposureTabHtml(c) : ''}
+        ${activeTab==='notes' ? notesTabHtml(c) : ''}
+      </div>
+
+      <div class="print-summary">${printSummaryHtml(c)}</div>
+    `;
+    return main;
+  }
+
+  function remindersViewHtml(){
+    const tasks = allOpenTasks();
+    const dates = upcomingKeyDates();
+    const minutes = allUnloggedMinutes();
+    return `
+      <div class="panel-head"><h2 style="font-family:var(--font-display); font-size:32px; margin:0;">Reminders</h2></div>
+      <div class="reminders-section" style="margin-top:24px;">
+        <div class="panel-head"><h3>Court minutes to log</h3></div>
+        ${minutes.length ? minutes.map(r => `
+          <div class="reminder-row">
+            <div class="task-body">
+              <div class="task-text">${escapeHtml(r.date.label)}</div>
+              <div class="reminder-case">${escapeHtml(r.case.clientName || 'Untitled client')}</div>
+              <div class="due-pill overdue">${fmtDate(r.date.date)}</div>
+            </div>
+            <button class="btn reminder-jump" data-jump="${r.case.id}" data-jump-tab="dates" data-open-minute-for="${r.date.id}">Log minute</button>
+          </div>
+        `).join('') : `<div class="empty-tab">Nothing waiting on a court minute.</div>`}
+      </div>
+      <div class="reminders-section">
+        <div class="panel-head"><h3>Open tasks</h3></div>
+        ${tasks.length ? tasks.map(r => `
+          <div class="reminder-row">
+            <input type="checkbox" class="task-checkbox" data-toggle-task="${r.task.id}" data-toggle-case="${r.case.id}">
+            <div class="task-body">
+              <div class="task-text">${escapeHtml(r.task.text)}</div>
+              <div class="reminder-case">${escapeHtml(r.case.clientName || 'Untitled client')}</div>
+              <div class="due-pill ${taskUrgencyClass(r.task.dueDate)}">${taskDueLabel(r.task.dueDate)}</div>
+            </div>
+            <button class="icon-btn reminder-jump" data-jump="${r.case.id}" data-jump-tab="tasks" title="Open case">\u2192</button>
+          </div>
+        `).join('') : `<div class="empty-tab">No open tasks. Nice.</div>`}
+      </div>
+      <div class="reminders-section">
+        <div class="panel-head"><h3>Upcoming key dates (14 days)</h3></div>
+        ${dates.length ? dates.map(r => `
+          <div class="reminder-row">
+            <div class="task-body">
+              <div class="task-text">${escapeHtml(r.date.label)}</div>
+              <div class="reminder-case">${escapeHtml(r.case.clientName || 'Untitled client')}</div>
+              <div class="due-pill ${daysUntil(r.date.date) < 0 ? 'overdue':'soon'}">${fmtDate(r.date.date)}</div>
+            </div>
+            <button class="icon-btn reminder-jump" data-jump="${r.case.id}" data-jump-tab="dates" title="Open case">\u2192</button>
+          </div>
+        `).join('') : `<div class="empty-tab">Nothing on the calendar in the next 14 days.</div>`}
+      </div>
+    `;
+  }
+
+  function printSummaryHtml(c){
+    const openTasks = c.tasks.filter(t => !t.done);
+    const upcomingDates = [...c.dates].filter(d=>d.date).sort((a,b)=>a.date.localeCompare(b.date));
+    const openGrounds = c.grounds;
+    const recentNotes = [...c.notes].reverse().slice(0,4);
+    return `
+      <h1>${escapeHtml(c.clientName || 'Untitled client')}</h1>
+      <div class="p-meta">
+        Docket: ${escapeHtml(c.docketNumber) || 'unassigned'} &nbsp;\u00B7&nbsp;
+        Status: ${STATUS_LABEL[c.status]} &nbsp;\u00B7&nbsp;
+        ${courtJudgeLine(c)} &nbsp;\u00B7&nbsp;
+        Printed ${new Date().toLocaleDateString()}
+      </div>
+      <h2>Charges</h2>
+      <p>${c.charges ? escapeHtml(c.charges).replace(/\n/g,'<br>') : 'None on file.'}</p>
+      <h2>Key dates</h2>
+      ${upcomingDates.length ? `<ul>${upcomingDates.map(d => `<li><strong>${escapeHtml(d.label)}</strong> \u2014 ${fmtDate(d.date)}${d.detail ? ' \u2014 ' + escapeHtml(d.detail) : ''}</li>`).join('')}</ul>` : '<p>None on file.</p>'}
+      <h2>Open tasks</h2>
+      ${openTasks.length ? `<ul>${openTasks.map(t => `<li>${escapeHtml(t.text)}${t.dueDate ? ' \u2014 ' + fmtDate(t.dueDate) : ''}</li>`).join('')}</ul>` : '<p>None on file.</p>'}
+      <h2>Grounds & motions</h2>
+      ${openGrounds.length ? `<ul>${openGrounds.map((g,i) => `<li><strong>${String.fromCharCode(65+i)}. ${escapeHtml(g.title)}</strong> (${GROUND_STATUS_LABEL[g.status]}) \u2014 ${escapeHtml(g.description)}</li>`).join('')}</ul>` : '<p>None on file.</p>'}
+      <h2>Recent notes</h2>
+      ${recentNotes.length ? `<ul>${recentNotes.map(n => `<li>${escapeHtml(n.timestamp)} \u2014 ${escapeHtml(n.text)}</li>`).join('')}</ul>` : '<p>None on file.</p>'}
+    `;
+  }
+
+  function deadlinesTabHtml(c){
+    const sorted = [...c.deadlines].sort((a,b) => (a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
+    return `
+      <div class="empty-tab" style="font-style:normal; color:var(--brass); padding-top:0;">Planning aid only \u2014 doesn\u2019t account for continuances, tolling, waivers, or amendments after today. Verify every deadline against the actual case record and current rule text before relying on it.</div>
+      <div class="panel-head" style="margin-top:18px;"><h3>Calculate a deadline</h3></div>
+      <div class="edit-panel">
+        <div class="field">
+          <label>Deadline type</label>
+          <select id="dl-preset">${DEADLINE_PRESETS.map(p => `<option value="${p.id}">${p.label}${p.id!=='custom' ? ' (' + p.amount + ' ' + p.unit + ')' : ''}</option>`).join('')}</select>
+        </div>
+        <div class="form-row" id="dl-custom-fields">
+          <div class="field"><label>Amount</label><input id="dl-amount" type="number" min="1" value="30"></div>
+          <div class="field"><label>Unit</label>
+            <select id="dl-unit"><option value="days">Days</option><option value="months">Months</option><option value="years">Years</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Label</label><input id="dl-label" placeholder="e.g. Notice of Intent to Appeal"></div>
+          <div class="field"><label>Trigger date</label><input id="dl-trigger" type="date"></div>
+        </div>
+        <div id="dl-citation" class="date-detail" style="min-height:14px;"></div>
+        <div class="form-actions"><button class="btn btn-primary" data-action="calc-deadline">Calculate & add task</button></div>
+      </div>
+      <div class="panel-head" style="margin-top:24px;"><h3>Tracked deadlines</h3></div>
+      ${sorted.length ? sorted.map(d => `
+        <div class="item-card">
+          <div class="body">
+            <div class="date-label">${escapeHtml(d.label)}</div>
+            <div class="date-value">${fmtDate(d.dueDate)}</div>
+            <div class="date-detail">Trigger: ${fmtDate(d.triggerDate)} + ${d.amount} ${d.unit}${d.ruleDescription ? ' \u2014 ' + escapeHtml(d.ruleDescription) : ''}</div>
+          </div>
+          <button class="icon-btn" data-delete-deadline="${d.id}" title="Remove">\u2715</button>
+        </div>
+      `).join('') : `<div class="empty-tab">No deadlines tracked yet.</div>`}
+    `;
+  }
+
+  function editHeaderHtml(c){
+    return `
+      <div class="edit-panel">
+        <div class="form-row">
+          <div class="field"><label>Client name</label><input id="eh-client" value="${attrEsc(c.clientName)}"></div>
+          <div class="field"><label>Docket number</label><input id="eh-docket" value="${attrEsc(c.docketNumber)}"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Court / County</label><input id="eh-court" placeholder="e.g. Cleveland County District Court" value="${attrEsc(c.court)}"></div>
+          <div class="field"><label>Judge</label><input id="eh-judge" placeholder="e.g. Hon. Jane Smith" value="${attrEsc(c.judge)}"></div>
+        </div>
+        <div class="field"><label>Charges (free text)</label><textarea id="eh-charges">${escapeHtml(c.charges)}</textarea></div>
+        <div class="field">
+          <label>Charges (structured \u2014 exposure tracking)</label>
+          <div class="edit-charges-block">
+            <button class="btn btn-charges-toggle" data-action="toggle-add-charge">${ui.addCharge?'Close charge search':'+ Search & add charge'}</button>
+            ${ui.addCharge ? addChargePanelHtml() : ''}
+            ${chargeListHtml(Array.isArray(c.exposureCharges) ? c.exposureCharges : [])}
+          </div>
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="eh-status">
+            ${Object.keys(STATUS_LABEL).map(k => `<option value="${k}" ${k===c.status?'selected':''}>${STATUS_LABEL[k]}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" data-action="save-header">Save changes</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function logMinuteHtml(){
+    const s = ui.logMinute;
+    let inner = '';
+    if(s.stage === 'upload'){
+      inner = `
+        <div class="field">
+          <label>Photo or scan of the court minute</label>
+          <input type="file" id="minute-file" accept="image/*,application/pdf">
+        </div>
+        <div class="form-actions"><button class="btn btn-ghost" data-action="cancel-minute">Cancel</button></div>
+      `;
+    } else if(s.stage === 'ready'){
+      inner = `
+        <div class="minute-preview">
+          ${s.mimeType && s.mimeType.startsWith('image/')
+            ? `<img src="data:${s.mimeType};base64,${s.imageBase64}" alt="Court minute preview">`
+            : `<div class="empty-tab">PDF selected: ${escapeHtml(s.fileName || 'document.pdf')}</div>`}
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" data-action="extract-minute">Extract details</button>
+          <button class="btn btn-ghost" data-action="cancel-minute">Cancel</button>
+        </div>
+      `;
+    } else if(s.stage === 'extracting'){
+      inner = `<div class="empty-tab">Reading the minute\u2026</div>`;
+    } else if(s.stage === 'error'){
+      inner = `
+        <div class="empty-tab" style="color:var(--red); font-style:normal;">${escapeHtml(s.errorMsg || 'Something went wrong reading that file.')}</div>
+        <div class="form-actions">
+          <button class="btn" data-action="retry-minute">Try again</button>
+          <button class="btn btn-ghost" data-action="cancel-minute">Cancel</button>
+        </div>
+      `;
+    } else if(s.stage === 'review'){
+      const d = s.extracted;
+      inner = `
+        <div class="empty-tab" style="font-style:normal; color:var(--brass); margin-bottom:4px;">Review before saving \u2014 extraction can miss or misread things.</div>
+        <div class="form-row">
+          <div class="field"><label>Hearing type</label><input id="mn-type" value="${attrEsc(d.hearingType)}"></div>
+          <div class="field"><label>Hearing date</label><input id="mn-hdate" type="date" value="${attrEsc(d.hearingDate)}"></div>
+        </div>
+        <div class="field"><label>What happened</label><textarea id="mn-summary">${escapeHtml(d.summary)}</textarea></div>
+        <div class="field"><label>Bond / custody note</label><input id="mn-bond" value="${attrEsc(d.bondOrCustodyNote)}"></div>
+        <div class="form-row">
+          <div class="field"><label>Next date label</label><input id="mn-nlabel" value="${attrEsc(d.nextDateLabel)}"></div>
+          <div class="field"><label>Next date</label><input id="mn-ndate" type="date" value="${attrEsc(d.nextDate)}"></div>
+        </div>
+        <div class="field"><label>Next date detail</label><input id="mn-ndetail" value="${attrEsc(d.nextDateDetail)}"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" data-action="save-minute">Save to case</button>
+          <button class="btn btn-ghost" data-action="cancel-minute">Cancel</button>
+        </div>
+      `;
+    }
+    return `<div class="edit-panel minute-panel"><div class="panel-head"><h3>Log court minute</h3></div>${inner}</div>`;
+  }
+
+  function datesTabHtml(c){
+    const sorted = [...c.dates].sort((a,b) => (a.date||'9999').localeCompare(b.date||'9999'));
+    const unlogged = unloggedPastDates(c);
+    return `
+      ${unlogged.length ? unlogged.map(d => `
+        <div class="minute-alert">
+          <span>${escapeHtml(d.label)} on ${fmtDate(d.date)} has passed \u2014 log the court minute?</span>
+          <button class="btn" data-log-minute-for="${d.id}">Log minute</button>
+        </div>
+      `).join('') : ''}
+      <div class="panel-head">
+        <h3>Key dates</h3>
+        <div style="display:flex; gap:8px;">
+          <button class="btn" data-action="open-log-minute">Log court minute</button>
+          <button class="btn" data-action="toggle-add-date">${ui.addDate?'Close':'+ Add date'}</button>
+        </div>
+      </div>
+      ${ui.addDate ? `
+        <div class="edit-panel add-inline">
+          <div class="form-row">
+            <div class="field"><label>Label</label><input id="ad-label" placeholder="e.g. Pretrial hearing"></div>
+            <div class="field"><label>Date</label><input id="ad-date" type="date"></div>
+          </div>
+          <div class="field"><label>Detail</label><input id="ad-detail" placeholder="e.g. 9:00 AM, Dept 4"></div>
+          <div class="form-actions">
+            <button class="btn btn-primary" data-action="save-date">Add</button>
+            <button class="btn btn-ghost" data-action="toggle-add-date">Cancel</button>
+          </div>
+        </div>` : ''}
+      ${sorted.length ? sorted.map(d => `
+        <div class="item-card">
+          <div class="body">
+            <div class="date-label">${escapeHtml(d.label)}</div>
+            ${d.date ? `<div class="date-value">${fmtDate(d.date)}</div>` : ''}
+            ${d.detail ? `<div class="date-detail">${escapeHtml(d.detail)}</div>` : ''}
+            ${d.minuteLogged ? `<div class="minute-tag">\u2713 Minute logged</div>` : ''}
+          </div>
+          ${(d.date && daysUntil(d.date) <= 0 && !d.minuteLogged) ? `<button class="btn" data-log-minute-for="${d.id}">Log minute</button>` : ''}
+          <button class="icon-btn" data-delete-date="${d.id}" title="Remove">\u2715</button>
+        </div>
+      `).join('') : `<div class="empty-tab">No dates on record \u2014 add the next one that matters.</div>`}
+    `;
+  }
+
+  function tasksTabHtml(c){
+    const sorted = [...c.tasks].sort((a,b) => {
+      if(a.done !== b.done) return a.done ? 1 : -1;
+      return (a.dueDate||'9999').localeCompare(b.dueDate||'9999');
+    });
+    return `
+      <div class="panel-head"><h3>Tasks</h3><button class="btn" data-action="toggle-add-task">${ui.addTask?'Close':'+ Add task'}</button></div>
+      ${ui.addTask ? `
+        <div class="edit-panel add-inline">
+          <div class="form-row">
+            <div class="field"><label>Task</label><input id="at-text" placeholder="e.g. Send discovery request"></div>
+            <div class="field"><label>Due date</label><input id="at-date" type="date"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" data-action="save-task">Add</button>
+            <button class="btn btn-ghost" data-action="toggle-add-task">Cancel</button>
+          </div>
+        </div>` : ''}
+      ${sorted.length ? sorted.map(t => `
+        <div class="task-item ${t.done?'done':''}">
+          <input type="checkbox" class="task-checkbox" data-toggle-task="${t.id}" data-toggle-case="${c.id}" ${t.done?'checked':''}>
+          <div class="task-body">
+            <div class="task-text">${escapeHtml(t.text)}</div>
+            <div class="due-pill ${taskUrgencyClass(t.dueDate)}">${taskDueLabel(t.dueDate)}</div>
+          </div>
+          <button class="icon-btn" data-delete-task="${t.id}" title="Remove">\u2715</button>
+        </div>
+      `).join('') : `<div class="empty-tab">No tasks yet \u2014 add the next thing that needs doing.</div>`}
+    `;
+  }
+
+  function groundsTabHtml(c){
+    return `
+      <div class="panel-head"><h3>Grounds & motions</h3><button class="btn" data-action="toggle-add-ground">${ui.addGround?'Close':'+ Log ground'}</button></div>
+      ${ui.addGround ? `
+        <div class="edit-panel add-inline">
+          <div class="field"><label>Title</label><input id="ag-title" placeholder="e.g. Discovery Is Ongoing"></div>
+          <div class="field"><label>Description</label><textarea id="ag-desc" placeholder="Framing, no laundry list"></textarea></div>
+          <div class="field">
+            <label>Status</label>
+            <select id="ag-status">${Object.keys(GROUND_STATUS_LABEL).map(k => `<option value="${k}">${GROUND_STATUS_LABEL[k]}</option>`).join('')}</select>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" data-action="save-ground">Add</button>
+            <button class="btn btn-ghost" data-action="toggle-add-ground">Cancel</button>
+          </div>
+        </div>` : ''}
+      ${c.grounds.length ? c.grounds.map((g,i) => `
+        <div class="item-card">
+          <div class="ground-row">
+            <div class="ground-letter">${String.fromCharCode(65+i)}</div>
+            <div class="body">
+              <div class="ground-title">${escapeHtml(g.title)}</div>
+              <div class="ground-desc">${escapeHtml(g.description)}</div>
+              <div class="pill ${g.status}">${GROUND_STATUS_LABEL[g.status]}</div>
+            </div>
+          </div>
+          <button class="icon-btn" data-delete-ground="${g.id}" title="Remove">\u2715</button>
+        </div>
+      `).join('') : `<div class="empty-tab">No grounds logged for this case yet.</div>`}
+    `;
+  }
+
+  function exposureTabHtml(c){
+    const count = felonyClasses && Array.isArray(felonyClasses.offenses) ? felonyClasses.offenses.length : 0;
+    const charges = Array.isArray(c.exposureCharges) ? c.exposureCharges : [];
+    return `
+      <div class="panel-head"><h3>Exposure</h3><button class="btn" data-action="toggle-add-charge">${ui.addCharge?'Close':'+ Add charge'}</button></div>
+      <div class="exposure-status">${count ? `Felony classification data loaded \u2014 ${count} offenses (Classes Y, A1\u2013A3, B1\u2013B6, C1, C2, D2 complete; D1/D3 limited to Titles 21/47/63).` : `Felony classification data not loaded yet \u2014 refresh the page.`}</div>
+      ${ui.addCharge ? addChargePanelHtml() : ''}
+      ${chargeListHtml(charges)}
+    `;
+  }
+
+  function chargeListHtml(charges){
+    const totalLine = chargeTotalLine(charges);
+    return `
+      ${charges.length ? `<div class="exposure-total">${totalLine}</div>` : ''}
+      ${charges.length ? charges.map(chargeItemCardHtml).join('') : `<div class="empty-tab">No charges tracked yet \u2014 add one to model sentencing exposure for this case.</div>`}
+    `;
+  }
+
+  function chargeItemCardHtml(ch){
+    return `
+      <div class="item-card">
+        <div class="body">
+          <div class="ground-title">${escapeHtml(ch.offenseLabel || 'Charge')}</div>
+          <div class="court-judge">${escapeHtml(ch.citation || '')}${ch.class ? ' \u00B7 Class ' + escapeHtml(ch.class) : ''}</div>
+          <div class="due-pill">${escapeHtml(ch.computedRange || '')}</div>
+          ${ch.note ? `<div class="charge-note">${escapeHtml(ch.note)}</div>` : ''}
+        </div>
+        <button class="icon-btn" data-delete-charge="${ch.id}" title="Remove">\u2715</button>
+      </div>`;
+  }
+
+  function chargeTotalLine(charges){
+    const numeric = charges.filter(ch => typeof ch.minYears === 'number');
+    if(!numeric.length) return 'Add charges with numeric ranges to see a combined total.';
+    const minTotal = numeric.reduce((s,ch) => s + ch.minYears, 0);
+    const anyLife = numeric.some(ch => ch.maxYears === null);
+    const maxTotal = anyLife ? null : numeric.reduce((s,ch) => s + (ch.maxYears||0), 0);
+    return `Combined exposure if run CONSECUTIVELY: ${minTotal} \u2013 ${fmtYrs(maxTotal)} years across ${numeric.length} charge${numeric.length===1?'':'s'}. If run CONCURRENTLY, exposure is capped by the single highest charge. Judicial discretion determines which applies \u2014 this is not a guarantee either way.`;
+  }
+
+  function addChargePanelHtml(){
+    const ac = ui.addCharge;
+    if(!ac.selected){
+      const results = searchFelonyOffenses(ac.query);
+      return `
+        <div class="edit-panel add-inline">
+          <div class="field"><label>Statute citation or offense name</label><input type="text" id="charge-search" value="${attrEsc(ac.query)}" placeholder="e.g. &quot;1435&quot;, &quot;burglary second&quot;, &quot;kidnapping&quot;"></div>
+          <div id="charge-results" class="charge-results">${chargeResultsHtml(results, ac.query)}</div>
+          <div class="form-actions"><button class="btn btn-ghost" data-action="toggle-add-charge">Cancel</button></div>
+        </div>`;
+    }
+    return `
+      <div class="edit-panel add-inline">
+        <div class="charge-selected-head">
+          <div class="ground-title">${escapeHtml(ac.selected.offense)}</div>
+          <div class="court-judge">${escapeHtml(ac.selected.citation)} \u00B7 Class ${escapeHtml(ac.selected.class)}</div>
+          <button class="btn btn-ghost btn-small" data-action="charge-back">\u2190 Different offense</button>
+        </div>
+        <div id="charge-config">${chargeConfigHtml()}</div>
+        <div class="form-actions">
+          <button class="btn btn-primary" data-action="save-charge">Add to case</button>
+          <button class="btn btn-ghost" data-action="toggle-add-charge">Cancel</button>
+        </div>
+      </div>`;
+  }
+
+  function chargeResultsHtml(results, query){
+    if((query||'').trim().length < 2) return '';
+    if(!results.length) return `<div class="search-hint">No match. Try a different citation fragment or keyword.</div>`;
+    return results.map(o => `
+      <div class="result-row" data-select-offense="${attrEsc(o.citation)}|||${attrEsc(o.offense)}">
+        <span class="rlabel">${escapeHtml(o.offense)}<br><span class="rcite">${escapeHtml(o.citation)}</span></span>
+        <span class="rclass">${escapeHtml(o.class)}</span>
+      </div>`).join('');
+  }
+
+  function findOffense(citation, offense){
+    return felonyClasses.offenses.find(o => o.citation === citation && o.offense === offense);
+  }
+
+  function chargeConfigHtml(){
+    const ac = ui.addCharge;
+    const o = ac.selected;
+    const kind = classifyOffenseKind(o);
+
+    if(ac.forceHab && kind !== 'capital'){
+      return `
+        <div class="flag">Modeling under § 51.1 instead of this offense's own repeat-offense structure.</div>
+        ${hab51PanelHtml()}
+        <button class="btn btn-small" data-action="charge-back-from-hab">\u2190 Back to computed range</button>`;
+    }
+
+    if(kind === 'capital'){
+      const isLEO = o.citation.includes('701.7(E)');
+      return `
+        <div class="exposure-stub">Class Y \u2014 Murder in the First Degree (21 O.S. § 701.9). Not a term-of-years offense.
+        Sentencing menu: <b>${isLEO ? 'death or life without parole only' : 'death, life without parole, or life'}</b>.
+        ${isLEO ? 'Per § 701.9(A), § 701.7(E) convictions are not eligible for a plain life sentence absent overwhelming mitigation.' : ''}
+        This tool does not model capital sentencing procedure.</div>`;
+    }
+
+    if(kind === 'uniform'){
+      const tiers = felonyClasses.uniformRanges[o.class].tiers;
+      const tierOptions = [
+        {key:'noPriors', label:'No qualifying priors'},
+        {key:'onePriorOrTwoPriorClassCD', label:'1\u20132 prior Class C/D convictions'},
+        {key:'threePriorsClassCDOrOnePriorClassYAB', label:'3+ prior Class C/D, or 1+ prior Class Y/A/B'},
+      ];
+      if(!ac.tier) ac.tier = 'noPriors';
+      const exemptNote = o.baseSentenceExempt && ac.tier === 'noPriors'
+        ? `<div class="flag">This offense's first-offense sentence is exempt from the uniform range \u2014 it uses its own statute (possibly with § 51.1). Only the prior-conviction tiers shown here reflect this class's range.</div>` : '';
+      return `
+        <div class="radiorow">
+          ${tierOptions.map(t => `<label class="${ac.tier===t.key?'checked':''}"><input type="radio" name="charge-tier" value="${t.key}" ${ac.tier===t.key?'checked':''}> ${t.label}</label>`).join('')}
+        </div>
+        ${exemptNote}
+        <div id="charge-preview">${uniformPreviewHtml(o.class, ac.tier, tiers)}</div>`;
+    }
+
+    if(kind === 'verifiedTiered'){
+      const vr = o.verifiedRange;
+      if(!ac.tier) ac.tier = 'none';
+      const tierLabels = {none:'No qualifying prior \u2014 first offense', onePrior:'1 prior conviction of this same offense', twoPlusPriors:'2+ prior convictions of this same offense'};
+      return `
+        <div class="radiorow">
+          ${Object.keys(tierLabels).map(k => `<label class="${ac.tier===k?'checked':''}"><input type="radio" name="charge-tier" value="${k}"> ${tierLabels[k]}</label>`).join('')}
+        </div>
+        <div id="charge-preview">${verifiedTieredPreviewHtml(vr, ac.tier)}</div>
+        ${vr.note ? `<div class="flag note">${escapeHtml(vr.note)}</div>` : ''}
+        <button class="btn btn-small" data-action="charge-to-hab">Model § 51.1 alternative instead</button>`;
+    }
+
+    if(kind === 'verified'){
+      const vr = o.verifiedRange;
+      return `
+        <div id="charge-preview">${verifiedFlatPreviewHtml(vr)}</div>
+        ${vr.note ? `<div class="flag note">${escapeHtml(vr.note)}</div>` : ''}
+        ${vr.hasOwnRepeatOffenseEscalation ? `<button class="btn btn-small" data-action="charge-to-hab">Model § 51.1 alternative instead</button>` : ''}`;
+    }
+
+    if(kind === 'exempt'){
+      return `
+        <div class="flag">This offense is exempt from its class's uniform range \u2014 it keeps its own penalty, enhanced (if at all) under § 51.1.</div>
+        ${hab51PanelHtml()}`;
+    }
+
+    // ownRangeUnverified / unclassified fallback
+    return `
+      <div class="flag">${kind==='ownRangeUnverified' ? 'This class has no uniform range \u2014 enter the offense\'s own first-offense range below.' : 'Classification for this offense was not independently confirmed \u2014 enter its statutory range below if known.'}</div>
+      ${hab51PanelHtml()}`;
+  }
+
+  function uniformPreviewHtml(cls, tierKey, tiers){
+    const t = tiers[tierKey];
+    return rangeToolHtml(t.minYears, t.maxYears, t.minTimeServedPct);
+  }
+
+  function verifiedTieredPreviewHtml(vr, tierKey){
+    const t = vr.tiers[tierKey];
+    return rangeToolHtml(t.minYears, t.maxYears, vr.minTimeServedPct);
+  }
+
+  function verifiedFlatPreviewHtml(vr){
+    return rangeToolHtml(vr.minYears, vr.maxYears, vr.is85PercentCrime ? 85 : null);
+  }
+
+  function hab51PanelHtml(){
+    const ac = ui.addCharge;
+    if(!ac.hab) ac.hab = { min:'', max:'', life:false, tier:'none' };
+    const h = ac.hab;
+    return `
+      <div class="form-row">
+        <div class="field"><label>First-offense min (yrs)</label><input type="number" id="hab-min" value="${attrEsc(h.min)}" min="0"></div>
+        <div class="field"><label>First-offense max (yrs)</label><input type="number" id="hab-max" value="${attrEsc(h.max)}" min="0" ${h.life?'disabled':''}></div>
+      </div>
+      <label class="inline-check"><input type="checkbox" id="hab-life" ${h.life?'checked':''}> Max is life imprisonment</label>
+      <div class="radiorow">
+        <label class="${h.tier==='none'?'checked':''}"><input type="radio" name="hab-tier" value="none" ${h.tier==='none'?'checked':''}> No priors \u2014 first offense</label>
+        <label class="${h.tier==='one'?'checked':''}"><input type="radio" name="hab-tier" value="one" ${h.tier==='one'?'checked':''}> One prior felony \u2014 § 51.1(A)</label>
+        <label class="${h.tier==='two'?'checked':''}"><input type="radio" name="hab-tier" value="two" ${h.tier==='two'?'checked':''}> Two+ prior felonies \u2014 § 51.1(C)</label>
+      </div>
+      <div id="charge-preview">${hab51PreviewHtml()}</div>`;
+  }
+
+  function hab51PreviewHtml(){
+    const h = ui.addCharge.hab;
+    const min = parseInt(h.min,10) || 0;
+    const max = h.life ? null : (h.max === '' ? null : parseInt(h.max,10));
+    if(max === null && !h.life && h.tier === 'none'){
+      return `<div class="search-hint">Enter the offense's own maximum (or check life) to see a range.</div>`;
+    }
+    const r = computeHab51(min, max, h.tier);
+    if(r.unresolved){
+      return `<div class="flag">§ 51.1(C)(3) doesn't have a verified number for this tier in this tool \u2014 pull the current statute text before relying on a figure here.</div>`;
+    }
+    return rangeToolHtml(r.min===null?0:r.min, r.max, null, r.cite);
+  }
+
+  function updateHabPreviewPartial(){
+    const ac = ui.addCharge; if(!ac || !ac.hab) return;
+    const minEl = document.getElementById('hab-min'), maxEl = document.getElementById('hab-max');
+    if(minEl) ac.hab.min = minEl.value;
+    if(maxEl) ac.hab.max = maxEl.value;
+    const previewEl = document.getElementById('charge-preview');
+    if(previewEl){ previewEl.innerHTML = hab51PreviewHtml(); wireExposureHypoSlider(); }
+  }
+
+  function computeFinalCharge(){
+    const ac = ui.addCharge, o = ac.selected;
+    const kind = classifyOffenseKind(o);
+    const base = { id: uid(), citation: o.citation, offenseLabel: o.offense, class: o.class };
+
+    if(kind === 'capital'){
+      const isLEO = o.citation.includes('701.7(E)');
+      return { ...base, computedRange: isLEO ? 'Death or life without parole' : 'Death, life without parole, or life',
+        note: '21 O.S. § 701.9 \u2014 not a term-of-years offense.' };
+    }
+
+    if(ac.forceHab || kind === 'exempt' || kind === 'ownRangeUnverified' || kind === 'unclassified'){
+      const h = ac.hab || {min:'',max:'',life:false,tier:'none'};
+      const min = parseInt(h.min,10) || 0;
+      const max = h.life ? null : (h.max === '' ? null : parseInt(h.max,10));
+      const r = computeHab51(min, max, h.tier);
+      if(r.unresolved) return { ...base, computedRange: 'Unresolved \u2014 verify § 51.1(C)(3) manually', note: 'This tier has no verified figure in this tool.' };
+      return { ...base, minYears: r.min===null?undefined:r.min, maxYears: r.max,
+        computedRange: `${r.min===null?'\u2014':r.min} \u2013 ${fmtYrs(r.max)} years (${r.cite})`,
+        note: kind==='exempt' ? 'Modeled under § 51.1 \u2014 this offense is exempt from its class\'s uniform range.' : '' };
+    }
+
+    if(kind === 'uniform'){
+      const tierKey = ac.tier || 'noPriors';
+      const t = felonyClasses.uniformRanges[o.class].tiers[tierKey];
+      return { ...base, minYears: t.minYears, maxYears: t.maxYears,
+        computedRange: `${t.minYears} \u2013 ${fmtYrs(t.maxYears)} years, min ${t.minTimeServedPct}% served`,
+        note: (o.baseSentenceExempt && tierKey==='noPriors') ? 'Base sentence may be exempt from this range \u2014 verify against § 51.1.' : '' };
+    }
+
+    if(kind === 'verifiedTiered'){
+      const vr = o.verifiedRange;
+      const tierKey = ac.tier || 'none';
+      const t = vr.tiers[tierKey];
+      return { ...base, minYears: t.minYears, maxYears: t.maxYears,
+        computedRange: `${t.minYears} \u2013 ${fmtYrs(t.maxYears)} years, min ${vr.minTimeServedPct}% served`, note: vr.note || '' };
+    }
+
+    if(kind === 'verified'){
+      const vr = o.verifiedRange;
+      return { ...base, minYears: vr.minYears, maxYears: vr.maxYears,
+        computedRange: `${vr.minYears} \u2013 ${fmtYrs(vr.maxYears)} years${vr.is85PercentCrime ? ', 85% crime' : ''}`, note: vr.note || '' };
+    }
+
+    return { ...base, computedRange: 'Not computed', note: '' };
+  }
+
+  function wireExposurePanel(){
+    const ac = ui.addCharge;
+    if(!ac) return;
+    wireExposureHypoSlider();
+
+    const searchEl = document.getElementById('charge-search');
+    if(searchEl){
+      searchEl.addEventListener('input', () => {
+        ac.query = searchEl.value;
+        const resultsEl = document.getElementById('charge-results');
+        if(resultsEl) resultsEl.innerHTML = chargeResultsHtml(searchFelonyOffenses(ac.query), ac.query);
+        wireChargeResultClicks();
+      });
+    }
+    wireChargeResultClicks();
+
+    document.querySelectorAll('[data-action="charge-back"]').forEach(node => {
+      node.addEventListener('click', () => { ac.selected = null; ac.tier = null; ac.hab = null; ac.forceHab = false; render(); });
+    });
+
+    document.querySelectorAll('[data-action="charge-to-hab"]').forEach(node => {
+      node.addEventListener('click', () => {
+        const o = ac.selected;
+        let seedMin = 0, seedMax = '';
+        if(o.verifiedRange && o.verifiedRange.tiers) { seedMin = o.verifiedRange.tiers.none.minYears; seedMax = o.verifiedRange.tiers.none.maxYears ?? ''; }
+        else if(o.verifiedRange) { seedMin = o.verifiedRange.minYears; seedMax = o.verifiedRange.maxYears ?? ''; }
+        ac.hab = { min:String(seedMin), max:String(seedMax), life:false, tier:'none' };
+        ac.forceHab = true;
+        render();
+      });
+    });
+    document.querySelectorAll('[data-action="charge-back-from-hab"]').forEach(node => {
+      node.addEventListener('click', () => { ac.forceHab = false; render(); });
+    });
+
+    document.querySelectorAll('input[name="charge-tier"]').forEach(node => {
+      node.addEventListener('change', () => { ac.tier = node.value; render(); });
+    });
+    document.querySelectorAll('input[name="hab-tier"]').forEach(node => {
+      node.addEventListener('change', () => { if(!ac.hab) ac.hab={min:'',max:'',life:false,tier:'none'}; ac.hab.tier = node.value; render(); });
+    });
+    const habLife = document.getElementById('hab-life');
+    if(habLife) habLife.addEventListener('change', () => { ac.hab.life = habLife.checked; render(); });
+    const habMin = document.getElementById('hab-min');
+    if(habMin) habMin.addEventListener('input', updateHabPreviewPartial);
+    const habMax = document.getElementById('hab-max');
+    if(habMax) habMax.addEventListener('input', updateHabPreviewPartial);
+
+    document.querySelectorAll('[data-action="save-charge"]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c || !ac.selected) return;
+        const charge = computeFinalCharge();
+        if(!Array.isArray(c.exposureCharges)) c.exposureCharges = [];
+        c.exposureCharges.push(charge);
+        ui.addCharge = null;
+        await saveCases(); render();
+      });
+    });
+  }
+
+  function wireChargeResultClicks(){
+    document.querySelectorAll('[data-select-offense]').forEach(node => {
+      node.addEventListener('click', () => {
+        const [citation, offense] = node.getAttribute('data-select-offense').split('|||');
+        const o = findOffense(citation, offense);
+        if(!o) return;
+        ui.addCharge.selected = o;
+        ui.addCharge.tier = null;
+        ui.addCharge.hab = null;
+        ui.addCharge.forceHab = false;
+        render();
+      });
+    });
+  }
+
+  function notesTabHtml(c){
+    const sorted = [...c.notes].reverse();
+    return `
+      <div class="panel-head"><h3>Notes</h3></div>
+      <div class="edit-panel add-inline">
+        <div class="field"><label>New note</label><textarea id="note-text" placeholder="Log what happened, what's next"></textarea></div>
+        <div class="form-actions"><button class="btn btn-primary" data-action="save-note">Add note</button></div>
+      </div>
+      ${sorted.length ? `<div style="margin-top:16px;">${sorted.map(n => `
+        <div class="note-item">
+          <div class="note-ts">${escapeHtml(n.timestamp)}</div>
+          <div class="note-text">${escapeHtml(n.text)}</div>
+        </div>
+      `).join('')}</div>` : `<div class="empty-tab">No notes yet \u2014 start the file.</div>`}
+    `;
+  }
+
+  function escapeHtml(str){
+    if(str === undefined || str === null) return '';
+    return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function attrEsc(str){ return escapeHtml(str); }
+
+  // ---------- Court minute extraction ----------
+  async function extractMinute(base64, mimeType, fileName){
+    const isPdf = mimeType === 'application/pdf';
+    const prompt = 'You are reviewing a photo or scan of a criminal court minute or docket sheet for a defense attorney\u2019s case file. Extract ONLY what is clearly legible in the image \u2014 never guess, infer, or fill in typical/likely values. If a field is not clearly present, return an empty string for it. Respond with ONLY a raw JSON object, no markdown code fences, no commentary before or after, matching exactly this shape:\n{"hearingDate":"YYYY-MM-DD or empty string","hearingType":"short label such as Arraignment, Preliminary Hearing, Motion Hearing, Status Conference, Trial, or empty string","summary":"2-4 sentence plain-language summary of what happened, rulings, or orders, or empty string","nextDate":"YYYY-MM-DD or empty string","nextDateLabel":"short label for the next setting, or empty string","nextDateDetail":"time, department, or other detail, or empty string","bondOrCustodyNote":"any bond or custody change noted, or empty string"}';
+
+    const contentBlock = isPdf
+      ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } }
+      : { type: 'image', source: { type: 'base64', media_type: mimeType, data: base64 } };
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: [ contentBlock, { type: 'text', text: prompt } ] }],
+      }),
+    });
+    if(!response.ok) throw new Error('Request failed (' + response.status + ')');
+    const data = await response.json();
+    const textBlock = (data.content || []).find(b => b.type === 'text');
+    if(!textBlock || !textBlock.text) throw new Error('No readable response');
+    let cleaned = textBlock.text.trim();
+    cleaned = cleaned.replace(/^```json/i, '').replace(/^```/, '').replace(/```$/, '').trim();
+    const parsed = JSON.parse(cleaned);
+    return {
+      hearingDate: parsed.hearingDate || '',
+      hearingType: parsed.hearingType || '',
+      summary: parsed.summary || '',
+      nextDate: parsed.nextDate || '',
+      nextDateLabel: parsed.nextDateLabel || '',
+      nextDateDetail: parsed.nextDateDetail || '',
+      bondOrCustodyNote: parsed.bondOrCustodyNote || '',
+    };
+  }
+
+  function applyMinuteToCase(c, forDateId, data){
+    const hearingLabel = data.hearingType || 'Court hearing';
+    const when = data.hearingDate ? fmtDate(data.hearingDate) : '';
+    const lines = [];
+    lines.push(`${hearingLabel}${when ? ' \u2014 ' + when : ''}: ${data.summary || '(no summary extracted \u2014 review the original)'}`);
+    if(data.bondOrCustodyNote) lines.push(`Bond/custody: ${data.bondOrCustodyNote}`);
+    c.notes.push({ id: uid(), timestamp: new Date().toLocaleString(), text: lines.join('\n') });
+
+    if(forDateId){
+      const d = c.dates.find(x => x.id === forDateId);
+      if(d) d.minuteLogged = true;
+    }
+
+    if(data.nextDate){
+      c.dates.push({ id: uid(), label: data.nextDateLabel || 'Next court date', date: data.nextDate, detail: data.nextDateDetail || '', minuteLogged:false });
+      c.tasks.push({ id: uid(), text: `Prepare for ${data.nextDateLabel || 'next hearing'}`, dueDate: data.nextDate, done:false });
+    }
+  }
+
+  // ---------- Brief generator ----------
+  function buildBrief(c){
+    const lines = [];
+    lines.push(`CASE BRIEF \u2014 ${c.clientName || 'Untitled client'}`);
+    lines.push(`Docket: ${c.docketNumber || 'unassigned'} | Status: ${STATUS_LABEL[c.status]}`);
+    lines.push(`Court: ${c.court || 'unassigned'} | Judge: ${c.judge || 'unassigned'}`);
+    lines.push('');
+    lines.push('CHARGES');
+    lines.push(c.charges || '(none on file)');
+    lines.push('');
+    lines.push('KEY DATES');
+    if(c.dates.length){
+      c.dates.forEach(d => lines.push(`- ${d.label}${d.date ? ': ' + fmtDate(d.date) : ''}${d.detail ? ' \u2014 ' + d.detail : ''}`));
+    } else lines.push('(none on file)');
+    lines.push('');
+    lines.push('OPEN TASKS');
+    const openTasks = c.tasks.filter(t => !t.done);
+    if(openTasks.length){
+      openTasks.forEach(t => lines.push(`- ${t.text} (${taskDueLabel(t.dueDate)})`));
+    } else lines.push('(none on file)');
+    lines.push('');
+    lines.push('TRACKED DEADLINES');
+    if(c.deadlines.length){
+      c.deadlines.forEach(d => lines.push(`- ${d.label}: ${fmtDate(d.dueDate)} (trigger ${fmtDate(d.triggerDate)} + ${d.amount} ${d.unit})`));
+    } else lines.push('(none on file)');
+    lines.push('');
+    lines.push('GROUNDS / MOTIONS');
+    if(c.grounds.length){
+      c.grounds.forEach((g,i) => lines.push(`${String.fromCharCode(65+i)}. ${g.title} (${GROUND_STATUS_LABEL[g.status]}) \u2014 ${g.description}`));
+    } else lines.push('(none on file)');
+    lines.push('');
+    lines.push('RECENT NOTES');
+    if(c.notes.length){
+      [...c.notes].reverse().slice(0,5).forEach(n => lines.push(`${n.timestamp} \u2014 ${n.text}`));
+    } else lines.push('(none on file)');
+    return lines.join('\n');
+  }
+
+  // ---------- Wiring ----------
+  function wireGlobalActions(){
+    wireCaseItemClicks(document);
+    wireExposurePanel();
+    document.getElementById('case-search')?.addEventListener('input', updateCaseList);
+
+    document.querySelectorAll('[data-jump]').forEach(node => {
+      node.addEventListener('click', () => {
+        selectedId = node.getAttribute('data-jump');
+        activeTab = node.getAttribute('data-jump-tab') || 'dates';
+        viewMode = 'case';
+        ui.editHeader = false; ui.addDate = false; ui.addGround = false; ui.addTask = false; ui.addCharge = null;
+        const openFor = node.getAttribute('data-open-minute-for');
+        ui.logMinute = openFor ? { forDateId: openFor, stage:'upload', imageBase64:null, mimeType:null, fileName:null, extracted:null, errorMsg:null } : null;
+        render();
+      });
+    });
+
+    document.querySelectorAll('[data-toggle-task]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const caseId = node.getAttribute('data-toggle-case');
+        const taskId = node.getAttribute('data-toggle-task');
+        const c = cases.find(x => x.id === caseId);
+        if(!c) return;
+        const t = c.tasks.find(x => x.id === taskId);
+        if(!t) return;
+        t.done = !t.done;
+        await saveCases(); render();
+      });
+    });
+
+    const byAction = (action, fn) => {
+      const node = document.querySelector(`[data-action="${action}"]`);
+      if(node) node.addEventListener('click', fn);
+    };
+
+    byAction('new-case', () => { ui.newCaseForm = true; render(); document.getElementById('nc-client')?.focus(); });
+    byAction('cancel-new-case', () => { ui.newCaseForm = false; render(); });
+    byAction('view-reminders', () => { viewMode = 'reminders'; render(); });
+    byAction('save-new-case', async () => {
+      const clientName = document.getElementById('nc-client').value.trim();
+      if(!clientName) return;
+      const docketNumber = document.getElementById('nc-docket').value.trim();
+      const newCase = { id: uid(), clientName, docketNumber, court:'', judge:'', charges:'', status:'active', dates:[], tasks:[], deadlines:[], grounds:[], notes:[], exposureCharges:[] };
+      cases.push(newCase);
+      selectedId = newCase.id;
+      viewMode = 'case';
+      ui.newCaseForm = false;
+      await saveCases(); render();
+    });
+
+    byAction('toggle-edit', () => { ui.editHeader = !ui.editHeader; render(); });
+    byAction('save-header', async () => {
+      const c = getSelected(); if(!c) return;
+      c.clientName = document.getElementById('eh-client').value.trim();
+      c.docketNumber = document.getElementById('eh-docket').value.trim();
+      c.court = document.getElementById('eh-court').value.trim();
+      c.judge = document.getElementById('eh-judge').value.trim();
+      c.charges = document.getElementById('eh-charges').value.trim();
+      c.status = document.getElementById('eh-status').value;
+      ui.editHeader = false;
+      await saveCases(); render();
+    });
+
+    byAction('delete-case', async () => {
+      const c = getSelected(); if(!c) return;
+      if(!confirm(`Delete the file for ${c.clientName || 'this client'}? This can\u2019t be undone.`)) return;
+      cases = cases.filter(x => x.id !== c.id);
+      selectedId = cases.length ? cases[0].id : null;
+      await saveCases(); render();
+    });
+
+    byAction('copy-brief', async () => {
+      const c = getSelected(); if(!c) return;
+      const text = buildBrief(c);
+      try{
+        await navigator.clipboard.writeText(text);
+        const btn = document.querySelector('[data-action="copy-brief"]');
+        const original = btn.textContent;
+        btn.textContent = 'Copied \u2713';
+        setTimeout(() => { btn.textContent = original; }, 1600);
+      }catch(e){ alert(text); }
+    });
+
+    document.querySelectorAll('[data-tab]').forEach(node => {
+      node.addEventListener('click', () => {
+        activeTab = node.getAttribute('data-tab');
+        ui.addDate = false; ui.addGround = false; ui.addTask = false;
+        render();
+      });
+    });
+
+    byAction('toggle-add-task', () => { ui.addTask = !ui.addTask; render(); });
+    byAction('toggle-add-charge', () => { ui.addCharge = ui.addCharge ? null : { query:'', selected:null, tier:null, hab:null, forceHab:false }; render(); });
+    byAction('save-task', async () => {
+      const c = getSelected(); if(!c) return;
+      const text = document.getElementById('at-text').value.trim();
+      if(!text) return;
+      const dueDate = document.getElementById('at-date').value;
+      c.tasks.push({ id: uid(), text, dueDate, done:false });
+      ui.addTask = false;
+      await saveCases(); render();
+    });
+    document.querySelectorAll('[data-delete-task]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c) return;
+        c.tasks = c.tasks.filter(t => t.id !== node.getAttribute('data-delete-task'));
+        await saveCases(); render();
+      });
+    });
+
+    byAction('toggle-add-date', () => { ui.addDate = !ui.addDate; render(); });
+    byAction('save-date', async () => {
+      const c = getSelected(); if(!c) return;
+      const label = document.getElementById('ad-label').value.trim();
+      if(!label) return;
+      const date = document.getElementById('ad-date').value;
+      const detail = document.getElementById('ad-detail').value.trim();
+      c.dates.push({ id: uid(), label, date, detail, minuteLogged:false });
+      ui.addDate = false;
+      await saveCases(); render();
+    });
+    document.querySelectorAll('[data-delete-date]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c) return;
+        c.dates = c.dates.filter(d => d.id !== node.getAttribute('data-delete-date'));
+        await saveCases(); render();
+      });
+    });
+
+    byAction('toggle-add-ground', () => { ui.addGround = !ui.addGround; render(); });
+    byAction('save-ground', async () => {
+      const c = getSelected(); if(!c) return;
+      const title = document.getElementById('ag-title').value.trim();
+      if(!title) return;
+      const description = document.getElementById('ag-desc').value.trim();
+      const status = document.getElementById('ag-status').value;
+      c.grounds.push({ id: uid(), title, description, status });
+      ui.addGround = false;
+      await saveCases(); render();
+    });
+    document.querySelectorAll('[data-delete-ground]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c) return;
+        c.grounds = c.grounds.filter(g => g.id !== node.getAttribute('data-delete-ground'));
+        await saveCases(); render();
+      });
+    });
+
+    document.querySelectorAll('[data-delete-charge]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c) return;
+        c.exposureCharges = (c.exposureCharges||[]).filter(ch => ch.id !== node.getAttribute('data-delete-charge'));
+        await saveCases(); render();
+      });
+    });
+
+    byAction('save-note', async () => {
+      const c = getSelected(); if(!c) return;
+      const ta = document.getElementById('note-text');
+      const text = ta.value.trim();
+      if(!text) return;
+      c.notes.push({ id: uid(), timestamp: new Date().toLocaleString(), text });
+      await saveCases(); render();
+    });
+
+    byAction('open-log-minute', () => {
+      ui.logMinute = { forDateId: null, stage:'upload', imageBase64:null, mimeType:null, fileName:null, extracted:null, errorMsg:null };
+      render();
+    });
+    document.querySelectorAll('[data-log-minute-for]').forEach(node => {
+      node.addEventListener('click', () => {
+        ui.logMinute = { forDateId: node.getAttribute('data-log-minute-for'), stage:'upload', imageBase64:null, mimeType:null, fileName:null, extracted:null, errorMsg:null };
+        render();
+      });
+    });
+    byAction('cancel-minute', () => { ui.logMinute = null; render(); });
+
+    const fileInput = document.getElementById('minute-file');
+    if(fileInput){
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files && fileInput.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result || '';
+          const base64 = String(result).split(',')[1] || '';
+          ui.logMinute.imageBase64 = base64;
+          ui.logMinute.mimeType = file.type;
+          ui.logMinute.fileName = file.name;
+          ui.logMinute.stage = 'ready';
+          render();
+        };
+        reader.onerror = () => {
+          ui.logMinute.stage = 'error';
+          ui.logMinute.errorMsg = 'Could not read that file. Try again.';
+          render();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    byAction('extract-minute', async () => {
+      ui.logMinute.stage = 'extracting';
+      render();
+      try{
+        const result = await extractMinute(ui.logMinute.imageBase64, ui.logMinute.mimeType, ui.logMinute.fileName);
+        ui.logMinute.extracted = result;
+        ui.logMinute.stage = 'review';
+      }catch(e){
+        ui.logMinute.stage = 'error';
+        ui.logMinute.errorMsg = 'Couldn\u2019t read that file \u2014 try a clearer photo, or enter the details manually as a note.';
+      }
+      render();
+    });
+
+    byAction('retry-minute', () => {
+      ui.logMinute.stage = ui.logMinute.imageBase64 ? 'ready' : 'upload';
+      render();
+    });
+
+    byAction('save-minute', async () => {
+      const c = getSelected(); if(!c || !ui.logMinute) return;
+      const data = {
+        hearingType: document.getElementById('mn-type').value.trim(),
+        hearingDate: document.getElementById('mn-hdate').value,
+        summary: document.getElementById('mn-summary').value.trim(),
+        bondOrCustodyNote: document.getElementById('mn-bond').value.trim(),
+        nextDateLabel: document.getElementById('mn-nlabel').value.trim(),
+        nextDate: document.getElementById('mn-ndate').value,
+        nextDateDetail: document.getElementById('mn-ndetail').value.trim(),
+      };
+      applyMinuteToCase(c, ui.logMinute.forDateId, data);
+      ui.logMinute = null;
+      await saveCases(); render();
+    });
+
+    byAction('print-summary', () => { window.print(); });
+    byAction('retry-save', async () => { await saveCases(); render(); });
+
+    const presetSelect = document.getElementById('dl-preset');
+    if(presetSelect){
+      const applyPreset = () => {
+        const preset = DEADLINE_PRESETS.find(p => p.id === presetSelect.value);
+        const customFields = document.getElementById('dl-custom-fields');
+        const labelInput = document.getElementById('dl-label');
+        const citationDiv = document.getElementById('dl-citation');
+        if(!preset) return;
+        if(preset.id === 'custom'){
+          customFields.style.display = 'flex';
+          citationDiv.textContent = '';
+        } else {
+          customFields.style.display = 'none';
+          labelInput.value = preset.label;
+          citationDiv.textContent = `${preset.citation} \u2014 ${preset.note}`;
+        }
+      };
+      presetSelect.addEventListener('change', applyPreset);
+      applyPreset();
+    }
+
+    byAction('calc-deadline', async () => {
+      const c = getSelected(); if(!c) return;
+      const presetId = document.getElementById('dl-preset').value;
+      const preset = DEADLINE_PRESETS.find(p => p.id === presetId);
+      const trigger = document.getElementById('dl-trigger').value;
+      if(!trigger){ alert('Enter a trigger date first.'); return; }
+      const label = document.getElementById('dl-label').value.trim() || (preset ? preset.label : 'Deadline');
+      let amount, unit, ruleDescription;
+      if(preset && preset.id !== 'custom'){
+        amount = preset.amount; unit = preset.unit;
+        ruleDescription = `${preset.citation} \u2014 ${preset.note}`;
+      } else {
+        amount = parseInt(document.getElementById('dl-amount').value, 10) || 0;
+        unit = document.getElementById('dl-unit').value;
+        ruleDescription = 'Custom deadline \u2014 verify independently.';
+      }
+      const dueDate = addToDate(trigger, amount, unit);
+      c.deadlines.push({ id: uid(), label, triggerDate: trigger, amount, unit, dueDate, ruleDescription });
+      c.tasks.push({ id: uid(), text: label, dueDate, done:false });
+      await saveCases(); render();
+    });
+
+    document.querySelectorAll('[data-delete-deadline]').forEach(node => {
+      node.addEventListener('click', async () => {
+        const c = getSelected(); if(!c) return;
+        c.deadlines = c.deadlines.filter(d => d.id !== node.getAttribute('data-delete-deadline'));
+        await saveCases(); render();
+      });
+    });
+  }
+
+  loadFelonyClasses();
+  loadCases();
+})();
+</script>
+</body>
+</html>
