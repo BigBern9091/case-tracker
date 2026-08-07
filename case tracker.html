@@ -67,11 +67,20 @@
   .btn-danger{ color:var(--red); }
 
   .case-list{ flex:1; overflow-y:auto; }
-  .case-item{ padding:14px 20px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; border-left:3px solid transparent; }
+  .client-group{ border-bottom:1px solid var(--border); }
+  .client-group-head{ display:flex; align-items:center; gap:8px; padding:11px 20px; cursor:pointer; user-select:none; }
+  .client-group-head:hover{ background:var(--surface-2); }
+  .client-group-head .chev{ font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); width:10px; flex-shrink:0; transition:transform .12s; }
+  .client-group.collapsed .chev{ transform:rotate(-90deg); }
+  .client-group-head .cg-name{ font-family:var(--font-display); font-weight:600; font-size:14.5px; flex:1; }
+  .client-group-head .cg-count{ font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); background:var(--surface-2); border-radius:9px; padding:2px 7px; }
+  .cg-exposure-btn{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.04em; color:var(--brass); background:none; border:1px solid var(--brass-dim); border-radius:3px; padding:3px 7px; cursor:pointer; white-space:nowrap; }
+  .cg-exposure-btn:hover{ background:var(--brass-dim); }
+  .client-group.collapsed .client-cases{ display:none; }
+  .case-item{ padding:14px 20px 14px 30px; border-top:1px solid var(--border); cursor:pointer; transition:background .12s; border-left:3px solid transparent; }
   .case-item:hover{ background:var(--surface-2); }
   .case-item.active{ background:var(--surface-2); border-left-color:var(--red); }
-  .case-item .client{ font-family:var(--font-display); font-weight:600; font-size:15.5px; }
-  .case-item .docket{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); margin-top:3px; letter-spacing:0.02em; }
+  .case-item .docket{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); letter-spacing:0.02em; }
   .case-item .next{ font-size:11.5px; color:var(--ink-dim); margin-top:7px; }
   .case-item .next.urgent{ color:var(--red); font-weight:600; }
   .rail-empty{ padding:28px 20px; color:var(--ink-faint); font-size:12.5px; }
@@ -297,10 +306,13 @@
   let cases = [];
   let felonyClasses = null; // { meta, offenses, uniformRanges, habitualEnhancement51_1 }
   let selectedId = null;
+  let selectedClientKey = null;
   let activeTab = 'dates';
-  let viewMode = 'case'; // 'case' | 'reminders'
+  let viewMode = 'case'; // 'case' | 'reminders' | 'client'
   let searchQuery = '';
-  let ui = { newCaseForm:false, editHeader:false, addDate:false, addGround:false, addTask:false, addCharge:false, logMinute:null };
+  let ui = { newCaseForm:false, editHeader:false, addDate:false, addGround:false, addTask:false, addCharge:false, logMinute:null, collapsedClients: new Set() };
+
+  function clientKey(name){ return (name||'').trim().toLowerCase(); }
 
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 
@@ -729,16 +741,83 @@
         render();
       });
     });
+    container.querySelectorAll('[data-toggle-client]').forEach(node => {
+      node.addEventListener('click', (e) => {
+        if(e.target.closest('[data-view-client-exposure]')) return;
+        const key = node.getAttribute('data-toggle-client');
+        if(ui.collapsedClients.has(key)) ui.collapsedClients.delete(key); else ui.collapsedClients.add(key);
+        updateCaseList();
+      });
+    });
+    container.querySelectorAll('[data-view-client-exposure]').forEach(node => {
+      node.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectedClientKey = node.getAttribute('data-view-client-exposure');
+        viewMode = 'client';
+        render();
+      });
+    });
+    container.querySelectorAll('[data-new-case-for]').forEach(node => {
+      node.addEventListener('click', (e) => {
+        e.stopPropagation();
+        ui.newCaseForm = node.getAttribute('data-new-case-for');
+        render();
+        document.getElementById('nc-docket')?.focus();
+      });
+    });
+  }
+
+  // Groups cases by a normalized client name so multiple matters for the same
+  // client sit under one header in the rail. No new stored field \u2014 the group
+  // key is just clientName.trim().toLowerCase(), so renaming a client to match
+  // an existing spelling re-groups it automatically.
+  function groupCasesByClient(list){
+    const groups = [];
+    const byKey = new Map();
+    list.forEach(c => {
+      const key = clientKey(c.clientName) || `\u2014untitled\u2014${c.id}`;
+      if(!byKey.has(key)){
+        const g = { key, name: c.clientName || 'Untitled client', cases: [] };
+        byKey.set(key, g);
+        groups.push(g);
+      }
+      byKey.get(key).cases.push(c);
+    });
+    return groups;
+  }
+
+  function caseGroupHtml(group){
+    const collapsed = ui.collapsedClients.has(group.key) && !group.cases.some(c => c.id === selectedId);
+    const exposureBtn = group.cases.length > 1
+      ? `<button class="cg-exposure-btn" data-view-client-exposure="${attrEsc(group.key)}">\u03A3 Exposure</button>`
+      : '';
+    const addCaseBtn = `<button class="cg-exposure-btn" data-new-case-for="${attrEsc(group.name)}" title="New case for this client">+ Case</button>`;
+    return `
+      <div class="client-group ${collapsed?'collapsed':''}">
+        <div class="client-group-head" data-toggle-client="${attrEsc(group.key)}">
+          <span class="chev">\u25BC</span>
+          <span class="cg-name">${escapeHtml(group.name)}</span>
+          <span class="cg-count">${group.cases.length}</span>
+          ${exposureBtn}${addCaseBtn}
+        </div>
+        <div class="client-cases">${group.cases.map(caseItemHtml).join('')}</div>
+      </div>`;
+  }
+
+  function renderCaseGroups(list){
+    if(!list.length){
+      return cases.length
+        ? `<div class="rail-empty">No matches for \u201c${escapeHtml(searchQuery)}\u201d.</div>`
+        : `<div class="rail-empty">No cases logged yet. Open your first file.</div>`;
+    }
+    return groupCasesByClient(list).map(caseGroupHtml).join('');
   }
 
   function updateCaseList(){
     searchQuery = document.getElementById('case-search').value;
     const listEl = document.querySelector('.case-list');
     if(!listEl) return;
-    const results = filteredCases();
-    listEl.innerHTML = results.length
-      ? results.map(caseItemHtml).join('')
-      : (cases.length ? `<div class="rail-empty">No matches for \u201c${escapeHtml(searchQuery)}\u201d.</div>` : `<div class="rail-empty">No cases logged yet. Open your first file.</div>`);
+    listEl.innerHTML = renderCaseGroups(filteredCases());
     wireCaseItemClicks(listEl);
   }
 
@@ -775,16 +854,32 @@
       ${ui.newCaseForm ? newCaseFormHtml() : ''}
       <div class="search-wrap"><input type="text" id="case-search" placeholder="Search cases\u2026" value="${attrEsc(searchQuery)}"></div>
       <div class="case-list">
-        ${filteredCases().length ? filteredCases().map(caseItemHtml).join('') : (cases.length ? `<div class="rail-empty">No matches for \u201c${escapeHtml(searchQuery)}\u201d.</div>` : `<div class="rail-empty">No cases logged yet. Open your first file.</div>`)}
+        ${renderCaseGroups(filteredCases())}
       </div>
     `;
     return rail;
   }
 
+  function uniqueClientNames(){
+    const seen = new Set();
+    const names = [];
+    cases.forEach(c => {
+      const k = clientKey(c.clientName);
+      if(c.clientName && !seen.has(k)){ seen.add(k); names.push(c.clientName); }
+    });
+    return names;
+  }
+
   function newCaseFormHtml(){
+    const prefill = typeof ui.newCaseForm === 'string' ? ui.newCaseForm : '';
     return `
       <div class="new-case-form">
-        <div class="field"><label>Client name</label><input id="nc-client" placeholder="Full name"></div>
+        <div class="field"><label>Client name</label>
+          <input id="nc-client" placeholder="Full name" list="existing-clients" autocomplete="off" value="${attrEsc(prefill)}">
+          <datalist id="existing-clients">
+            ${uniqueClientNames().map(n => `<option value="${attrEsc(n)}"></option>`).join('')}
+          </datalist>
+        </div>
         <div class="field"><label>Docket number</label><input id="nc-docket" placeholder="e.g. CR-2026-1148"></div>
         <div class="form-actions">
           <button class="btn btn-primary" data-action="save-new-case">Save</button>
@@ -798,7 +893,6 @@
     const next = nextUpInfo(c);
     return `
       <div class="case-item ${c.id===selectedId && viewMode==='case'?'active':''}" data-select="${c.id}">
-        <div class="client">${escapeHtml(c.clientName || 'Untitled client')}</div>
         <div class="docket">${escapeHtml(c.docketNumber) || 'No docket #'}</div>
         ${next ? `<div class="next ${next.urgent?'urgent':''}">${escapeHtml(next.label)} \u2014 ${fmtDate(next.date)}</div>` : ''}
       </div>
@@ -816,6 +910,10 @@
     const main = el(`<div class="main"></div>`);
     if(viewMode === 'reminders'){
       main.innerHTML = remindersViewHtml();
+      return main;
+    }
+    if(viewMode === 'client'){
+      main.innerHTML = clientExposureHtml(selectedClientKey);
       return main;
     }
     const c = getSelected();
@@ -1190,21 +1288,73 @@
   function chargeListHtml(charges){
     const totalLine = chargeTotalLine(charges);
     return `
-      ${charges.length ? `<div class="exposure-total">${totalLine}</div>` : ''}
+      ${charges.length ? `<div class="exposure-total">${totalLine}${combinedHypoSliderHtml(charges)}</div>` : ''}
       ${charges.length ? charges.map(chargeItemCardHtml).join('') : `<div class="empty-tab">No charges tracked yet \u2014 add one to model sentencing exposure for this case.</div>`}
     `;
   }
 
-  function chargeItemCardHtml(ch){
+  function chargeItemCardHtml(ch, caseLabel){
     return `
       <div class="item-card">
         <div class="body">
           <div class="ground-title">${escapeHtml(ch.offenseLabel || 'Charge')}</div>
-          <div class="court-judge">${escapeHtml(ch.citation || '')}${ch.class ? ' \u00B7 Class ' + escapeHtml(ch.class) : ''}</div>
+          <div class="court-judge">${escapeHtml(ch.citation || '')}${ch.class ? ' \u00B7 Class ' + escapeHtml(ch.class) : ''}${caseLabel ? ' \u00B7 ' + escapeHtml(caseLabel) : ''}</div>
           <div class="due-pill">${escapeHtml(ch.computedRange || '')}</div>
           ${ch.note ? `<div class="charge-note">${escapeHtml(ch.note)}</div>` : ''}
+          ${chargeHypoSliderHtml(ch)}
         </div>
         <button class="icon-btn" data-delete-charge="${ch.id}" title="Remove">\u2715</button>
+      </div>`;
+  }
+
+  // Persistent hypothetical-sentence slider for an already-saved charge \u2014
+  // separate id namespace (charge-hypo-*) from the add-charge preview slider
+  // (exposure-hypo) so both can exist in the DOM without colliding.
+  function chargeHypoSliderHtml(ch){
+    if(typeof ch.minYears !== 'number') return '';
+    const min = ch.minYears;
+    const sliderMax = ch.maxYears === null || ch.maxYears === undefined ? Math.max(30, min*2, 40) : ch.maxYears;
+    return `
+      <div class="exp-hypo">
+        <div class="exp-hypo-label">Model a specific sentence</div>
+        <input type="range" id="charge-hypo-${ch.id}" min="${min}" max="${sliderMax}" value="${min}" step="1" data-pct="${ch.pct||''}">
+        <div class="exp-hypo-readout" id="charge-hypo-readout-${ch.id}">${hypoReadoutText(min, ch.pct)}</div>
+      </div>`;
+  }
+
+  function wireSavedChargeSliders(){
+    document.querySelectorAll('[id^="charge-hypo-"]').forEach(slider => {
+      slider.addEventListener('input', () => {
+        const years = parseInt(slider.value, 10);
+        const pct = slider.getAttribute('data-pct') ? parseInt(slider.getAttribute('data-pct'),10) : null;
+        const readout = document.getElementById(slider.id.replace('charge-hypo-','charge-hypo-readout-'));
+        if(readout) readout.innerHTML = hypoReadoutText(years, pct);
+      });
+    });
+    const combined = document.getElementById('combined-hypo');
+    if(combined){
+      combined.addEventListener('input', () => {
+        const years = parseInt(combined.value, 10);
+        const readout = document.getElementById('combined-hypo-readout');
+        if(readout) readout.textContent = `${years} yrs imposed, run consecutively`;
+      });
+    }
+  }
+
+  // Combined slider across all numeric charges in the list, modeling a single
+  // hypothetical TOTAL sentence within the consecutive min\u2013max envelope.
+  function combinedHypoSliderHtml(charges){
+    const numeric = charges.filter(ch => typeof ch.minYears === 'number');
+    if(numeric.length < 2) return '';
+    const minTotal = numeric.reduce((s,ch) => s + ch.minYears, 0);
+    const anyLife = numeric.some(ch => ch.maxYears === null || ch.maxYears === undefined);
+    const maxTotal = anyLife ? null : numeric.reduce((s,ch) => s + (ch.maxYears||0), 0);
+    const sliderMax = maxTotal === null ? Math.max(30, minTotal*2, 40) : maxTotal;
+    return `
+      <div class="exp-hypo">
+        <div class="exp-hypo-label">Model a total sentence across all charges (consecutive)</div>
+        <input type="range" id="combined-hypo" min="${minTotal}" max="${sliderMax}" value="${minTotal}" step="1">
+        <div class="exp-hypo-readout" id="combined-hypo-readout">${minTotal} yrs imposed, run consecutively</div>
       </div>`;
   }
 
@@ -1215,6 +1365,35 @@
     const anyLife = numeric.some(ch => ch.maxYears === null);
     const maxTotal = anyLife ? null : numeric.reduce((s,ch) => s + (ch.maxYears||0), 0);
     return `Combined exposure if run CONSECUTIVELY: ${minTotal} \u2013 ${fmtYrs(maxTotal)} years across ${numeric.length} charge${numeric.length===1?'':'s'}. If run CONCURRENTLY, exposure is capped by the single highest charge. Judicial discretion determines which applies \u2014 this is not a guarantee either way.`;
+  }
+
+  // Cross-case exposure: flattens every charge across every case sharing the
+  // same client-name key, tags each with its originating case so it's still
+  // traceable, and reuses the same total/slider logic as a single case's tab.
+  function clientExposureHtml(key){
+    const group = cases.filter(c => clientKey(c.clientName) === key);
+    if(!group.length){
+      return `<div class="empty-main"><h2>Client not found</h2><div>This client may have been renamed or their cases deleted.</div></div>`;
+    }
+    const clientName = group[0].clientName || 'Untitled client';
+    const tagged = [];
+    group.forEach(c => (c.exposureCharges||[]).forEach(ch => tagged.push({ ...ch, _caseLabel: c.docketNumber || 'No docket #' })));
+    const totalLine = chargeTotalLine(tagged);
+    return `
+      <div class="file-top">
+        <div class="file-id">
+          <div class="docket-no">Combined exposure \u00B7 ${group.length} case${group.length===1?'':'s'}</div>
+          <h2>${escapeHtml(clientName)}</h2>
+        </div>
+        <div class="file-actions">
+          <button class="btn" data-action="close-client-exposure">Close</button>
+        </div>
+      </div>
+      <div class="panel-head" style="margin-top:20px;"><h3>Exposure across all cases</h3></div>
+      ${tagged.length
+        ? `<div class="exposure-total">${totalLine}${combinedHypoSliderHtml(tagged)}</div>${tagged.map(ch => chargeItemCardHtml(ch, ch._caseLabel)).join('')}`
+        : `<div class="empty-tab">No charges tracked yet on any of this client's cases.</div>`}
+    `;
   }
 
   function addChargePanelHtml(){
@@ -1401,7 +1580,7 @@
       const max = h.life ? null : (h.max === '' ? null : parseInt(h.max,10));
       const r = computeHab51(min, max, h.tier);
       if(r.unresolved) return { ...base, computedRange: 'Unresolved \u2014 verify § 51.1(C)(3) manually', note: 'This tier has no verified figure in this tool.' };
-      return { ...base, minYears: r.min===null?undefined:r.min, maxYears: r.max,
+      return { ...base, minYears: r.min===null?undefined:r.min, maxYears: r.max, pct: null,
         computedRange: `${r.min===null?'\u2014':r.min} \u2013 ${fmtYrs(r.max)} years (${r.cite})`,
         note: kind==='exempt' ? 'Modeled under § 51.1 \u2014 this offense is exempt from its class\'s uniform range.' : '' };
     }
@@ -1409,7 +1588,7 @@
     if(kind === 'uniform'){
       const tierKey = ac.tier || 'noPriors';
       const t = felonyClasses.uniformRanges[o.class].tiers[tierKey];
-      return { ...base, minYears: t.minYears, maxYears: t.maxYears,
+      return { ...base, minYears: t.minYears, maxYears: t.maxYears, pct: t.minTimeServedPct || null,
         computedRange: `${t.minYears} \u2013 ${fmtYrs(t.maxYears)} years, min ${t.minTimeServedPct}% served`,
         note: (o.baseSentenceExempt && tierKey==='noPriors') ? 'Base sentence may be exempt from this range \u2014 verify against § 51.1.' : '' };
     }
@@ -1418,13 +1597,13 @@
       const vr = o.verifiedRange;
       const tierKey = ac.tier || 'none';
       const t = vr.tiers[tierKey];
-      return { ...base, minYears: t.minYears, maxYears: t.maxYears,
+      return { ...base, minYears: t.minYears, maxYears: t.maxYears, pct: vr.minTimeServedPct || null,
         computedRange: `${t.minYears} \u2013 ${fmtYrs(t.maxYears)} years, min ${vr.minTimeServedPct}% served`, note: vr.note || '' };
     }
 
     if(kind === 'verified'){
       const vr = o.verifiedRange;
-      return { ...base, minYears: vr.minYears, maxYears: vr.maxYears,
+      return { ...base, minYears: vr.minYears, maxYears: vr.maxYears, pct: vr.is85PercentCrime ? 85 : null,
         computedRange: `${vr.minYears} \u2013 ${fmtYrs(vr.maxYears)} years${vr.is85PercentCrime ? ', 85% crime' : ''}`, note: vr.note || '' };
     }
 
@@ -1626,6 +1805,7 @@
   function wireGlobalActions(){
     wireCaseItemClicks(document);
     wireExposurePanel();
+    wireSavedChargeSliders();
     document.getElementById('case-search')?.addEventListener('input', updateCaseList);
 
     document.querySelectorAll('[data-jump]').forEach(node => {
@@ -1661,6 +1841,7 @@
     byAction('new-case', () => { ui.newCaseForm = true; render(); document.getElementById('nc-client')?.focus(); });
     byAction('cancel-new-case', () => { ui.newCaseForm = false; render(); });
     byAction('view-reminders', () => { viewMode = 'reminders'; render(); });
+    byAction('close-client-exposure', () => { viewMode = cases.some(c=>c.id===selectedId) ? 'case' : 'reminders'; render(); });
     byAction('save-new-case', async () => {
       const clientName = document.getElementById('nc-client').value.trim();
       if(!clientName) return;
@@ -1773,8 +1954,12 @@
 
     document.querySelectorAll('[data-delete-charge]').forEach(node => {
       node.addEventListener('click', async () => {
-        const c = getSelected(); if(!c) return;
-        c.exposureCharges = (c.exposureCharges||[]).filter(ch => ch.id !== node.getAttribute('data-delete-charge'));
+        // Charge ids are globally unique (uid()), so this also works correctly
+        // from the cross-case client exposure view, not just the selected case.
+        const chargeId = node.getAttribute('data-delete-charge');
+        const owner = cases.find(c => (c.exposureCharges||[]).some(ch => ch.id === chargeId));
+        if(!owner) return;
+        owner.exposureCharges = owner.exposureCharges.filter(ch => ch.id !== chargeId);
         await saveCases(); render();
       });
     });
