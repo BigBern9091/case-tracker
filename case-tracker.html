@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   :root{
     --bg:#12151B;
@@ -146,8 +147,16 @@
   .pill.granted{ color:var(--green); background:var(--green-dim); }
   .pill.denied{ color:var(--red); background:var(--red-dim); }
 
-  .icon-btn{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:2px 4px; flex-shrink:0; }
+  .icon-btn{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:2px 4px; flex-shrink:0; text-decoration:none; display:inline-block; }
   .icon-btn:hover{ color:var(--red); }
+  .icon-btn.gcal-link:hover{ color:var(--brass); }
+  .gcal-synced{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.04em; color:var(--green); background:var(--green-dim); border-radius:3px; padding:3px 6px; white-space:nowrap; }
+  .gcal-synced.pending{ color:var(--ink-faint); background:var(--surface-2); }
+  .gcal-panel{ padding:14px 20px; border-bottom:1px solid var(--border); background:var(--surface-2); display:flex; flex-direction:column; gap:8px; }
+  .gcal-panel .gcal-status{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-dim); }
+  .gcal-panel .gcal-status.connected{ color:var(--green); }
+  .gcal-panel .gcal-error{ font-family:var(--font-mono); font-size:10.5px; color:var(--red); }
+  .gcal-panel .gcal-help{ font-size:11.5px; color:var(--ink-faint); line-height:1.5; }
 
   .note-item{ padding:12px 0; border-bottom:1px solid var(--border); }
   .note-item:last-child{ border-bottom:none; }
@@ -169,6 +178,10 @@
   .result-row .rlabel{ color:var(--ink); line-height:1.4; }
   .result-row .rcite{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
   .result-row .rclass{ font-family:var(--font-mono); font-size:10.5px; font-weight:600; background:var(--brass); color:#1B1400; border-radius:3px; padding:1px 6px; white-space:nowrap; }
+  .result-row .runverified{ font-family:var(--font-mono); font-size:9.5px; font-weight:600; color:var(--red); background:var(--red-dim); border-radius:3px; padding:1px 6px; white-space:nowrap; margin-left:6px; }
+  .statflags{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; }
+  .statflag{ font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:0.02em; padding:2px 7px; border-radius:3px; background:var(--surface-2); color:var(--ink-dim); white-space:nowrap; }
+  .statflag.red{ background:var(--red-dim); color:var(--red); }
   .search-hint{ font-size:11.5px; color:var(--ink-faint); padding:9px 2px; }
   .radiorow{ display:flex; flex-direction:column; gap:6px; margin:10px 0; }
   .radiorow label{ display:flex; gap:8px; align-items:flex-start; font-size:12.5px; padding:8px 10px; border:1px solid var(--border); border-radius:5px; cursor:pointer; background:var(--bg); }
@@ -310,7 +323,7 @@
   let activeTab = 'dates';
   let viewMode = 'case'; // 'case' | 'reminders' | 'client'
   let searchQuery = '';
-  let ui = { newCaseForm:false, editHeader:false, addDate:false, addGround:false, addTask:false, addCharge:false, logMinute:null, collapsedClients: new Set() };
+  let ui = { newCaseForm:false, editHeader:false, addDate:false, addGround:false, addTask:false, addCharge:false, logMinute:null, collapsedClients: new Set(), gcalPanel:false };
 
   function clientKey(name){ return (name||'').trim().toLowerCase(); }
 
@@ -562,6 +575,277 @@
   }
 
   function fmtYrs(n){ return (n===null || n===undefined) ? 'Life' : String(n); }
+
+  // ---------- OSCN docket links ----------
+  // oscn.net/dockets/GetCaseInformation.aspx?db={county}&number={caseNumber} is a
+  // real, stable URL pattern. County slug is derived from the first word of the
+  // free-text court field (e.g. "Cleveland County District Court" -> "cleveland").
+  function oscnCountySlug(courtText){
+    const m = /^([A-Za-z]+)/.exec((courtText||'').trim());
+    return m ? m[1].toLowerCase() : '';
+  }
+  function oscnDocketUrl(c){
+    const slug = oscnCountySlug(c.court);
+    if(!slug || !c.docketNumber) return null;
+    return `https://www.oscn.net/dockets/GetCaseInformation.aspx?db=${encodeURIComponent(slug)}&number=${encodeURIComponent(c.docketNumber)}`;
+  }
+
+  // ---------- 21 O.S. § 13.1 (85% parole eligibility), 57 O.S. § 571 (violent crime,
+  // Art. VI § 10), and 22 O.S. § 471.2 (drug court eligibility) ----------
+  // Matched by statute section against the enumerated lists in the pasted statute
+  // text, rather than hand-tagging offenses. Automated, but still a keyword/section
+  // match against a lookup table \u2014 spot-check against the current statute for
+  // any charge where this actually matters.
+  function parseCitation(citation){
+    const m = /^(\d+[A-Za-z]?)\s+O\.S\.\s+§\s+([\d.\-]+)/.exec(citation || '');
+    return m ? { title: m[1], section: m[2] } : { title: '', section: '' };
+  }
+  const S131_T21_SECTIONS = new Set(['701.7','701.8','711','651','644','652','653','800','801','797','1111','1114','1401','1431','1767.1','843.5','888','1021.2','1021.3','1024.1','1024.2','1040.12a','1030','1123','646','748','175','1289.17A']);
+  const S571_T21_SECTIONS = new Set(['645','652','650','651','653','681','1303','701.7','701.8','711','716','741','1431','1441','745','751','791','797','800','801','843.5','849','888','1114','1111.1','1123','1287','1289.16','1311','1320.2','1401','349','1262','1261','1481','1485','1903','843.1','1767.1','1021.2','1021.3','1024.1','1040.12a','1030','646','748','1268','540A','644']);
+
+  function matchesAggravatedTraffickingC(o, title, section){
+    return title === '63' && section.startsWith('2-415') && /aggravated trafficking/i.test(o.offense || '');
+  }
+  function is85PercentCrime13_1(o){
+    const { title, section } = parseCitation(o.citation);
+    if(title === '43A' && section === '10-103') return true; // abuse of a vulnerable adult
+    if(matchesAggravatedTraffickingC(o, title, section)) return true; // § 13.1 item 20 — subsection C only
+    return title === '21' && S131_T21_SECTIONS.has(section);
+  }
+  function isViolentCrime571(o){
+    const { title, section } = parseCitation(o.citation);
+    if(title === '43A' && section === '10-103') return true;
+    if(matchesAggravatedTraffickingC(o, title, section)) return true; // § 571 item vv — subsection C only
+    return title === '21' && S571_T21_SECTIONS.has(section);
+  }
+  function drugCourtExcluded471_2(o){
+    const { title, section } = parseCitation(o.citation);
+    if(title === '63' && section.startsWith('2-415')) return true; // Trafficking In Illegal Drugs Act, any tier
+    if(title === '21' && section === '644'){
+      const m = /644\(([A-Z])/.exec(o.citation);
+      if(m && ['C','D','E','F','G','J'].includes(m[1])) return true;
+    }
+    return false;
+  }
+  function statutoryFlagsHtml(o){
+    const flags = [];
+    if(is85PercentCrime13_1(o)) flags.push(`<span class="statflag red">85% \u2014 21 O.S. § 13.1</span>`);
+    if(isViolentCrime571(o)) flags.push(`<span class="statflag red">Violent crime \u2014 57 O.S. § 571</span>`);
+    if(drugCourtExcluded471_2(o)) flags.push(`<span class="statflag" title="Excluded under 22 O.S. § 471.2(B)(1)/(2) \u2014 § 644(C)/(D)/(E)/(F)/(G)/(J) or a Trafficking In Illegal Drugs Act violation">Drug court excluded \u2014 22 O.S. § 471.2</span>`);
+    return flags.length ? `<div class="statflags">${flags.join('')}</div>` : '';
+  }
+
+  // ---------- Google Calendar links (one-click "Add to Calendar", no OAuth) ----------
+  function ymd(dateStr){ return (dateStr||'').replace(/-/g,''); }
+  function addOneDay(dateStr){
+    const d = new Date(dateStr + 'T00:00:00');
+    if(isNaN(d)) return dateStr;
+    d.setDate(d.getDate()+1);
+    return d.toISOString().slice(0,10);
+  }
+  function googleCalendarUrl({ title, dateStr, details, location }){
+    if(!dateStr) return null;
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: title || 'Case date',
+      dates: `${ymd(dateStr)}/${ymd(addOneDay(dateStr))}`,
+      details: details || '',
+      location: location || '',
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+  function addToCalendarLinkHtml(url){
+    if(!url) return '';
+    return `<a class="icon-btn gcal-link" href="${attrEsc(url)}" target="_blank" rel="noopener" title="Add to Google Calendar">\uD83D\uDCC5</a>`;
+  }
+
+  // ---------- Google Calendar OAuth auto-sync ----------
+  // Client-side only (Google Identity Services token client) \u2014 no backend,
+  // no stored secret. Requires a Google Cloud OAuth Client ID (Web application
+  // type) with this page's origin added under Authorized JavaScript origins.
+  const GCAL_CLIENT_ID_KEY = 'gcalClientId';
+  const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.events';
+  let gcalClientId = '';
+  let gcalTokenClient = null;
+  let gcalAccessToken = null;
+  let gcalTokenExpiry = 0;
+  let gcalConnected = false;
+  let gcalConnecting = false;
+  let gcalLastError = '';
+
+  async function loadGcalClientId(){
+    try{
+      const res = await window.storage.get(GCAL_CLIENT_ID_KEY, false);
+      gcalClientId = res ? JSON.parse(res.value) : '';
+    } catch(e){ gcalClientId = ''; }
+  }
+  async function saveGcalClientId(id){
+    gcalClientId = id;
+    try{ await window.storage.set(GCAL_CLIENT_ID_KEY, JSON.stringify(id), false); } catch(e){}
+  }
+
+  function waitForGis(){
+    return new Promise((resolve, reject) => {
+      const started = Date.now();
+      (function poll(){
+        if(window.google && window.google.accounts && window.google.accounts.oauth2) return resolve();
+        if(Date.now() - started > 8000) return reject(new Error('Google sign-in script did not load.'));
+        setTimeout(poll, 100);
+      })();
+    });
+  }
+
+  function ensureTokenClient(){
+    if(gcalTokenClient) return gcalTokenClient;
+    gcalTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: gcalClientId,
+      scope: GCAL_SCOPE,
+      callback: () => {}, // overridden per-call below
+    });
+    return gcalTokenClient;
+  }
+
+  function requestGcalToken(promptMode){
+    return new Promise(async (resolve, reject) => {
+      try{
+        await waitForGis();
+        const client = ensureTokenClient();
+        client.callback = (resp) => {
+          if(resp && resp.access_token){
+            gcalAccessToken = resp.access_token;
+            gcalTokenExpiry = Date.now() + ((resp.expires_in||3600) * 1000);
+            resolve(resp);
+          } else {
+            reject(new Error((resp && resp.error) || 'No access token returned.'));
+          }
+        };
+        client.requestAccessToken({ prompt: promptMode });
+      } catch(e){ reject(e); }
+    });
+  }
+
+  async function connectGoogleCalendar(){
+    gcalLastError = '';
+    if(!gcalClientId){ gcalLastError = 'Enter a Google Client ID first.'; render(); return; }
+    gcalConnecting = true; render();
+    try{
+      await requestGcalToken('consent');
+      gcalConnected = true;
+      await syncAllPendingGcalItems();
+    } catch(e){
+      gcalLastError = e.message || 'Could not connect to Google Calendar.';
+      gcalConnected = false;
+    } finally {
+      gcalConnecting = false; render();
+    }
+  }
+
+  function disconnectGoogleCalendar(){
+    if(gcalAccessToken && window.google && google.accounts && google.accounts.oauth2){
+      try{ google.accounts.oauth2.revoke(gcalAccessToken, () => {}); } catch(e){}
+    }
+    gcalAccessToken = null; gcalTokenExpiry = 0; gcalConnected = false; gcalLastError = '';
+    render();
+  }
+
+  // Attempts a no-prompt token refresh on load if we already have a client id
+  // saved \u2014 succeeds silently if the browser still has an active Google
+  // session and prior consent for this origin; otherwise just stays disconnected
+  // until the person clicks Connect again.
+  async function attemptSilentGcalReconnect(){
+    if(!gcalClientId) return;
+    try{
+      await requestGcalToken('');
+      gcalConnected = true;
+      await syncAllPendingGcalItems();
+      render();
+    } catch(e){ /* silent \u2014 stay disconnected, no error shown on load */ }
+  }
+
+  async function ensureFreshGcalToken(){
+    if(gcalAccessToken && Date.now() < gcalTokenExpiry - 60000) return true;
+    try{ await requestGcalToken(''); return true; }
+    catch(e){ gcalConnected = false; return false; }
+  }
+
+  async function createGcalEvent({ title, dateStr, details, location }){
+    if(!dateStr) return null;
+    const ok = await ensureFreshGcalToken();
+    if(!ok) return null;
+    try{
+      const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + gcalAccessToken },
+        body: JSON.stringify({
+          summary: title || 'Case date',
+          description: details || '',
+          location: location || '',
+          start: { date: dateStr },
+          end: { date: addOneDay(dateStr) },
+        }),
+      });
+      if(!res.ok) return null;
+      const data = await res.json();
+      return data.id || null;
+    } catch(e){ return null; }
+  }
+
+  async function deleteGcalEvent(eventId){
+    if(!eventId) return;
+    const ok = await ensureFreshGcalToken();
+    if(!ok) return;
+    try{
+      await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/' + eventId, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + gcalAccessToken },
+      });
+    } catch(e){ /* best effort */ }
+  }
+
+  // Pushes every date/deadline on a case that doesn't have a gcalEventId yet.
+  // Returns true if anything changed (so callers know whether to re-render/save).
+  async function syncPendingGcalItems(c){
+    if(!gcalConnected || !c) return false;
+    let changed = false;
+    for(const d of c.dates){
+      if(d.gcalEventId || !d.date) continue;
+      const id = await createGcalEvent({
+        title: `${d.label}${c.clientName ? ' \u2014 ' + c.clientName : ''}`,
+        dateStr: d.date,
+        details: `${d.detail || ''}${c.docketNumber ? '\nDocket: ' + c.docketNumber : ''}`.trim(),
+        location: c.court || '',
+      });
+      if(id){ d.gcalEventId = id; changed = true; }
+    }
+    for(const d of c.deadlines){
+      if(d.gcalEventId || !d.dueDate) continue;
+      const id = await createGcalEvent({
+        title: `${d.label}${c.clientName ? ' \u2014 ' + c.clientName : ''}`,
+        dateStr: d.dueDate,
+        details: `Trigger: ${fmtDate(d.triggerDate)} + ${d.amount} ${d.unit}${d.ruleDescription ? ' \u2014 ' + d.ruleDescription : ''}${c.docketNumber ? '\nDocket: ' + c.docketNumber : ''}\n\nPlanning aid only \u2014 verify against the case record and current rule text.`,
+        location: c.court || '',
+      });
+      if(id){ d.gcalEventId = id; changed = true; }
+    }
+    if(changed) await saveCases();
+    return changed;
+  }
+
+  async function syncAllPendingGcalItems(){
+    if(!gcalConnected) return;
+    let any = false;
+    for(const c of cases){
+      const changed = await syncPendingGcalItems(c);
+      if(changed) any = true;
+    }
+    if(any) render();
+  }
+
+  function gcalStatusTagHtml(item){
+    if(item.gcalEventId) return `<span class="gcal-synced" title="Synced to Google Calendar">\u2713 Synced</span>`;
+    if(gcalConnected) return `<span class="gcal-synced pending" title="Will sync shortly">\u2026 syncing</span>`;
+    return '';
+  }
 
   function renderExposureBar(min, maxOrNull, pct){
     const scaleMax = maxOrNull === null ? Math.max(30, min*2, 40) : Math.max(30, maxOrNull);
@@ -848,9 +1132,11 @@
         <h1>Case Tracker</h1>
         <div class="header-actions">
           <button class="btn btn-primary" data-action="new-case">+ New case</button>
+          <button class="btn ${gcalConnected?'view-active':''}" data-action="toggle-gcal-panel">\uD83D\uDCC5 ${gcalConnected?'Connected':'Calendar'}</button>
           <button class="btn ${viewMode==='reminders'?'view-active':''}" data-action="view-reminders">Reminders${count ? `<span class="count-badge">${count}</span>` : ''}</button>
         </div>
       </div>
+      ${ui.gcalPanel ? gcalPanelHtml() : ''}
       ${ui.newCaseForm ? newCaseFormHtml() : ''}
       <div class="search-wrap"><input type="text" id="case-search" placeholder="Search cases\u2026" value="${attrEsc(searchQuery)}"></div>
       <div class="case-list">
@@ -868,6 +1154,25 @@
       if(c.clientName && !seen.has(k)){ seen.add(k); names.push(c.clientName); }
     });
     return names;
+  }
+
+  function gcalPanelHtml(){
+    return `
+      <div class="gcal-panel">
+        <div class="gcal-status ${gcalConnected?'connected':''}">${gcalConnected ? '\u2713 Connected \u2014 new dates and deadlines push automatically.' : 'Not connected \u2014 dates/deadlines fall back to a manual \uD83D\uDCC5 link.'}</div>
+        ${!gcalConnected ? `
+          <div class="field"><label>Google Client ID</label><input id="gcal-client-id" placeholder="xxxx.apps.googleusercontent.com" value="${attrEsc(gcalClientId)}"></div>
+          <div class="gcal-help">From Google Cloud Console \u2192 APIs &amp; Services \u2192 Credentials \u2192 OAuth client ID (Web application). Add this page's URL under Authorized JavaScript origins first.</div>
+        ` : ''}
+        ${gcalLastError ? `<div class="gcal-error">${escapeHtml(gcalLastError)}</div>` : ''}
+        <div class="form-actions">
+          ${gcalConnected
+            ? `<button class="btn btn-ghost" data-action="gcal-disconnect">Disconnect</button>`
+            : `<button class="btn btn-primary" data-action="gcal-connect" ${gcalConnecting?'disabled':''}>${gcalConnecting?'Connecting\u2026':'Connect Google Calendar'}</button>`}
+          <button class="btn btn-ghost" data-action="toggle-gcal-panel">Close</button>
+        </div>
+      </div>
+    `;
   }
 
   function newCaseFormHtml(){
@@ -932,6 +1237,7 @@
           <div class="stamp status-${c.status}">${STATUS_LABEL[c.status]}</div>
         </div>
         <div class="file-actions">
+          ${oscnDocketUrl(c) ? `<a class="btn" href="${attrEsc(oscnDocketUrl(c))}" target="_blank" rel="noopener">View on OSCN</a>` : ''}
           <button class="btn" data-action="copy-brief">Copy brief for Claude</button>
           <button class="btn" data-action="print-summary">Print summary</button>
           <button class="btn" data-action="toggle-edit">${ui.editHeader ? 'Close' : 'Edit'}</button>
@@ -1064,16 +1370,25 @@
         <div class="form-actions"><button class="btn btn-primary" data-action="calc-deadline">Calculate & add task</button></div>
       </div>
       <div class="panel-head" style="margin-top:24px;"><h3>Tracked deadlines</h3></div>
-      ${sorted.length ? sorted.map(d => `
+      ${sorted.length ? sorted.map(d => {
+        const gcalUrl = googleCalendarUrl({
+          title: `${d.label}${c.clientName ? ' \u2014 ' + c.clientName : ''}`,
+          dateStr: d.dueDate,
+          details: `Trigger: ${fmtDate(d.triggerDate)} + ${d.amount} ${d.unit}${d.ruleDescription ? ' \u2014 ' + d.ruleDescription : ''}${c.docketNumber ? '\nDocket: ' + c.docketNumber : ''}\n\nPlanning aid only \u2014 verify against the case record and current rule text.`,
+          location: c.court || '',
+        });
+        return `
         <div class="item-card">
           <div class="body">
             <div class="date-label">${escapeHtml(d.label)}</div>
             <div class="date-value">${fmtDate(d.dueDate)}</div>
             <div class="date-detail">Trigger: ${fmtDate(d.triggerDate)} + ${d.amount} ${d.unit}${d.ruleDescription ? ' \u2014 ' + escapeHtml(d.ruleDescription) : ''}</div>
           </div>
+          ${gcalConnected ? gcalStatusTagHtml(d) : addToCalendarLinkHtml(gcalUrl)}
           <button class="icon-btn" data-delete-deadline="${d.id}" title="Remove">\u2715</button>
         </div>
-      `).join('') : `<div class="empty-tab">No deadlines tracked yet.</div>`}
+      `;
+      }).join('') : `<div class="empty-tab">No deadlines tracked yet.</div>`}
     `;
   }
 
@@ -1196,7 +1511,14 @@
             <button class="btn btn-ghost" data-action="toggle-add-date">Cancel</button>
           </div>
         </div>` : ''}
-      ${sorted.length ? sorted.map(d => `
+      ${sorted.length ? sorted.map(d => {
+        const gcalUrl = googleCalendarUrl({
+          title: `${d.label}${c.clientName ? ' \u2014 ' + c.clientName : ''}`,
+          dateStr: d.date,
+          details: `${d.detail || ''}${c.docketNumber ? '\nDocket: ' + c.docketNumber : ''}`.trim(),
+          location: c.court || '',
+        });
+        return `
         <div class="item-card">
           <div class="body">
             <div class="date-label">${escapeHtml(d.label)}</div>
@@ -1205,9 +1527,11 @@
             ${d.minuteLogged ? `<div class="minute-tag">\u2713 Minute logged</div>` : ''}
           </div>
           ${(d.date && daysUntil(d.date) <= 0 && !d.minuteLogged) ? `<button class="btn" data-log-minute-for="${d.id}">Log minute</button>` : ''}
+          ${gcalConnected ? gcalStatusTagHtml(d) : addToCalendarLinkHtml(gcalUrl)}
           <button class="icon-btn" data-delete-date="${d.id}" title="Remove">\u2715</button>
         </div>
-      `).join('') : `<div class="empty-tab">No dates on record \u2014 add the next one that matters.</div>`}
+      `;
+      }).join('') : `<div class="empty-tab">No dates on record \u2014 add the next one that matters.</div>`}
     `;
   }
 
@@ -1299,12 +1623,21 @@
         <div class="body">
           <div class="ground-title">${escapeHtml(ch.offenseLabel || 'Charge')}</div>
           <div class="court-judge">${escapeHtml(ch.citation || '')}${ch.class ? ' \u00B7 Class ' + escapeHtml(ch.class) : ''}${caseLabel ? ' \u00B7 ' + escapeHtml(caseLabel) : ''}</div>
+          ${ch.statFlags ? statFlagsFromStoredHtml(ch.statFlags) : ''}
           <div class="due-pill">${escapeHtml(ch.computedRange || '')}</div>
           ${ch.note ? `<div class="charge-note">${escapeHtml(ch.note)}</div>` : ''}
           ${chargeHypoSliderHtml(ch)}
         </div>
         <button class="icon-btn" data-delete-charge="${ch.id}" title="Remove">\u2715</button>
       </div>`;
+  }
+
+  function statFlagsFromStoredHtml(flags){
+    const out = [];
+    if(flags.is131) out.push(`<span class="statflag red">85% \u2014 21 O.S. § 13.1</span>`);
+    if(flags.is571) out.push(`<span class="statflag red">Violent crime \u2014 57 O.S. § 571</span>`);
+    if(flags.drugCourtExcluded) out.push(`<span class="statflag">Drug court excluded \u2014 22 O.S. § 471.2</span>`);
+    return out.length ? `<div class="statflags">${out.join('')}</div>` : '';
   }
 
   // Persistent hypothetical-sentence slider for an already-saved charge \u2014
@@ -1425,11 +1758,19 @@
   function chargeResultsHtml(results, query){
     if((query||'').trim().length < 2) return '';
     if(!results.length) return `<div class="search-hint">No match. Try a different citation fragment or keyword.</div>`;
-    return results.map(o => `
+    const unverifiedCount = results.filter(o => classifyOffenseKind(o) === 'ownRangeUnverified').length;
+    const summary = unverifiedCount
+      ? `<div class="search-hint">${unverifiedCount} of ${results.length} result${results.length===1?'':'s'} still need${results.length===1?'s':''} a verified range \u2014 paste the statute text for one and I'll add it.</div>`
+      : '';
+    return summary + results.map(o => {
+      const unverified = classifyOffenseKind(o) === 'ownRangeUnverified';
+      return `
       <div class="result-row" data-select-offense="${attrEsc(o.citation)}|||${attrEsc(o.offense)}">
         <span class="rlabel">${escapeHtml(o.offense)}<br><span class="rcite">${escapeHtml(o.citation)}</span></span>
         <span class="rclass">${escapeHtml(o.class)}</span>
-      </div>`).join('');
+        ${unverified ? `<span class="runverified" title="No verified range in the dataset yet \u2014 you'll enter it manually">\u26A0 Unverified</span>` : ''}
+      </div>`;
+    }).join('');
   }
 
   function findOffense(citation, offense){
@@ -1437,6 +1778,10 @@
   }
 
   function chargeConfigHtml(){
+    return statutoryFlagsHtml(ui.addCharge.selected) + chargeConfigHtmlInner();
+  }
+
+  function chargeConfigHtmlInner(){
     const ac = ui.addCharge;
     const o = ac.selected;
     const kind = classifyOffenseKind(o);
@@ -1564,9 +1909,22 @@
   }
 
   function computeFinalCharge(){
+    const raw = computeFinalChargeRaw();
+    // 21 O.S. § 13.1 sets a statutory 85%-served floor independent of class/tier
+    // math \u2014 apply it here so it can't be silently missed by whichever branch
+    // above computed the range.
+    if(raw.statFlags && raw.statFlags.is131 && typeof raw.minYears === 'number' && raw.pct !== 85){
+      raw.pct = 85;
+      raw.computedRange = raw.computedRange.replace(/,?\s*min \d+% served/, '') + (raw.computedRange.includes('85%') ? '' : ', min 85% served (21 O.S. § 13.1)');
+    }
+    return raw;
+  }
+
+  function computeFinalChargeRaw(){
     const ac = ui.addCharge, o = ac.selected;
     const kind = classifyOffenseKind(o);
-    const base = { id: uid(), citation: o.citation, offenseLabel: o.offense, class: o.class };
+    const flags = { is131: is85PercentCrime13_1(o), is571: isViolentCrime571(o), drugCourtExcluded: drugCourtExcluded471_2(o) };
+    const base = { id: uid(), citation: o.citation, offenseLabel: o.offense, class: o.class, statFlags: flags };
 
     if(kind === 'capital'){
       const isLEO = o.citation.includes('701.7(E)');
@@ -1841,6 +2199,13 @@
     byAction('new-case', () => { ui.newCaseForm = true; render(); document.getElementById('nc-client')?.focus(); });
     byAction('cancel-new-case', () => { ui.newCaseForm = false; render(); });
     byAction('view-reminders', () => { viewMode = 'reminders'; render(); });
+    byAction('toggle-gcal-panel', () => { ui.gcalPanel = !ui.gcalPanel; gcalLastError = ''; render(); });
+    byAction('gcal-connect', async () => {
+      const input = document.getElementById('gcal-client-id');
+      if(input) await saveGcalClientId(input.value.trim());
+      await connectGoogleCalendar();
+    });
+    byAction('gcal-disconnect', () => { disconnectGoogleCalendar(); });
     byAction('close-client-exposure', () => { viewMode = cases.some(c=>c.id===selectedId) ? 'case' : 'reminders'; render(); });
     byAction('save-new-case', async () => {
       const clientName = document.getElementById('nc-client').value.trim();
@@ -1924,10 +2289,13 @@
       c.dates.push({ id: uid(), label, date, detail, minuteLogged:false });
       ui.addDate = false;
       await saveCases(); render();
+      syncPendingGcalItems(c).then(changed => { if(changed) render(); });
     });
     document.querySelectorAll('[data-delete-date]').forEach(node => {
       node.addEventListener('click', async () => {
         const c = getSelected(); if(!c) return;
+        const target = c.dates.find(d => d.id === node.getAttribute('data-delete-date'));
+        if(target && target.gcalEventId) deleteGcalEvent(target.gcalEventId);
         c.dates = c.dates.filter(d => d.id !== node.getAttribute('data-delete-date'));
         await saveCases(); render();
       });
@@ -2042,6 +2410,7 @@
       applyMinuteToCase(c, ui.logMinute.forDateId, data);
       ui.logMinute = null;
       await saveCases(); render();
+      syncPendingGcalItems(c).then(changed => { if(changed) render(); });
     });
 
     byAction('print-summary', () => { window.print(); });
@@ -2088,11 +2457,14 @@
       c.deadlines.push({ id: uid(), label, triggerDate: trigger, amount, unit, dueDate, ruleDescription });
       c.tasks.push({ id: uid(), text: label, dueDate, done:false });
       await saveCases(); render();
+      syncPendingGcalItems(c).then(changed => { if(changed) render(); });
     });
 
     document.querySelectorAll('[data-delete-deadline]').forEach(node => {
       node.addEventListener('click', async () => {
         const c = getSelected(); if(!c) return;
+        const target = c.deadlines.find(d => d.id === node.getAttribute('data-delete-deadline'));
+        if(target && target.gcalEventId) deleteGcalEvent(target.gcalEventId);
         c.deadlines = c.deadlines.filter(d => d.id !== node.getAttribute('data-delete-deadline'));
         await saveCases(); render();
       });
@@ -2100,7 +2472,7 @@
   }
 
   loadFelonyClasses();
-  loadCases();
+  loadCases().then(() => { loadGcalClientId().then(attemptSilentGcalReconnect); });
 })();
 </script>
 </body>
